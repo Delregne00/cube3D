@@ -1,0 +1,214 @@
+# VALIDACIONES COMPLETAS cub3D
+
+## FORMATOS DE TEXTURAS VÁLIDOS
+
+### Formatos soportados por miniLibX:
+- [✅] **.xpm** (X11 Pixmap) - **MÁS RECOMENDADO**
+- [✅] **.bmp** (Windows Bitmap)
+- [✅] **.png** (Portable Network Graphics) - según versión de miniLibX
+- [✅] **.jpg/.jpeg** - según versión de miniLibX
+
+**⚠️ NOTA:** `.xpm` es el formato más estable y universalmente soportado por miniLibX en todos los sistemas.
+
+## CHECKLIST COMPLETO DE VALIDACIONES
+
+### 1. VALIDACIÓN DEL ARCHIVO .cub
+- [✅] El archivo tiene extensión `.cub`
+- [✅] El archivo existe y es legible
+- [✅] El archivo no está vacío
+- [✅] Se puede abrir y leer correctamente
+
+### 2. ESTRUCTURA DEL ARCHIVO
+- [✅] Contiene exactamente 6 elementos de configuración (4 texturas + 2 colores)
+- [✅] No hay elementos duplicados
+- [✅] El mapa está al final del archivo
+- [ ] No hay líneas con contenido inválido
+
+### 3. TEXTURAS (4 obligatorias)
+#### Identificadores válidos:
+- [✅] **NO** - Textura Norte
+- [✅] **SO** - Textura Sur  
+- [✅] **WE** - Textura Oeste
+- [✅] **EA** - Textura Este
+
+#### Validaciones por textura:
+- [✅] Identificador correcto (mayúsculas, sin espacios extra)
+- [✅] Seguido de al menos un espacio
+- [✅] Ruta del archivo especificada
+- [✅] El archivo de textura existe
+- [✅] El archivo es legible
+- [✅] Formato de imagen válido (.xpm recomendado)
+- [ ] La imagen se puede cargar con miniLibX
+
+### 4. COLORES (2 obligatorios)
+#### Identificadores válidos:
+- [✅ ] **F** - Color del suelo (Floor)
+- [✅ ] **C** - Color del techo (Ceiling)
+
+#### Formato RGB:
+- [✅ ] Identificador seguido de espacio(s)
+- [✅ ] Exactamente 3 números
+- [✅ ] Separados por comas (sin espacios entre número y coma)
+- [✅ ] Cada valor en rango [0,255]
+- [✅] Sin decimales (números enteros)
+
+#### Ejemplos válidos:
+```
+F 220,100,0
+C 225,30,0
+F 0,0,0
+C 255,255,255
+```
+
+#### Ejemplos inválidos:
+```
+F 220, 100, 0    // espacios después de comas
+F 256,100,0      // valor fuera de rango
+F 220.5,100,0    // decimales
+F 220,100        // faltan valores
+```
+
+### 5. MAPA
+#### Caracteres válidos:
+- [ ] **'1'** - Pared
+- [ ] **'0'** - Espacio vacío (suelo)
+- [ ] **'N'** - Jugador mirando Norte
+- [ ] **'S'** - Jugador mirando Sur
+- [ ] **'E'** - Jugador mirando Este  
+- [ ] **'W'** - Jugador mirando Oeste
+- [ ] **' '** - Espacio (vacío, parte del mapa)
+- [ ] **'\t'** - Tabulación (tratada como espacio)
+
+#### Validaciones del mapa:
+- [ ] Exactamente UN jugador (N, S, E, o W)
+- [ ] Al menos una pared (1)
+- [ ] Al menos un espacio vacío (0)
+- [ ] El mapa está completamente cerrado
+- [ ] No hay caracteres inválidos
+- [ ] El mapa no está vacío
+- [ ] Mínimo 3x3 de tamaño
+
+#### Validación de cierre:
+- [ ] Primera fila: solo '1' y espacios
+- [ ] Última fila: solo '1' y espacios  
+- [ ] Primera columna: solo '1' y espacios
+- [ ] Última columna: solo '1' y espacios
+- [ ] Todo '0', 'N', 'S', 'E', 'W' debe estar rodeado de '1' o espacios que lleven a '1'
+
+### 6. MANEJO DE ESPACIOS Y FORMATO
+- [ ] Líneas vacías permitidas entre elementos (excepto en el mapa)
+- [ ] Espacios múltiples permitidos entre identificador y valor
+- [ ] El mapa se parsea exactamente como aparece
+- [ ] Diferentes longitudes de línea en el mapa son válidas
+
+### 7. ERRORES A DETECTAR
+- [ ✅] Archivo no encontrado: `"Error\nNo se puede leer el archivo"`
+- [✅ ] Extensión incorrecta: `"Error\nEl archivo debe tener extensión .cub"`
+- [✅ ] Elemento faltante: `"Error\nFalta la textura Norte (NO)"`
+- [✅ ] Elemento duplicado: `"Error\nTextura Norte (NO) duplicada"`
+- [ ✅] Color inválido: `"Error\nColor fuera de rango [0,255]"`
+- [ ✅] Textura no encontrada: `"Error\nNo se puede cargar la textura: ruta"`
+- [ ] Mapa no cerrado: `"Error\nEl mapa no está cerrado por paredes"`
+- [ ] Múltiples jugadores: `"Error\nSolo puede haber un jugador en el mapa"`
+- [ ] Sin jugador: `"Error\nFalta el jugador en el mapa"`
+- [ ] Carácter inválido: `"Error\nCarácter inválido 'X' en el mapa"`
+
+## EJEMPLO DE ARCHIVO .cub CORRECTO
+
+```
+NO ./textures/wall_north.xpm
+SO ./textures/wall_south.xpm
+WE ./textures/wall_west.xpm
+EA ./textures/wall_east.xpm
+
+F 220,100,0
+C 225,30,0
+
+        1111111111111111111111111
+        1000000000110000000000001
+        1011000001110000000000001
+        1001000000000000000000001
+111111111011000001110000000000001
+100000000011000001110111111111111
+11110111111111011100000010001
+11110111111111011101010010001
+11000000110101011100000010001
+10000000000000001100000010001
+10000000000000001101010010001
+11000001110101011111011110N0111
+11110111 1110101 101111010001
+11111111 1111111 111111111111
+```
+
+## CASOS EDGE IMPORTANTES
+
+### Espacios en el mapa:
+```
+111111
+1   01  // espacios válidos
+100001
+1000N1
+111111
+```
+
+### Mapa con forma irregular:
+```
+  11111
+  10001
+1110001
+100N001
+1111111
+```
+
+### Rutas con espacios (válidas):
+```
+NO ./my textures/north wall.xpm
+```
+
+## ESTRUCTURA DE VALIDACIÓN RECOMENDADA
+
+### 1. Parseo inicial
+```c
+// Verificar extensión
+// Abrir archivo
+// Leer línea por línea
+```
+
+### 2. Identificar elementos
+```c
+// Si línea empieza con "NO", "SO", "WE", "EA" -> textura
+// Si línea empieza con "F", "C" -> color  
+// Si línea contiene '0', '1', 'N', 'S', 'E', 'W' -> mapa
+// Si línea vacía -> ignorar
+```
+
+### 3. Validar completitud
+```c
+// ¿Tengo las 4 texturas?
+// ¿Tengo los 2 colores?
+// ¿Tengo el mapa?
+// ¿Todo en formato correcto?
+```
+
+### 4. Validar mapa
+```c
+// ¿Un solo jugador?
+// ¿Está cerrado?
+// ¿Solo caracteres válidos?
+```
+
+### 5. Validar archivos
+```c
+// ¿Existen las texturas?
+// ¿Se pueden cargar con miniLibX?
+```
+
+## ORDEN DE VALIDACIÓN RECOMENDADO
+
+1. **Archivo y extensión**
+2. **Estructura y formato** 
+3. **Elementos obligatorios presentes**
+4. **Formato de texturas y colores**
+5. **Existencia de archivos de textura**
+6. **Validación del mapa**
+7. **Carga de texturas con miniLibX**
