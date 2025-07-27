@@ -41,15 +41,19 @@ endif
 
 # Source files
 MAIN_SRC = main.c
-INIT_SRC = $(SRCDIR)/init/init.c
-PARSER_SRC = $(SRCDIR)/parser/parser.c \
-             $(SRCDIR)/parser/parser_file.c \
-             $(SRCDIR)/parser/parser_textures.c \
-             $(SRCDIR)/parser/parser_rgb.c \
-             $(SRCDIR)/parser/parser_map.c \
-             $(SRCDIR)/parser/flood_fill.c \
-             $(SRCDIR)/parser/flood_fill_utils.c \
-             $(SRCDIR)/parser/parser_utils.c
+INIT_SRC =		$(SRCDIR)/init/cube_init.c \
+				$(SRCDIR)/init/game_init.c
+
+PARSER_SRC =	$(SRCDIR)/parser/parser.c \
+            	$(SRCDIR)/parser/parser_file.c \
+            	$(SRCDIR)/parser/parser_textures.c \
+            	$(SRCDIR)/parser/parser_rgb.c \
+            	$(SRCDIR)/parser/parser_map.c \
+            	$(SRCDIR)/parser/flood_fill.c \
+            	$(SRCDIR)/parser/flood_fill_utils.c \
+            	$(SRCDIR)/parser/parser_utils.c
+
+RAYCASTING_SRC =$(SRCDIR)/raycasting/render.c
 
 # All source files
 SRC = $(MAIN_SRC) $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC)

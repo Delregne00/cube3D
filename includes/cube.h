@@ -13,7 +13,10 @@
 # include "libraries/MLX42/include/MLX42/MLX42.h"
 
 //Macros
-#define MAX_MAP_SIZE 100
+# define MAX_MAP_SIZE 100
+# define WIN_W 1920
+# define WIN_H 1080
+
 
 //structs
 
@@ -34,13 +37,38 @@ typedef struct  s_data
 typedef struct  s_cube
 {
     t_data  *data;
-    mlx_t   *mlx;
+    // mlx_t   *mlx;
     t_map   *map;          
 }           t_cube;
 
+typedef struct s_player {
+    double x;
+    double y;
+    double dir_x;
+    double dir_y;
+    double plane_x;
+    double plane_y;
+} t_player;
+
+typedef struct s_game {
+	t_cube		*cube;
+    t_player	player;
+    void		*mlx;
+    void		*win;
+    void		*img;
+    char		*addr;
+    int			width;
+    int			height;
+} t_game;
+
+
 // Init functions
-t_cube    *init(void);
-void      free_cube(t_cube *cube);
+// init/cube_init.c
+t_cube    *cube_init(void);
+void      cube_free(t_cube *cube);
+
+// init/game_init.c
+t_game	*game_init(t_cube *cube);
 
 //Parsing functions
 bool    parser(t_cube *cube, char *file);
@@ -77,5 +105,7 @@ char    *trim_whitespace(char *str);
 void    process_empty_line(char *line);
 void    print_parsed_data(t_cube *cube);
 
+// /raycasting/render.c
+void	render(void *param);
 
 #endif

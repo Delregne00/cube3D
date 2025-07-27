@@ -1,6 +1,6 @@
 #include "cube.h"
 
-t_data *init_data(void)
+t_data *cube_data_init(void)
 {
     t_data *data;
     int i;
@@ -30,7 +30,7 @@ t_data *init_data(void)
     return (data);
 }
 
-t_map *init_map(void)
+t_map *cube_map_init(void)
 {
     t_map *map;
     
@@ -45,21 +45,20 @@ t_map *init_map(void)
 }
 
 
-t_cube *init(void)
+t_cube *cube_init(void)
 {
     t_cube *cube;
     
     cube = malloc(sizeof(t_cube));
     if (!cube)
         return (NULL);
-    
-    cube->data = init_data();
+    cube->data = cube_data_init();
     if (!cube->data)
     {
         free(cube);
         return (NULL);
     }
-    cube->map = init_map();
+    cube->map = cube_map_init();
     if (!cube->map)
     {
         if (cube->data->textures)
@@ -77,11 +76,11 @@ t_cube *init(void)
         free(cube);
         return (NULL);
     }
-    cube->mlx = NULL; 
+    // cube->mlx = NULL; 
     return (cube);
 }
 
-void free_cube(t_cube *cube)
+void cube_free(t_cube *cube)
 {
     int i;
     
