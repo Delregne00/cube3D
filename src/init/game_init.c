@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_init.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/26 09:05:00 by jsayerza          #+#    #+#             */
+/*   Updated: 2025/07/26 09:05:00 by jsayerza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/cube.h"
 
 // static void	game_init_mlx(t_game *game)
@@ -8,7 +20,7 @@
 // 	game->addr = 0;
 // }
 
-t_game	*game_init(t_cube *cube)
+t_game	*game_init(t_cube *cube, t_collector **collector)
 {
 	t_game	*game;
 	int x, y;
@@ -18,6 +30,11 @@ t_game	*game_init(t_cube *cube)
 	{
 		printf("KKlavaK\n");
         return (NULL);
+	}
+	if (collector)
+	{
+		collector_append(collector, game);
+		game->collector = *collector;
 	}
 	game->cube = cube;
     // game->player	= player;

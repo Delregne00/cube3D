@@ -40,7 +40,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 # Source files
-MAIN_SRC = main.c
+MAIN_SRC = 		main.c
 INIT_SRC =		$(SRCDIR)/init/cube_init.c \
 				$(SRCDIR)/init/game_init.c
 
@@ -55,12 +55,15 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 
 RAYCASTING_SRC =$(SRCDIR)/raycasting/render.c
 
+UTILS_SRC =		$(SRCDIR)/utils/collector.c \
+				$(SRCDIR)/utils/utils.c
+
 # All source files
-SRC = $(MAIN_SRC) $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC)
+SRC = $(MAIN_SRC) $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(RAYCASTING_SRC) $(UTILS_SRC)
 
 # Object files - CORREGIDO
 MAIN_OBJ = $(OBJDIR)/main.o
-OTHER_SRC = $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC)
+OTHER_SRC = $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(RAYCASTING_SRC) $(UTILS_SRC)
 OTHER_OBJ = $(OTHER_SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 OBJ = $(MAIN_OBJ) $(OTHER_OBJ)
 
