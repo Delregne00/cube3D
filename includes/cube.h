@@ -173,15 +173,15 @@ void    print_parsed_data(t_cube *cube);
 /* ========================================================================== */
 /*                           RENDER FUNCTIONS                                 */
 /* ========================================================================== */
-/* raycasting/render.c */
-void	render(void *param);
+/* render/render.c */
+//void	render(void *param);
 void	render_raycast(t_game *game);
 
-/* raycasting/textures.c */
-mlx_texture_t	*load_texture(const char *path);
+/* render/textures.c */
 int				load_textures(t_cube *cube);
 
-/* raycasting/render_utils.c */
-void	print_cube_data(t_cube *cube);
+/* render/render_utils.c */
+//void	print_cube_data(t_cube *cube);
+void	print_textures_and_colors(t_cube *cube);
 
 #endif

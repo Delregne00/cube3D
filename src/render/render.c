@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "includes/cube.h"
 
 mlx_texture_t	*select_texture(t_game *game, int side, int ray_dir_x, int ray_dir_y)
@@ -180,8 +179,9 @@ void	render_raycast(t_game *game)
 		!game->cube->tex_east || !game->cube->tex_east->pixels ||
 		!game->img)
 	{
-		if (write(2, "Error: textures no carregades o game->img és NULL\n", 51) == -1)
-			perror("write error");
+		// if (write(2, "Error: textures no carregades o game->img és NULL\n", 51) == -1)
+		// 	perror("write error");
+		print_msg("Error: textures no carregades o game->img és NULL");
 		return ;
 	}
 	while (x < w)

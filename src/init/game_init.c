@@ -54,10 +54,6 @@ t_game	*game_init(t_cube *cube, t_collector **collector)
 	game->addr = 0;
 	game->width = 0;
 	game->height = 0;
-	// game->tex_north = load_texture(cube->tex_north);
-	// game->tex_south = load_texture(cube->tex_south);
-	// game->tex_west  = load_texture(cube->tex_west);
-	// game->tex_east  = load_texture(cube->tex_east);
 	if (load_textures(game->cube))
 	{
 		free(game);

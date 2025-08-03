@@ -53,19 +53,19 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/flood_fill_utils.c \
 				$(SRCDIR)/parser/parser_utils.c
 
-RAYCASTING_SRC =$(SRCDIR)/raycasting/render.c \
-				$(SRCDIR)/raycasting/textures.c \
-				$(SRCDIR)/raycasting/render_utils.c
+RENDER_SRC =	$(SRCDIR)/render/render.c \
+				$(SRCDIR)/render/textures.c \
+				$(SRCDIR)/render/render_utils.c
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
 
 # All source files
-SRC = $(MAIN_SRC) $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(RAYCASTING_SRC) $(UTILS_SRC)
+SRC = $(MAIN_SRC) $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(UTILS_SRC) $(MINIMAP_SRC)
 
 # Object files - CORREGIDO
 MAIN_OBJ = $(OBJDIR)/main.o
-OTHER_SRC = $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(RAYCASTING_SRC) $(UTILS_SRC)
+OTHER_SRC = $(PARSER_SRC) $(INIT_SRC) $(RENDER_SRC) $(UTILS_SRC) $(MINIMAP_SRC)
 OTHER_OBJ = $(OTHER_SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 OBJ = $(MAIN_OBJ) $(OTHER_OBJ)
 
@@ -104,8 +104,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS) Makefile | $(OBJDIR)
 		printf "$(BLUE)[PARSER]$(NC) "; \
 	elif echo "$<" | grep -q "/minimap/"; then \
 		printf "$(MAGENTA)[MINIMAP]$(NC) "; \
-	elif echo "$<" | grep -q "/raycasting/"; then \
-		printf "$(MAGENTA)[RAYCASTING]$(NC) "; \
+	elif echo "$<" | grep -q "/render/"; then \
+		printf "$(MAGENTA)[RENDER]$(NC) "; \
 	elif echo "$<" | grep -q "/utils/"; then \
 		printf "$(MAGENTA)[UTILS]$(NC) "; \
 	fi; \
@@ -117,7 +117,7 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/init
 	@mkdir -p $(OBJDIR)/parser
 	@mkdir -p $(OBJDIR)/minimap
-	@mkdir -p $(OBJDIR)/raycasting
+	@mkdir -p $(OBJDIR)/render
 	@mkdir -p $(OBJDIR)/utils
 
 clean:
@@ -151,8 +151,8 @@ info:
 	@echo "$(CYAN)  MAIN:$(NC) $(words $(MAIN_SRC)) files"
 	@echo "$(BLUE)  PARSER:$(NC) $(words $(PARSER_SRC)) files"
 	@echo "$(CYAN)  INIT:$(NC) $(words $(INIT_SRC)) files"
-	@echo "$(MAGENTA)  MINIMAP:$(NC) $(words $(RENDER_SRC)) files"
-	@echo "$(MAGENTA)  RAYCASTING:$(NC) $(words $(RAYCASTING_SRC)) files"
+	@echo "$(MAGENTA)  MINIMAP:$(NC) $(words $(MINIMAP_SRC)) files"
+	@echo "$(MAGENTA)  RENDER:$(NC) $(words $(RENDER_SRC)) files"
 	@echo "$(MAGENTA)  UTILS:$(NC) $(words $(UTILS_SRC)) files"
 	@echo ""
 	@echo "$(YELLOW)Libraries:$(NC)"
