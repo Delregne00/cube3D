@@ -31,7 +31,7 @@ void	freer(void **ptr)
 	*ptr = (void *)0xDEADBEEF;
 }
 
-void	exit_print_error(const char *msg)
+void	print_msg(const char *msg)
 {
 	if (msg && *msg)
 		if (write(2, msg, ft_strlen(msg)) == -1)
@@ -44,7 +44,7 @@ void	exit_program(t_collector **collector, const char *msg, bool should_exit)
 {
 	collector_cleanup(collector);
 	if (msg && *msg)
-		exit_print_error(msg);
+		print_msg(msg);
 	if (should_exit)
 		exit(EXIT_FAILURE);
 }

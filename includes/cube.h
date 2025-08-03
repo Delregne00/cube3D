@@ -9,14 +9,18 @@
 # include <errno.h>
 # include <string.h>
 # include <stdarg.h>
+# include <math.h>
 # include "libraries/libft/libft.h"
 # include "libraries/MLX42/include/MLX42/MLX42.h"
 
 //Macros
 # define MAX_MAP_SIZE 100
-# define WIN_W 1920
-# define WIN_H 1080
-
+# define WIN_W 1280
+# define WIN_H 720
+# define TEX_NO 0
+# define TEX_SO 1
+# define TEX_WE 2
+# define TEX_EA 3
 
 /* ========================================================================== */
 /*                              STRUCTURES                                    */
@@ -30,46 +34,72 @@ typedef struct s_collector
 
 typedef struct s_map
 {
-    char    **map;
-    int     filas;
-    int     max_columnas;
+	char    **map;
+	int     filas;
+	int     max_columnas;
 }           t_map;
 
-typedef struct  s_data
+typedef struct s_data
 {
-    char    **textures;
-    int     f_color[3]; 
-    int     c_color[3];  
-}           t_data; 
+	char	**textures;		// [0]=NO, [1]=SO, [2]=WE, [3]=EA
+	int		f_color[3];		// Floor RGB
+	int		c_color[3];		// Ceiling RGB
+}	t_data;
 
-typedef struct  s_cube
+typedef struct s_cube
 {
-    t_data  *data;
-    // mlx_t   *mlx;
-    t_map   *map;          
-}           t_cube;
+	t_data			*data;
+	t_map			*map;
+	mlx_texture_t	*tex_north;
+	mlx_texture_t	*tex_south;
+	mlx_texture_t	*tex_west;
+	mlx_texture_t	*tex_east;
+}	t_cube;
 
 typedef struct s_player {
-    double x;
-    double y;
-    double dir_x;
-    double dir_y;
-    double plane_x;
-    double plane_y;
+	double x;
+	double y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
 } t_player;
 
 typedef struct s_game {
 	t_cube			*cube;
-    t_player		player;
-    void			*mlx;
-    void			*win;
-    void			*img;
-    char			*addr;
-    int				width;
-    int				height;
+	t_player		player;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				width;
+	int				height;
+	// mlx_texture_t	*tex_north;
+	// mlx_texture_t	*tex_south;
+	// mlx_texture_t	*tex_west;
+	// mlx_texture_t	*tex_east;
 	t_collector		*collector;
 } t_game;
 
+typedef struct s_ray
+{
+	int		mapX;
+	int		mapY;
+	int		stepX;
+	int		stepY;
+	int		hit;
+	int		side;
+	double	rayDirX;
+	double	rayDirY;
+	double	sideDistX;
+	double	sideDistY;
+	double	deltaDistX;
+	double	deltaDistY;
+	double	perpWallDist;
+	int		lineHeight;
+	int		drawStart;
+	int		drawEnd;
+}	t_ray;
 
 /* ========================================================================== */
 /*                           UTILITY FUNCTIONS                                */
@@ -78,7 +108,7 @@ typedef struct s_game {
 /* util/utils.c */
 void	ptr_print(void **ptr, char *msg);
 void	freer(void **ptr);
-void	exit_print_error(const char *msg);
+void	print_msg(const char *msg);
 void	exit_program(t_collector **collector, const char *msg,
 			bool should_exit);
 
@@ -139,7 +169,19 @@ char    *trim_whitespace(char *str);
 void    process_empty_line(char *line);
 void    print_parsed_data(t_cube *cube);
 
+
+/* ========================================================================== */
+/*                           RENDER FUNCTIONS                                 */
+/* ========================================================================== */
 /* raycasting/render.c */
 void	render(void *param);
+void	render_raycast(t_game *game);
+
+/* raycasting/textures.c */
+mlx_texture_t	*load_texture(const char *path);
+int				load_textures(t_cube *cube);
+
+/* raycasting/render_utils.c */
+void	print_cube_data(t_cube *cube);
 
 #endif

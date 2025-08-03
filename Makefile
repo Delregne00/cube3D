@@ -33,10 +33,10 @@ MLX42_LIB = $(MLX42DIR)/build/libmlx42.a
 # MLX42 flags (detecta automáticamente el sistema)
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-    MLX42_FLAGS = -lglfw -ldl -lm
+	MLX42_FLAGS = -lglfw -ldl -lm
 endif
 ifeq ($(UNAME_S),Darwin)
-    MLX42_FLAGS = -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+	MLX42_FLAGS = -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
 endif
 
 # Source files
@@ -45,15 +45,17 @@ INIT_SRC =		$(SRCDIR)/init/cube_init.c \
 				$(SRCDIR)/init/game_init.c
 
 PARSER_SRC =	$(SRCDIR)/parser/parser.c \
-            	$(SRCDIR)/parser/parser_file.c \
-            	$(SRCDIR)/parser/parser_textures.c \
-            	$(SRCDIR)/parser/parser_rgb.c \
-            	$(SRCDIR)/parser/parser_map.c \
-            	$(SRCDIR)/parser/flood_fill.c \
-            	$(SRCDIR)/parser/flood_fill_utils.c \
-            	$(SRCDIR)/parser/parser_utils.c
+				$(SRCDIR)/parser/parser_file.c \
+				$(SRCDIR)/parser/parser_textures.c \
+				$(SRCDIR)/parser/parser_rgb.c \
+				$(SRCDIR)/parser/parser_map.c \
+				$(SRCDIR)/parser/flood_fill.c \
+				$(SRCDIR)/parser/flood_fill_utils.c \
+				$(SRCDIR)/parser/parser_utils.c
 
-RAYCASTING_SRC =$(SRCDIR)/raycasting/render.c
+RAYCASTING_SRC =$(SRCDIR)/raycasting/render.c \
+				$(SRCDIR)/raycasting/textures.c \
+				$(SRCDIR)/raycasting/render_utils.c
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
@@ -78,7 +80,7 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(MLX42_LIB) $(OBJ) Makefile
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
 	@$(CC) $(CFLAGS) $(OBJ) -L$(LIBFTDIR) -lft -L$(MLX42DIR)/build -lmlx42 $(MLX42_FLAGS) -o $(NAME)
-	@echo "$(GREEN)$(NAME) creado con éxito!$(NC)"
+	@echo "$(GREEN)$(NAME) creat amb èxit!$(NC)"
 
 $(LIBFT): $(shell find $(LIBFTDIR) -name "*.c" -o -name "*.h")
 	@echo "$(CYAN)[LIBFT] Building libft...$(NC)"
@@ -88,12 +90,12 @@ $(MLX42_LIB):
 	@echo "$(CYAN)[MLX42] Building MLX42...$(NC)"
 	@cd $(MLX42DIR) && cmake -B build && make -C build --no-print-directory
 
-# Regla específica para main.c - NUEVA
+# Regla específica per a main.c
 $(OBJDIR)/main.o: main.c $(HEADERS) Makefile | $(OBJDIR)
 	@printf "$(CYAN)[MAIN]$(NC) $(WHITE)main.c$(NC)\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# Regla para archivos en src/
+# Regla per a arxius en src/
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS) Makefile | $(OBJDIR)
 	@mkdir -p $(dir $@)
 	@if echo "$<" | grep -q "/init/"; then \
@@ -102,6 +104,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS) Makefile | $(OBJDIR)
 		printf "$(BLUE)[PARSER]$(NC) "; \
 	elif echo "$<" | grep -q "/minimap/"; then \
 		printf "$(MAGENTA)[MINIMAP]$(NC) "; \
+	elif echo "$<" | grep -q "/raycasting/"; then \
+		printf "$(MAGENTA)[RAYCASTING]$(NC) "; \
+	elif echo "$<" | grep -q "/utils/"; then \
+		printf "$(MAGENTA)[UTILS]$(NC) "; \
 	fi; \
 	printf "$(WHITE)$<$(NC)\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -111,6 +117,8 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/init
 	@mkdir -p $(OBJDIR)/parser
 	@mkdir -p $(OBJDIR)/minimap
+	@mkdir -p $(OBJDIR)/raycasting
+	@mkdir -p $(OBJDIR)/utils
 
 clean:
 	@echo "$(YELLOW)Cleaning object files...$(NC)"
@@ -144,7 +152,17 @@ info:
 	@echo "$(BLUE)  PARSER:$(NC) $(words $(PARSER_SRC)) files"
 	@echo "$(CYAN)  INIT:$(NC) $(words $(INIT_SRC)) files"
 	@echo "$(MAGENTA)  MINIMAP:$(NC) $(words $(RENDER_SRC)) files"
+	@echo "$(MAGENTA)  RAYCASTING:$(NC) $(words $(RAYCASTING_SRC)) files"
+	@echo "$(MAGENTA)  UTILS:$(NC) $(words $(UTILS_SRC)) files"
 	@echo ""
 	@echo "$(YELLOW)Libraries:$(NC)"
 	@echo "$(CYAN)  LIBFT:$(NC) $(LIBFT)"
 	@echo "$(MAGENTA)  MLX42:$(NC) $(MLX42_LIB)"
+
+
+# 	Notes:
+#	./cube maps/map_00.cub 
+#
+# 	x substituir espais en blanc:
+# 	^(    )+
+# 	\t
