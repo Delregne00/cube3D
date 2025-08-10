@@ -24,7 +24,7 @@ OBJDIR = obj
 INCLUDES = -I$(INCDIR) -I$(LIBFTDIR) -I$(MLX42DIR)/include -I.
 
 # Target
-NAME = cube
+NAME = cub3D
 
 # Libraries
 LIBFT = $(LIBFTDIR)/libft.a
@@ -52,6 +52,9 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/flood_fill.c \
 				$(SRCDIR)/parser/flood_fill_utils.c \
 				$(SRCDIR)/parser/parser_utils.c
+
+MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
+				$(SRCDIR)/minimap/player_movement.c
 
 RENDER_SRC =	$(SRCDIR)/render/render.c \
 				$(SRCDIR)/render/textures.c \
@@ -105,9 +108,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS) Makefile | $(OBJDIR)
 	elif echo "$<" | grep -q "/minimap/"; then \
 		printf "$(MAGENTA)[MINIMAP]$(NC) "; \
 	elif echo "$<" | grep -q "/render/"; then \
-		printf "$(MAGENTA)[RENDER]$(NC) "; \
+		printf "$(CYAN)[RENDER]$(NC) "; \
 	elif echo "$<" | grep -q "/utils/"; then \
-		printf "$(MAGENTA)[UTILS]$(NC) "; \
+		printf "$(BLUE)[UTILS]$(NC) "; \
 	fi; \
 	printf "$(WHITE)$<$(NC)\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -152,8 +155,8 @@ info:
 	@echo "$(BLUE)  PARSER:$(NC) $(words $(PARSER_SRC)) files"
 	@echo "$(CYAN)  INIT:$(NC) $(words $(INIT_SRC)) files"
 	@echo "$(MAGENTA)  MINIMAP:$(NC) $(words $(MINIMAP_SRC)) files"
-	@echo "$(MAGENTA)  RENDER:$(NC) $(words $(RENDER_SRC)) files"
-	@echo "$(MAGENTA)  UTILS:$(NC) $(words $(UTILS_SRC)) files"
+	@echo "$(CYAN)  RENDER:$(NC) $(words $(RENDER_SRC)) files"
+	@echo "$(BLUE)  UTILS:$(NC) $(words $(UTILS_SRC)) files"
 	@echo ""
 	@echo "$(YELLOW)Libraries:$(NC)"
 	@echo "$(CYAN)  LIBFT:$(NC) $(LIBFT)"
@@ -161,7 +164,7 @@ info:
 
 
 # 	Notes:
-#	./cube maps/map_00.cub 
+#	./cub3D maps/map_000.cub 
 #
 # 	x substituir espais en blanc:
 # 	^(    )+

@@ -21,6 +21,7 @@ static mlx_texture_t	*load_texture(const char *path)
 
 	if (!path)
 		return (NULL);
+	printf("load_texture - path: %s\n", path);
 	ext = strrchr(path, '.');
 	if (!ext)
 		return (NULL);

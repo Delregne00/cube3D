@@ -40,6 +40,9 @@ t_map *cube_map_init(void)
     map->map = NULL;
     map->filas = 0;
     map->max_columnas = 0;
+	map->player_x = -1;
+	map->player_y = -1;
+	map->player_dir = '\0';
     
     return (map);
 }

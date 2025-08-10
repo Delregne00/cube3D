@@ -73,25 +73,66 @@ bool validate_map_characters(char **map)
     return (true);
 }
 
-bool find_player_position(char **map, int *player_count)
+// bool find_player_position(char **map, int *player_count)
+// {
+//     int i;
+//     int j;
+
+//     if (!map || !player_count)
+//         return (false);
+
+//     *player_count = 0;
+//     i = 0;
+//     while (map[i])
+//     {
+//         j = 0;
+//         while (map[i][j])
+//         {
+//             if (map[i][j] == 'N' || map[i][j] == 'S' ||
+//                 map[i][j] == 'E' || map[i][j] == 'W')
+//             {
+//                 (*player_count)++;
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+//     if (*player_count == 0)
+//     {
+//         print_error(1, "No player position found in map");
+//         return (false);
+//     }
+//     if (*player_count > 1)
+//     {
+//         print_error(1, "Multiple player positions found in map");
+//         return (false);
+//     }
+//     return (true);
+// }
+
+static bool find_player_position(t_map *game_map, int *player_count)
 {
     int i;
     int j;
 
-    if (!map || !player_count)
+    if (!game_map || !game_map->map || !player_count)
         return (false);
 
     *player_count = 0;
     i = 0;
-    while (map[i])
+    while (game_map->map[i])
     {
         j = 0;
-        while (map[i][j])
+        while (game_map->map[i][j])
         {
-            if (map[i][j] == 'N' || map[i][j] == 'S' ||
-                map[i][j] == 'E' || map[i][j] == 'W')
+            if (game_map->map[i][j] == 'N' || game_map->map[i][j] == 'S' ||
+                game_map->map[i][j] == 'E' || game_map->map[i][j] == 'W')
             {
                 (*player_count)++;
+                // Guardar la posición y dirección del jugador
+                game_map->player_x = j;
+                game_map->player_y = i;
+                game_map->player_dir = game_map->map[i][j];
             }
             j++;
         }
@@ -110,6 +151,7 @@ bool find_player_position(char **map, int *player_count)
     return (true);
 }
 
+
 bool validate_map(t_map *map)
 {
     int     player_count;
@@ -121,7 +163,8 @@ bool validate_map(t_map *map)
     }
     if (!validate_map_characters(map->map))
         return (false);
-    if (!find_player_position(map->map, &player_count))
+    // if (!find_player_position(map->map, &player_count))
+    if (!find_player_position(map, &player_count))
         return (false);
     if (!flood_fill(map))
         return (false);

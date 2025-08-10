@@ -8,6 +8,7 @@ test*
 *.json
 main_test.c
 cube
+cub3D
 
 # Prerequisites
 *.d

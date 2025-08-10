@@ -22,6 +22,19 @@
 # define TEX_WE 2
 # define TEX_EA 3
 
+// Macros para el minimap
+#define MINIMAP_SCALE 10        // Tamaño de cada celda del mapa
+#define MINIMAP_OFFSET_X 20     // Posición X del minimap en la ventana
+#define MINIMAP_OFFSET_Y 20     // Posición Y del minimap en la ventana
+#define PLAYER_SIZE 3           // Tamaño del punto del jugador
+#define PLAYER_DIR_LENGTH 15    // Longitud de la línea de dirección
+
+// Colores para el minimap
+#define COLOR_WALL 0xFF0000FF   // Rojo para paredes
+#define COLOR_FLOOR 0xFFFFFFFF  // Blanco para suelo
+#define COLOR_PLAYER 0x00FF00FF // Verde para jugador
+#define COLOR_DIR 0x0000FFFF    // Azul para dirección
+
 /* ========================================================================== */
 /*                              STRUCTURES                                    */
 /* ========================================================================== */
@@ -37,6 +50,9 @@ typedef struct s_map
 	char    **map;
 	int     filas;
 	int     max_columnas;
+	int     player_x;
+	int     player_y;
+	char    player_dir;
 }           t_map;
 
 typedef struct s_data
@@ -68,16 +84,11 @@ typedef struct s_player {
 typedef struct s_game {
 	t_cube			*cube;
 	t_player		player;
-	void			*mlx;
-	void			*win;
-	void			*img;
+	mlx_t           *mlx;
+	mlx_image_t     *img;
 	char			*addr;
 	int				width;
 	int				height;
-	// mlx_texture_t	*tex_north;
-	// mlx_texture_t	*tex_south;
-	// mlx_texture_t	*tex_west;
-	// mlx_texture_t	*tex_east;
 	t_collector		*collector;
 } t_game;
 
@@ -169,6 +180,27 @@ char    *trim_whitespace(char *str);
 void    process_empty_line(char *line);
 void    print_parsed_data(t_cube *cube);
 
+
+/* ========================================================================== */
+/*                          MINIMAP FUNCTIONS                                 */
+/* ========================================================================== */
+void render_minimap(t_game *game);
+void draw_map_grid(t_game *game);
+void draw_player(t_game *game);
+void draw_player_direction(t_game *game);
+void draw_square(t_game *game, int x, int y, int size, uint32_t color);
+void draw_line(t_game *game, int x0, int y0, int x1, int y1, uint32_t color);
+
+/* ========================================================================== */
+/*                  PLAYER MOVEMENT FUNCTIONS                                 */
+/* ========================================================================== */
+void handle_input(t_game *game);
+void move_player(t_game *game, int direction);
+void strafe_player(t_game *game, int direction);
+void rotate_player(t_game *game, int direction);
+bool is_wall(t_game *game, double x, double y);
+void player_init(t_game *game);
+void game_loop(void *param);
 
 /* ========================================================================== */
 /*                           RENDER FUNCTIONS                                 */
