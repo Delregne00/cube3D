@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-/* Compilar directe a terminal amb :
+/* primer compilar mlx y libft despres fer servir la comanda  directe a terminal:
 gcc -o raycasting raycasting.c \
     -Iincludes \
     -Ilibraries/MLX42/include \
@@ -22,14 +22,14 @@ gcc -o raycasting raycasting.c \
 #define TITLE           "Raycasting 2D - Vista Top-Down"
 
 // ==================== CONFIGURACIÓN DE RAYCASTING ====================
-#define FOV             60.0f        // Campo de visión en grados
-#define NUM_RAYS        60           // Número de rayos
-#define RAY_LENGTH      15.0f        // Longitud máxima del rayo
+#define FOV             90.0f        // Campo de visión en grados
+#define NUM_RAYS        120           // Número de rayos
+#define RAY_LENGTH      150.0f        // Longitud máxima del rayo
 #define RAY_STEP        0.02f        // Paso del rayo (precisión)
 
 // ==================== CONFIGURACIÓN DE MOVIMIENTO ====================
-#define MOVE_SPEED      0.05f        // Velocidad de movimiento
-#define ROT_SPEED       0.03f        // Velocidad de rotación
+#define MOVE_SPEED      0.02f        // Velocidad de movimiento
+#define ROT_SPEED       0.02f        // Velocidad de rotación
 #define MOUSE_SENS      0.01f        // Sensibilidad del ratón
 
 // ==================== COLORES ====================
