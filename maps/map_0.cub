@@ -3,7 +3,7 @@ SO ./textures/wall_south.jpeg
 WE ./textures/wall_west.png
 EA ./textures/wall_east.jpg
 
-F 40,100,0
+F 40,10,0
 C 25,30,0
 
         111111111111111111111
