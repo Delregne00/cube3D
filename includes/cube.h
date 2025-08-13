@@ -89,7 +89,7 @@ typedef struct s_game {
 	char			*addr;
 	int				width;
 	int				height;
-	t_collector		*collector;
+	// t_collector		*collector;
 } t_game;
 
 typedef struct s_ray
@@ -139,8 +139,8 @@ void	collector_append(t_collector **collector, void *ptr);
 /*                           INIT FUNCTIONS                                   */
 /* ========================================================================== */
 /* init/cube_init.c */
-t_cube    *cube_init(void);
-void      cube_free(t_cube *cube);
+t_cube	*cube_init(t_collector **collector);
+void	cube_free(t_cube *cube);
 
 /* init/game_init.c */
 t_game	*game_init(t_cube *cube, t_collector **collector);

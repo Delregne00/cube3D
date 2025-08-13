@@ -27,62 +27,38 @@ void game_loop(void *param)
     render_minimap(game);
 }
 
-// game_init() modificado
 t_game *game_init(t_cube *cube, t_collector **collector)
 {
     t_game *game;
 
     game = malloc(sizeof(t_game));
     if (!game)
-    {
-        printf("Error: Failed to allocate memory for game\n");
-        return (NULL);
-    }
-    
-    if (collector)
-    {
-        collector_append(collector, game);
-        game->collector = *collector;
-    }
-    
+		return (NULL);
+	collector_append(collector, game);
     game->cube = cube;
     game->width = WIN_W;
     game->height = WIN_H;
-    
     // Inicializar MLX
     game->mlx = mlx_init(WIN_W, WIN_H, "cub3D", false);
     if (!game->mlx)
-    {
-        perror("Failed to initialize MLX");
-        free(game);
-        exit(1);
-    }
-    
+		exit_program(collector, "Error Failed to initialize MLX", EXIT_FAILURE);
     // Crear imagen
     game->img = mlx_new_image(game->mlx, WIN_W, WIN_H);
     if (!game->img)
     {
-        perror("Failed to create image");
         mlx_terminate(game->mlx);
-        free(game);
-        exit(1);
-    }
-    
+		exit_program(collector, "Error Failed to create image", EXIT_FAILURE);
+	}
     // Inicializar jugador
     player_init(game);
-    
     // Añadir imagen a la ventana
     mlx_image_to_window(game->mlx, game->img, 0, 0);
-    
     // Configurar el loop hook para el minimap
     mlx_loop_hook(game->mlx, game_loop, game);
-    
     // Iniciar el loop
     mlx_loop(game->mlx);
-    
     // Limpiar
     mlx_terminate(game->mlx);
-    
     return (game);
 }
 
@@ -94,32 +70,32 @@ void player_init(t_game *game)
     game->player.y = (double)game->cube->map->player_y + 0.5;
     
     // Configurar dirección inicial según el carácter del mapa
-    // Ajustado para el sistema de coordenadas correcto
+    // Ahora coherente con el movimiento
     switch (game->cube->map->player_dir)
     {
-        case 'N':
-            game->player.dir_x = -1.0;
+        case 'N': // Norte = hacia arriba en el minimap
+            game->player.dir_x = 0.0;
+            game->player.dir_y = -1.0;
+            game->player.plane_x = 0.66;
+            game->player.plane_y = 0.0;
+            break;
+        case 'S': // Sur = hacia abajo en el minimap
+            game->player.dir_x = 0.0;
+            game->player.dir_y = 1.0;
+            game->player.plane_x = -0.66;
+            game->player.plane_y = 0.0;
+            break;
+        case 'E': // Este = hacia la derecha en el minimap
+            game->player.dir_x = 1.0;
             game->player.dir_y = 0.0;
             game->player.plane_x = 0.0;
             game->player.plane_y = 0.66;
             break;
-        case 'S':
-            game->player.dir_x = 1.0;
+        case 'W': // Oeste = hacia la izquierda en el minimap
+            game->player.dir_x = -1.0;
             game->player.dir_y = 0.0;
             game->player.plane_x = 0.0;
             game->player.plane_y = -0.66;
-            break;
-        case 'E':
-            game->player.dir_x = 0.0;
-            game->player.dir_y = 1.0;
-            game->player.plane_x = 0.66;
-            game->player.plane_y = 0.0;
-            break;
-        case 'W':
-            game->player.dir_x = 0.0;
-            game->player.dir_y = -1.0;
-            game->player.plane_x = -0.66;
-            game->player.plane_y = 0.0;
             break;
     }
 }

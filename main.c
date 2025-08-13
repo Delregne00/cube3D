@@ -6,35 +6,24 @@ int main(int argc, char **argv)
 	t_game		*game;
 	t_collector	*collector;
 
-	
 	if (argc != 2)
 	{
-	printf("Usage: %s <map.cub>\n", argv[0]);
-	return (1);
+		printf("Usage: %s <map.cub>\n", argv[0]);
+		return (1);
 	}
 	collector = NULL;
-	//TODO: guardar cube a collector
-	cube = cube_init();
+	cube = cube_init(&collector);
 	if (!cube)
-	{
-		//TODO: usar exit_program i buidar collector
-		printf("Error: Failed to initialize cube\n");
-	exit(1);
-	}
+		exit_program(&collector, "Error: Failed to initialize cube", EXIT_FAILURE);
+	collector_append(&collector, cube);
 	if (!parser(cube, argv[1]))
-	{
-		//TODO: usar exit_program i buidar collector
-		printf("Error: Parsing failed\n");
-		cube_free(cube);
-		exit(1);
-	}
+		exit_program(&collector, "Error: Parsing failed", EXIT_FAILURE);
 	printf("Parsing completed successfully!\n");
 	print_parsed_data(cube);
 	game = game_init(cube, &collector);
-
-	//TODO: no usar free i buidar collector
-	cube_free(cube);
-	free(game);
+	if (!game)
+		exit_program(&collector, "Error: Failed to initialize game", EXIT_FAILURE);
 	collector_cleanup(&collector);
+	printf("Surt de cub3D sense errors!\n");
 	return (EXIT_SUCCESS);
 }

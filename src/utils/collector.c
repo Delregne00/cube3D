@@ -47,9 +47,15 @@ void	collector_cleanup(t_collector **collector)
 	{
 		next = current->next;
 		if (current->ptr)
+		{
+			// printf("del ptr: %p\n", current->ptr);
 			freer(&current->ptr);
+		}
 		if (current)
+		{
+			// printf("   current: %p\n", current);
 			free(current);
+		}
 		current = next;
 	}
 	*collector = NULL;
@@ -76,6 +82,7 @@ void	collector_append(t_collector **collector, void *ptr)
 	if (!new_node)
 		exit_program(collector, "Error malloc collector", EXIT_FAILURE);
 	new_node->ptr = ptr;
+	// printf("app ptr: %p\n", ptr);
 	new_node->next = *collector;
 	*collector = new_node;
 }

@@ -28,7 +28,7 @@ void handle_input(t_game *game)
     if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
         rotate_player(game, 1);  // Rotar derecha
     if (mlx_is_key_down(game->mlx, MLX_KEY_ESCAPE))
-        mlx_close_window(game->mlx);
+        mlx_close_window(game->mlx);  // Esto hará que mlx_loop() termine
 }
 
 // Movimiento adelante/atrás
@@ -37,8 +37,9 @@ void move_player(t_game *game, int direction)
     double new_x, new_y;
     double move_speed = 0.05; // Ajusta según necesites
     
-    new_x = game->player.x + game->player.dir_y * move_speed * direction;
-    new_y = game->player.y + game->player.dir_x * move_speed * direction;
+    // Moverse en la dirección hacia donde mira el jugador
+    new_x = game->player.x + game->player.dir_x * move_speed * direction;
+    new_y = game->player.y + game->player.dir_y * move_speed * direction;
     
     if (!is_wall(game, new_x, game->player.y))
         game->player.x = new_x;
@@ -52,9 +53,9 @@ void strafe_player(t_game *game, int direction)
     double new_x, new_y;
     double move_speed = 0.05;
     
-    // Perpendicular al vector de dirección
-    new_x = game->player.x + game->player.plane_y * move_speed * direction;
-    new_y = game->player.y + game->player.plane_x * move_speed * direction;
+    // Perpendicular al vector de dirección (usar plane)
+    new_x = game->player.x + game->player.plane_x * move_speed * direction;
+    new_y = game->player.y + game->player.plane_y * move_speed * direction;
     
     if (!is_wall(game, new_x, game->player.y))
         game->player.x = new_x;
