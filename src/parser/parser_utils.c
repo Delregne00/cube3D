@@ -1,7 +1,35 @@
 #include "cube.h"
 
+// void	print_map(char **map)
+// {
+//     int i = 0;
+    
+//     if (!map)
+//         return;
+    
+//     while (map[i])
+//     {
+//         printf("%s\n", map[i]);
+//         i++;
+//     }
+// }
 
-void print_parsed_data(t_cube *cube)
+void	print_map(t_map *map)
+{
+    int i;
+
+	if (!map)
+		return ;
+	i = 0;
+	while (map->map[i])
+	{
+		printf("%s\n", map->map[i]);
+		i++;
+	}
+	printf("\n");
+}
+
+void	print_parsed_data(t_cube *cube)
 {
     int i;
     
@@ -32,12 +60,13 @@ void print_parsed_data(t_cube *cube)
         printf("  Ceiling (C): [NOT SET]\n");
     if (cube->map)
     {
-        i = 0;
-        while (cube->map->map[i])
-        {
-            printf("%s\n", cube->map->map[i]);
-            i++;
-        }
+        // i = 0;
+        // while (cube->map->map[i])
+        // {
+        //     printf("%s\n", cube->map->map[i]);
+        //     i++;
+        // }
+		print_map(cube->map);
     }
     else
         printf("  [NOT SET]\n");
@@ -57,20 +86,6 @@ void print_error(int n, ...)
     }
     ft_putstr_fd(".\n", STDERR_FILENO);
     va_end(args);
-}
-
-void print_map(char **map)
-{
-    int i = 0;
-    
-    if (!map)
-        return;
-    
-    while (map[i])
-    {
-        printf("%s\n", map[i]);
-        i++;
-    }
 }
 
 void free_map(t_map *map)

@@ -1,11 +1,16 @@
 #include "MLX42/MLX42.h"
 #include <stdio.h>
 #include <stdbool.h>
+// #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdlib.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 /* primer compilar mlx y libft despres fer servir la comanda  directe a terminal:
-gcc -o raycasting raycasting.c \
+gcc -o raycasting raycasting_test.c \
     -Iincludes \
     -Ilibraries/MLX42/include \
     -Llibraries/libft -lft \

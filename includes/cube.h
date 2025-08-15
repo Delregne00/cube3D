@@ -89,7 +89,6 @@ typedef struct s_game {
 	char			*addr;
 	int				width;
 	int				height;
-	// t_collector		*collector;
 } t_game;
 
 typedef struct s_ray
@@ -170,16 +169,16 @@ bool    start_position(t_map *map, int *start_x, int *start_y);
 bool    start_flood_fill(t_map *map, int x, int y, bool **visited);
 bool    check_connectivity(t_map *map, bool **visited);
 
-/* parsing utils */
+/* parser/parser_utils.c */
+void	print_map(t_map *map);
+// void    print_map(char **map);
 void    print_error(int n, ...);
-void    print_map(char **map);
 void    free_map(t_map *map);
 char    **allocate_map(void);
 void    free_map_partial(char **map, int size);
 char    *trim_whitespace(char *str);
 void    process_empty_line(char *line);
 void    print_parsed_data(t_cube *cube);
-
 
 /* ========================================================================== */
 /*                          MINIMAP FUNCTIONS                                 */
@@ -205,6 +204,10 @@ void game_loop(void *param);
 /* ========================================================================== */
 /*                           RENDER FUNCTIONS                                 */
 /* ========================================================================== */
+
+/* render/raycasting.c */
+void	raycasting(t_game *game);
+
 /* render/render.c */
 //void	render(void *param);
 void	render_raycast(t_game *game);

@@ -58,7 +58,8 @@ MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
 
 RENDER_SRC =	$(SRCDIR)/render/render.c \
 				$(SRCDIR)/render/textures.c \
-				$(SRCDIR)/render/render_utils.c
+				$(SRCDIR)/render/render_utils.c \
+				$(SRCDIR)/render/raycasting.c
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
