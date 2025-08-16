@@ -62,15 +62,24 @@ typedef struct s_data
 	int		c_color[3];		// Ceiling RGB
 }	t_data;
 
+// typedef struct s_cube
+// {
+// 	t_data			*data;
+// 	t_map			*map;
+// 	mlx_texture_t	*tex_north;
+// 	mlx_texture_t	*tex_south;
+// 	mlx_texture_t	*tex_west;
+// 	mlx_texture_t	*tex_east;
+// }	t_cube;
 typedef struct s_cube
 {
-	t_data			*data;
-	t_map			*map;
-	mlx_texture_t	*tex_north;
-	mlx_texture_t	*tex_south;
-	mlx_texture_t	*tex_west;
-	mlx_texture_t	*tex_east;
-}	t_cube;
+    t_data      *data;
+    t_map       *map;
+    mlx_image_t *tex_north;
+    mlx_image_t *tex_south;
+    mlx_image_t *tex_west;
+    mlx_image_t *tex_east;
+}   t_cube;
 
 typedef struct s_player {
 	double x;
@@ -90,6 +99,12 @@ typedef struct s_game {
 	int				width;
 	int				height;
 } t_game;
+
+typedef struct s_game_loop_param
+{
+    t_game       *game;
+    t_collector  **collector;
+} t_game_loop_param;
 
 typedef struct s_ray
 {
@@ -206,14 +221,15 @@ void game_loop(void *param);
 /* ========================================================================== */
 
 /* render/raycasting.c */
-void	raycasting(t_game *game);
+void	raycasting(t_game *game, t_collector **collector);
 
 /* render/render.c */
 //void	render(void *param);
 void	render_raycast(t_game *game);
 
 /* render/textures.c */
-int				load_textures(t_cube *cube);
+// int		load_textures(t_cube *cube);
+int		load_textures(t_game *game, t_collector **collector);
 
 /* render/render_utils.c */
 //void	print_cube_data(t_cube *cube);

@@ -15,7 +15,7 @@
 static void	init_ray(t_game *game, t_ray *ray, int x)
 {
 	double	cameraX;
-	
+
 	cameraX = 2 * x / (double)game->width - 1;
 	ray->rayDirX = game->player.dir_x + game->player.plane_x * cameraX;
 	ray->rayDirY = game->player.dir_y + game->player.plane_y * cameraX;
@@ -94,42 +94,39 @@ static void	calc_wall_height(t_game *game, t_ray *ray)
 		ray->drawEnd = game->height - 1;
 }
 
-static void	draw_vertical_line(t_game *game, int x, int start, int end, uint32_t color)
-{
-	int	y;
-
-	y = start;
-	while (y <= end)
-	{
-		if (y >= 0 && y < game->height)
-			mlx_put_pixel(game->img, x, y, color);
-		y++;
-	}
-}
-
-static uint32_t	get_wall_color(t_ray *ray)
-{
-	// NO
-	if (ray->side == 0 && ray->rayDirX < 0)
-		return (0xFF0000FF);
-	// SO
-	else if (ray->side == 0 && ray->rayDirX > 0)
-		return (0xFFFF00FF);
-	// WE
-	else if (ray->side == 1 && ray->rayDirY < 0)
-		return (0x0000FFFF);
-	// EA
-	else
-		return (0x00FF00FF);
-}
-
 static uint32_t	rgb_to_uint32(int r, int g, int b)
 {
-	// MLX42 usa RGBA en little-endian → 0xRRGGBBAA
 	return ((r & 0xFF) << 24) | ((g & 0xFF) << 16) | ((b & 0xFF) << 8) | 0xFF;
 }
 
-void	raycasting(t_game *game)
+static uint32_t get_texture_pixel(mlx_image_t *img, int texX, int texY)
+{
+    int index = (texY * img->width + texX) * 4;
+    return ((img->pixels[index] << 24)     // R
+        | (img->pixels[index + 1] << 16)   // G
+        | (img->pixels[index + 2] << 8)    // B
+        | (img->pixels[index + 3]));       // A
+}
+
+static mlx_image_t *select_texture(t_game *game, t_ray *ray)
+{
+    if (ray->side == 0)
+    {
+        if (ray->rayDirX < 0)
+            return (game->cube->tex_north);
+        else
+            return (game->cube->tex_south);
+    }
+    else
+    {
+        if (ray->rayDirY < 0)
+            return (game->cube->tex_west);
+        else
+            return (game->cube->tex_east);
+    }
+}
+
+void	raycasting(t_game *game, t_collector **collector)
 {
 	int			x;
 	int			y;
@@ -137,7 +134,6 @@ void	raycasting(t_game *game)
 	uint32_t	color_floor;
 	uint32_t	color_ceil;
 
-	// Convertimos F y C de game->cube->data a uint32_t
 	color_floor = rgb_to_uint32(
 		game->cube->data->f_color[0],
 		game->cube->data->f_color[1],
@@ -157,15 +153,59 @@ void	raycasting(t_game *game)
 		perform_dda(game, &ray);
 		calc_wall_height(game, &ray);
 
-		// Techo
+		// 1️⃣ Techo
 		y = 0;
 		while (y < ray.drawStart)
 			mlx_put_pixel(game->img, x, y++, color_ceil);
 
-		// Pared
-		draw_vertical_line(game, x, ray.drawStart, ray.drawEnd, get_wall_color(&ray));
+		// 2️⃣ Pared con textura
+		// mlx_texture_t *tex = select_texture(game, &ray);
+		mlx_image_t *tex = select_texture(game, &ray);
+		if (!tex)
+		{
+			exit_program(collector, "Error: textura NULL en raycasting", 0);
+		}
 
-		// Suelo
+		double wallX;
+		if (ray.side == 0)
+			wallX = game->player.y + ray.perpWallDist * ray.rayDirY;
+		else
+			wallX = game->player.x + ray.perpWallDist * ray.rayDirX;
+		wallX -= floor(wallX);
+
+		int texX = (int)(wallX * (double)tex->width);
+		if ((ray.side == 0 && ray.rayDirX > 0) ||
+			(ray.side == 1 && ray.rayDirY < 0))
+			texX = tex->width - texX - 1;
+
+		double step = 1.0 * tex->height / ray.lineHeight;
+		if (ray.drawStart < 0)
+			ray.drawStart = 0;
+		if (ray.drawEnd >= game->height)
+			ray.drawEnd = game->height - 1;
+
+		double texPos = (ray.drawStart - game->height / 2.0 + ray.lineHeight / 2.0) * step;
+
+		int texY;
+		texY = 0;
+		for (y = ray.drawStart; y <= ray.drawEnd; y++)
+		{
+			texY = (int)texPos % tex->height;
+			if (texY < 0)
+				texY += tex->height;
+
+			texPos += step;
+			uint32_t color = get_texture_pixel(tex, texX, texY);
+			mlx_put_pixel(game->img, x, y, color);
+		}
+		if (texX < 0 || (uint32_t)texX >= tex->width || texY < 0 || (uint32_t)texY >= tex->height)
+		{
+			printf("Error: texX=%d texY=%d fuera de rango (w=%d h=%d)\n",
+				texX, texY, tex->width, tex->height);
+			continue;
+		}
+
+		// 3️⃣ Suelo
 		y = ray.drawEnd + 1;
 		while (y < game->height)
 			mlx_put_pixel(game->img, x, y++, color_floor);
@@ -173,3 +213,124 @@ void	raycasting(t_game *game)
 		x++;
 	}
 }
+
+
+
+
+
+//// les 3 funcions següents funcionen OK però amb textures en loc de images
+// static uint32_t	get_texture_pixel(mlx_texture_t *tex, int texX, int texY)
+// {
+// 	int	index = (texY * tex->width + texX) * 4;
+// 	return ((tex->pixels[index] << 24)     // R
+// 		| (tex->pixels[index + 1] << 16)  // G
+// 		| (tex->pixels[index + 2] << 8)   // B
+// 		| (tex->pixels[index + 3]));      // A
+// }
+
+// static mlx_texture_t	*select_texture(t_game *game, t_ray *ray)
+// {
+// 	if (ray->side == 0)
+// 	{
+// 		if (ray->rayDirX < 0)
+// 			return (game->cube->tex_north);
+// 		else
+// 			return (game->cube->tex_south);
+// 	}
+// 	else
+// 	{
+// 		if (ray->rayDirY < 0)
+// 			return (game->cube->tex_west);
+// 		else
+// 			return (game->cube->tex_east);
+// 	}
+// }
+
+// void	raycasting(t_game *game)
+// {
+// 	int			x;
+// 	int			y;
+// 	t_ray		ray;
+// 	uint32_t	color_floor;
+// 	uint32_t	color_ceil;
+
+// 	color_floor = rgb_to_uint32(
+// 		game->cube->data->f_color[0],
+// 		game->cube->data->f_color[1],
+// 		game->cube->data->f_color[2]
+// 	);
+// 	color_ceil = rgb_to_uint32(
+// 		game->cube->data->c_color[0],
+// 		game->cube->data->c_color[1],
+// 		game->cube->data->c_color[2]
+// 	);
+
+// 	x = 0;
+// 	while (x < game->width)
+// 	{
+// 		init_ray(game, &ray, x);
+// 		calc_step_and_side_dist(game, &ray);
+// 		perform_dda(game, &ray);
+// 		calc_wall_height(game, &ray);
+
+// 		// 1️⃣ Techo
+// 		y = 0;
+// 		while (y < ray.drawStart)
+// 			mlx_put_pixel(game->img, x, y++, color_ceil);
+
+// 		// 2️⃣ Pared con textura
+// 		mlx_texture_t *tex = select_texture(game, &ray);
+// 		if (!tex)
+// 		{
+// 			printf("Error: textura NULL\n");
+// 			continue; // o salir
+// 		}
+
+// 		double wallX;
+// 		if (ray.side == 0)
+// 			wallX = game->player.y + ray.perpWallDist * ray.rayDirY;
+// 		else
+// 			wallX = game->player.x + ray.perpWallDist * ray.rayDirX;
+// 		wallX -= floor(wallX);
+
+// 		int texX = (int)(wallX * (double)tex->width);
+// 		if ((ray.side == 0 && ray.rayDirX > 0) ||
+// 			(ray.side == 1 && ray.rayDirY < 0))
+// 			texX = tex->width - texX - 1;
+
+// 		double step = 1.0 * tex->height / ray.lineHeight;
+// 		if (ray.drawStart < 0)
+// 			ray.drawStart = 0;
+// 		if (ray.drawEnd >= game->height)
+// 			ray.drawEnd = game->height - 1;
+
+// 		double texPos = (ray.drawStart - game->height / 2.0 + ray.lineHeight / 2.0) * step;
+
+// 		int texY;
+// 		texY = 0;
+// 		for (y = ray.drawStart; y <= ray.drawEnd; y++)
+// 		{
+// 			// texY = (int)texPos & (tex->height - 1);
+// 			texY = (int)texPos % tex->height;
+// 			if (texY < 0)
+// 				texY += tex->height;
+
+// 			texPos += step;
+// 			uint32_t color = get_texture_pixel(tex, texX, texY);
+// 			mlx_put_pixel(game->img, x, y, color);
+// 		}
+// 		if (texX < 0 || (uint32_t)texX >= tex->width || texY < 0 || (uint32_t)texY >= tex->height)
+// 		{
+// 			printf("Error: texX=%d texY=%d fuera de rango (w=%d h=%d)\n",
+// 				texX, texY, tex->width, tex->height);
+// 			continue;
+// 		}
+
+// 		// 3️⃣ Suelo
+// 		y = ray.drawEnd + 1;
+// 		while (y < game->height)
+// 			mlx_put_pixel(game->img, x, y++, color_floor);
+
+// 		x++;
+// 	}
+// }

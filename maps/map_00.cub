@@ -1,7 +1,7 @@
-NO ./textures/wall.png
-SO ./textures/wall.png
-WE ./textures/wall.png
-EA ./textures/wall.png
+NO ./textures/wall_v.png
+SO ./textures/wall_g.png
+WE ./textures/wall_hard.png
+EA ./textures/wall_vivid.png
 
 F 40,100,0
 C 25,30,0

@@ -1,6 +1,6 @@
-NO ./textures/wall.png
-SO ./textures/wall.png
-WE ./textures/wall.png
+NO ./textures/wall_y.png
+SO ./textures/wall_g.png
+WE ./textures/wall_hard.png
 EA ./textures/wall.png
 
 F 40,100,0

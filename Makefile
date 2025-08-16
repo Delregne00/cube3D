@@ -56,8 +56,7 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
 				$(SRCDIR)/minimap/player_movement.c
 
-RENDER_SRC =	$(SRCDIR)/render/render.c \
-				$(SRCDIR)/render/textures.c \
+RENDER_SRC =	$(SRCDIR)/render/textures.c \
 				$(SRCDIR)/render/render_utils.c \
 				$(SRCDIR)/render/raycasting.c
 
