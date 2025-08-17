@@ -12,18 +12,115 @@
 
 #include "includes/cube.h"
 
-// Función principal para renderizar el minimap
-void	render_minimap(t_game *game)
+// Funció x posar un píxel en la imatge de minilibX
+void	put_pixel_to_image(t_game *game, int x, int y, int color)
 {
-	if (!game || !game->cube || !game->cube->map)
-		return;
-	
-	draw_map_grid(game);
-	draw_player(game);
-	draw_player_direction(game);
+	char	*dst;
+
+	if (x >= 0 && x < WIN_W && y >= 0 && y < WIN_H)
+	{
+		dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
+		*(unsigned int*)dst = color;
+	}
 }
 
-// Dibujar la grid del mapa
+// Dibuixar una línia
+// void	draw_line(t_game *game, int x0, int y0, int x1, int y1, uint32_t color)
+void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+	int	e2;
+	
+	dx = abs(x1 - x0);
+	dy = abs(y1 - y0);
+	if (x0 < x1)
+		sx = 1;
+	else
+		sx = -1;
+	if (y0 < y1)
+		sy = 1;
+	else
+		sy = -1;
+	err = dx - dy;
+	while (1)
+	{
+		if (x0 >= 0 && x0 < WIN_W && y0 >= 0 && y0 < WIN_H)
+			// mlx_put_pixel(game->img, x0, y0, color);
+			put_pixel_to_image(game, x0, y0, color);
+		if (x0 == x1 && y0 == y1)
+			break;
+		
+		e2 = 2 * err;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			x0 += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			y0 += sy;
+		}
+	}
+}
+
+// Dibuixar un quadrat
+// void	draw_square(t_game *game, int x, int y, int size, uint32_t color)
+void	draw_square(t_game *game, int x, int y, int size, int color)
+{
+	int	i;
+	int	j;
+	
+	i = 0;
+	while (i < size)
+	{
+		j = 0;
+		while (j < size)
+		{
+			if (x + j >= 0 && x + j < WIN_W && y + i >= 0 && y + i < WIN_H)
+				// mlx_put_pixel(game->img, x + j, y + i, color);
+				put_pixel_to_image(game, x + j, y + i, color);				
+			j++;
+		}
+		i++;
+	}
+}
+
+// Dibuixar la direcció del jugador
+void	draw_player_direction(t_game *game)
+{
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
+	
+	start_x = MINIMAP_OFFSET_X + (game->player.x * MINIMAP_SCALE);
+	start_y = MINIMAP_OFFSET_Y + (game->player.y * MINIMAP_SCALE);
+	
+	end_x = start_x + (game->player.dir_x * PLAYER_DIR_LENGTH);
+	end_y = start_y + (game->player.dir_y * PLAYER_DIR_LENGTH);
+	
+	draw_line(game, start_x, start_y, end_x, end_y, COLOR_DIR);
+}
+
+// Dibuixar el jugador com un punt
+void	draw_player(t_game *game)
+{
+	int	pixel_x;
+	int	pixel_y;
+	
+	pixel_x = MINIMAP_OFFSET_X + (game->player.x * MINIMAP_SCALE);
+	pixel_y = MINIMAP_OFFSET_Y + (game->player.y * MINIMAP_SCALE);
+	
+	draw_square(game, pixel_x - PLAYER_SIZE/2, pixel_y - PLAYER_SIZE/2, 
+				PLAYER_SIZE, COLOR_PLAYER);
+}
+
+// Dibuixar grid del mapa
 void	draw_map_grid(t_game *game)
 {
 	int	i;
@@ -50,95 +147,13 @@ void	draw_map_grid(t_game *game)
 	}
 }
 
-// Dibujar al jugador como un punto
-void	draw_player(t_game *game)
+// Funció principal x renderitzar el minimap
+void	render_minimap(t_game *game)
 {
-	int	pixel_x;
-	int	pixel_y;
+	if (!game || !game->cube || !game->cube->map)
+		return;
 	
-	pixel_x = MINIMAP_OFFSET_X + (game->player.x * MINIMAP_SCALE);
-	pixel_y = MINIMAP_OFFSET_Y + (game->player.y * MINIMAP_SCALE);
-	
-	draw_square(game, pixel_x - PLAYER_SIZE/2, pixel_y - PLAYER_SIZE/2, 
-				PLAYER_SIZE, COLOR_PLAYER);
-}
-
-// Dibujar la dirección del jugador
-void	draw_player_direction(t_game *game)
-{
-	int start_x;
-	int start_y;
-	int end_x;
-	int end_y;
-	
-	start_x = MINIMAP_OFFSET_X + (game->player.x * MINIMAP_SCALE);
-	start_y = MINIMAP_OFFSET_Y + (game->player.y * MINIMAP_SCALE);
-	
-	end_x = start_x + (game->player.dir_x * PLAYER_DIR_LENGTH);
-	end_y = start_y + (game->player.dir_y * PLAYER_DIR_LENGTH);
-	
-	draw_line(game, start_x, start_y, end_x, end_y, COLOR_DIR);
-}
-
-// Función auxiliar para dibujar un cuadrado
-void	draw_square(t_game *game, int x, int y, int size, uint32_t color)
-{
-	int	i;
-	int	j;
-	
-	i = 0;
-	while (i < size)
-	{
-		j = 0;
-		while (j < size)
-		{
-			if (x + j >= 0 && x + j < WIN_W && y + i >= 0 && y + i < WIN_H)
-				mlx_put_pixel(game->img, x + j, y + i, color);
-			j++;
-		}
-		i++;
-	}
-}
-
-// Función auxiliar para dibujar una línea (algoritmo de Bresenham simplificado)
-void	draw_line(t_game *game, int x0, int y0, int x1, int y1, uint32_t color)
-{
-	int	dx;
-	int	dy;
-	int	sx;
-	int	sy;
-	int	err;
-	int	e2;
-	
-	dx = abs(x1 - x0);
-	dy = abs(y1 - y0);
-	if (x0 < x1)
-		sx = 1;
-	else
-		sx = -1;
-	if (y0 < y1)
-		sy = 1;
-	else
-		sy = -1;
-	err = dx - dy;
-	while (1)
-	{
-		if (x0 >= 0 && x0 < WIN_W && y0 >= 0 && y0 < WIN_H)
-			mlx_put_pixel(game->img, x0, y0, color);
-		
-		if (x0 == x1 && y0 == y1)
-			break;
-		
-		e2 = 2 * err;
-		if (e2 > -dy)
-		{
-			err -= dy;
-			x0 += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			y0 += sy;
-		}
-	}
+	draw_map_grid(game);
+	draw_player(game);
+	draw_player_direction(game);
 }

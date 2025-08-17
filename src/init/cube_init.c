@@ -8,7 +8,7 @@ static t_data *cube_data_init(t_collector **collector)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	collector_append(collector, data);
+	collector_append(collector, data, RES_MALLOC, NULL);
 	data->textures = malloc(5 * sizeof(char *));
 	if (!data->textures)
 	{
@@ -16,7 +16,7 @@ static t_data *cube_data_init(t_collector **collector)
 		return (NULL);
 		// exit_program(collector, "Error malloc init textures", EXIT_FAILURE);
 	}
-	collector_append(collector, data->textures);
+	collector_append(collector, data->textures, RES_MALLOC, NULL);
 	i = 0;
 	while (i < 5)
 	{
@@ -41,7 +41,7 @@ static t_map *cube_map_init(t_collector **collector)
 	if (!map)
 		return (NULL);
 		// exit_program(collector, "Error malloc cube_map_init", EXIT_FAILURE);
-	collector_append(collector, map);
+	collector_append(collector, map, RES_MALLOC, NULL);
 	map->map = NULL;
 	map->filas = 0;
 	map->max_columnas = 0;
@@ -66,7 +66,7 @@ t_cube *cube_init(t_collector **collector)
 		return (NULL);
 		// exit_program(collector, "Error malloc cube_data_init", EXIT_FAILURE);
 	}
-	collector_append(collector, cube->data);
+	collector_append(collector, cube->data, RES_MALLOC, NULL);
 	cube->map = cube_map_init(collector);
 	if (!cube->map)
 	{
@@ -85,7 +85,7 @@ t_cube *cube_init(t_collector **collector)
 		// free(cube);
 		return (NULL);
 	}
-	collector_append(collector, cube->map);
+	collector_append(collector, cube->map, RES_MALLOC, NULL);
 	// cube->mlx = NULL; 
 	return (cube);
 }

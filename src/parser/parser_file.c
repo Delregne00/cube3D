@@ -1,4 +1,5 @@
-#include "cube.h"
+// #include "cube.h"
+#include "includes/cube.h"
 
 char	**copy_map_fixed(char *first_line, int fd, int *map_size)
 {

@@ -12,26 +12,6 @@
 
 #include "includes/cube.h"
 
-void	game_loop(void *param)
-{
-    t_game_loop_param	*p;
-    t_game				*game;
-    t_collector			**collector;
-
-    p = (t_game_loop_param *)param;
-    game = p->game;
-    collector = p->collector;
-	// Limpiar la imagen (fondo negro)
-	ft_memset(game->img->pixels, 0, WIN_W * WIN_H * sizeof(uint32_t));
-	// Manejar input
-	handle_input(game);
-	// Raycasting básico (pintado de muros)
-	raycasting(game, collector);
-	// Renderizar minimap encima
-	render_minimap(game);
-}
-
-// Función player_init() que necesitas crear/modificar
 void player_init(t_game *game)
 {
 		// Usar la posición del parsing
@@ -70,46 +50,126 @@ void player_init(t_game *game)
 		// print_map(game->cube->map);
 }
 
+// int	close_window(t_game *game)
+int	close_window(t_game_loop_param *p)
+{
+	printf("marxaaaaa!\n");
+	// (void)game;
+	collector_cleanup(p->collector, p->game->mlx);
+	printf("Surt de cub3D sense errors x close_window!\n");
+	exit(0);
+	return (0);
+}
+
+// void	game_loop(void *param)
+int	game_loop(void *param)
+{
+	t_game_loop_param	*p;
+	t_game				*game;
+
+	p = (t_game_loop_param *)param;
+	game = p->game;
+	ft_memset(game->addr, 0, WIN_W * WIN_H * (game->bits_per_pixel / 8));
+	// handle_input(game);
+	handle_input(p);
+	// raycasting(game, p->collector);
+	render_minimap(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	return (0);
+}
+
+// Configurar hooks de minilibX
+void	hooks_setup(t_game_loop_param *p)
+{
+	mlx_hook(p->game->win, 2, 1L<<0, key_press, p->game);      // KeyPress
+	mlx_hook(p->game->win, 3, 1L<<1, key_release, p->game);    // KeyRelease  
+	// mlx_hook(p->game->win, 17, 1L<<17, close_window, p->game); // DestroyNotify (X)
+	mlx_hook(p->game->win, 17, 1L<<17, close_window, p); // DestroyNotify (X)
+	mlx_loop_hook(p->game->mlx, game_loop, p);          // Loop hook
+}
+
+// void	game_loop(void *param)
+// {
+//     t_game_loop_param	*p;
+//     t_game				*game;
+//     t_collector			**collector;
+
+//     p = (t_game_loop_param *)param;
+//     game = p->game;
+//     collector = p->collector;
+// 	// Limpiar la imagen (fondo negro)
+// 	ft_memset(game->img->pixels, 0, WIN_W * WIN_H * sizeof(uint32_t));
+// 	// Manejar input
+// 	handle_input(game);
+// 	// Raycasting básico (pintado de muros)
+// 	raycasting(game, collector);
+// 	// Renderizar minimap encima
+// 	render_minimap(game);
+// }
+
 t_game *game_init(t_cube *cube, t_collector **collector)
 {
-		t_game				*game;
-		t_game_loop_param	*loop_param;
+	t_game				*game;
+	t_game_loop_param	*loop_param;
 
-		game = malloc(sizeof(t_game));
-		if (!game)
-        	exit_program(collector, "Error malloc game", EXIT_FAILURE);
-		collector_append(collector, game);
-		game->cube = cube;
-		game->width = WIN_W;
-		game->height = WIN_H;
-		// Inicializar MLX
-		game->mlx = mlx_init(WIN_W, WIN_H, "cub3D", false);
-		if (!game->mlx)
-		exit_program(collector, "Error Failed to initialize MLX", EXIT_FAILURE);
-		// load_textures(cube);
-		load_textures(game, collector);
-		// Crear imagen
-		game->img = mlx_new_image(game->mlx, WIN_W, WIN_H);
-		if (!game->img)
-		{
-			mlx_terminate(game->mlx);
-			exit_program(collector, "Error Failed to create image", EXIT_FAILURE);
-		}
-		// Inicializar jugador
-		player_init(game);
-		// Añadir imagen a la ventana
-		mlx_image_to_window(game->mlx, game->img, 0, 0);
-		// Configurar el loop hook para el minimap
-		loop_param = malloc(sizeof(t_game_loop_param));
-		if (!loop_param)
-			exit_program(collector, "Error: Failed to initialize loop_param", EXIT_FAILURE);
-		collector_append(collector, loop_param);
-		loop_param->game = game;
-		loop_param->collector = collector;
-		mlx_loop_hook(game->mlx, game_loop, loop_param);
-		// Iniciar el loop
-		mlx_loop(game->mlx);
-		// Limpiar
-		mlx_terminate(game->mlx);
-		return (game);
+	game = malloc(sizeof(t_game));
+	if (!game)
+		exit_program(collector, "Error malloc game", EXIT_FAILURE, NULL);
+	collector_append(collector, game, RES_MALLOC, NULL);
+
+	game->cube = cube;
+	game->width = WIN_W;
+	game->height = WIN_H;
+
+	// Inicializar MLX
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		exit_program(collector, "Error Failed to initialize MLX", EXIT_FAILURE, NULL);
+
+	// Crear ventana
+	game->win = mlx_new_window(game->mlx, WIN_W, WIN_H, "cub3D");
+	if (!game->win)
+		exit_program(collector, "Error Failed to create window", EXIT_FAILURE, game->mlx);
+	collector_append(collector, game->win, RES_WIN, game->mlx);
+
+	// Cargar texturas
+	// load_textures(game, collector);
+
+	// Crear imagen
+	game->img = mlx_new_image(game->mlx, WIN_W, WIN_H);
+	if (!game->img)
+		exit_program(collector, "Error Failed to create image", EXIT_FAILURE, game->mlx);
+	collector_append(collector, game->img, RES_IMG, game->mlx);
+
+	game->addr = mlx_get_data_addr(game->img,
+									&game->bits_per_pixel,
+									&game->line_length,
+									&game->endian);
+	if (!game->addr)
+		exit_program(collector, "Error Failed to create addr", EXIT_FAILURE, game->mlx);
+
+	// Inicializar jugador
+	player_init(game);
+
+	// Configurar loop hook
+	loop_param = malloc(sizeof(t_game_loop_param));
+	if (!loop_param)
+		exit_program(collector, "Error: Failed to initialize loop_param", EXIT_FAILURE, game->mlx);
+	collector_append(collector, loop_param, RES_MALLOC, game->mlx);
+	loop_param->game = game;
+	loop_param->collector = collector;
+
+	// MiniLibX oficial no té mlx_loop_hook amb parametre directe, hem de fer-ho amb un hook
+	// mlx_loop_hook(game->mlx, game_loop, loop_param);
+	hooks_setup(loop_param);
+
+	// Iniciar loop
+	mlx_loop(game->mlx);
+
+	// Limpiar (després de sortir del loop)
+	// mlx_destroy_image(game->mlx, game->img);
+	// mlx_destroy_window(game->mlx, game->win);
+	// free(game);
+
+	return (game);
 }

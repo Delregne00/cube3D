@@ -10,6 +10,7 @@ NC = \033[0m
 
 # Compiler and flags
 CC = cc
+## no se xq serveixen totes aquestes flags... tenen a veure amb MLX42?
 CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -fno-trapping-math -funroll-loops 
 RM = rm -f
 
@@ -17,27 +18,31 @@ RM = rm -f
 SRCDIR = src
 INCDIR = includes
 LIBFTDIR = libraries/libft
-MLX42DIR = libraries/MLX42
+# MLX42DIR = libraries/MLX42
+MLXDIR = libraries/minilibx
 OBJDIR = obj
 
 # Include paths
-INCLUDES = -I$(INCDIR) -I$(LIBFTDIR) -I$(MLX42DIR)/include -I.
+# INCLUDES = -I$(INCDIR) -I$(LIBFTDIR) -I$(MLX42DIR)/include -I.
+INCLUDES = -I$(INCDIR) -I$(LIBFTDIR) -I$(MLXDIR) -I.
 
 # Target
 NAME = cub3D
 
 # Libraries
 LIBFT = $(LIBFTDIR)/libft.a
-MLX42_LIB = $(MLX42DIR)/build/libmlx42.a
+# MLX42_LIB = $(MLX42DIR)/build/libmlx42.a
+MLX_LIB = $(MLXDIR)/libmlx.a
 
-# MLX42 flags (detecta automáticamente el sistema)
+# MLX flags (detecta automáticamente el sistema)
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-	MLX42_FLAGS = -lglfw -ldl -lm
+# 	MLX42_FLAGS = -lglfw -ldl -lm
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
 endif
-ifeq ($(UNAME_S),Darwin)
-	MLX42_FLAGS = -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
-endif
+# ifeq ($(UNAME_S),Darwin)
+# 	MLX42_FLAGS = -lglfw -L"/opt/homebrew/Cellar/glfw/3.3.8/lib/"
+# endif
 
 # Source files
 MAIN_SRC = 		main.c
@@ -56,9 +61,10 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
 				$(SRCDIR)/minimap/player_movement.c
 
-RENDER_SRC =	$(SRCDIR)/render/textures.c \
-				$(SRCDIR)/render/render_utils.c \
-				$(SRCDIR)/render/raycasting.c
+# RENDER_SRC =	$(SRCDIR)/render/textures.c \
+# 				$(SRCDIR)/render/render_utils.c \
+# 				$(SRCDIR)/render/raycasting.c
+RENDER_SRC =	
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
@@ -80,18 +86,23 @@ HEADERS = $(INCDIR)/cube.h $(LIBFTDIR)/libft.h
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MLX42_LIB) $(OBJ) Makefile
+# $(NAME): $(LIBFT) $(MLX42_LIB) $(OBJ) Makefile
+$(NAME): $(LIBFT) $(MLX_LIB) $(OBJ) Makefile
 	@echo "$(CYAN)Linking $(NAME)...$(NC)"
-	@$(CC) $(CFLAGS) $(OBJ) -L$(LIBFTDIR) -lft -L$(MLX42DIR)/build -lmlx42 $(MLX42_FLAGS) -o $(NAME)
+# 	@$(CC) $(CFLAGS) $(OBJ) -L$(LIBFTDIR) -lft -L$(MLX42DIR)/build -lmlx42 $(MLX42_FLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -L$(LIBFTDIR) -lft -L$(MLXDIR) -lmlx $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) creat amb èxit!$(NC)"
 
 $(LIBFT): $(shell find $(LIBFTDIR) -name "*.c" -o -name "*.h")
 	@echo "$(CYAN)[LIBFT] Building libft...$(NC)"
 	@$(MAKE) -C $(LIBFTDIR) --no-print-directory
 
-$(MLX42_LIB):
-	@echo "$(CYAN)[MLX42] Building MLX42...$(NC)"
-	@cd $(MLX42DIR) && cmake -B build && make -C build --no-print-directory
+# $(MLX42_LIB):
+$(MLX_LIB):
+# 	@echo "$(CYAN)[MLX42] Building MLX42...$(NC)"
+# 	@cd $(MLX42DIR) && cmake -B build && make -C build --no-print-directory
+	@echo "$(CYAN)[MLX] Building MLX...$(NC)"
+	@cd $(MLXDIR) && cmake -B build && make -C build --no-print-directory
 
 # Regla específica per a main.c
 $(OBJDIR)/main.o: main.c $(HEADERS) Makefile | $(OBJDIR)
@@ -126,9 +137,13 @@ $(OBJDIR):
 clean:
 	@echo "$(YELLOW)Cleaning object files...$(NC)"
 	@$(MAKE) clean -C $(LIBFTDIR) --no-print-directory
-	@if [ -d "$(MLX42DIR)/build" ]; then \
-		echo "$(YELLOW)Cleaning MLX42...$(NC)"; \
-		$(MAKE) clean -C $(MLX42DIR)/build --no-print-directory 2>/dev/null || true; \
+# 	@if [ -d "$(MLX42DIR)/build" ]; then \
+# 		echo "$(YELLOW)Cleaning MLX42...$(NC)"; \
+# 		$(MAKE) clean -C $(MLX42DIR)/build --no-print-directory 2>/dev/null || true; \
+# 	fi
+	@if [ -d "$(MLXDIR)/build" ]; then \
+		echo "$(YELLOW)Cleaning MLX...$(NC)"; \
+		$(MAKE) clean -C $(MLXDIR)/build --no-print-directory 2>/dev/null || true; \
 	fi
 	@$(RM) -r $(OBJDIR)
 
@@ -136,9 +151,13 @@ fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(NC)"
 	@$(RM) $(NAME)
 	@$(MAKE) fclean -C $(LIBFTDIR) --no-print-directory
-	@if [ -d "$(MLX42DIR)/build" ]; then \
-		echo "$(RED)Removing MLX42 build...$(NC)"; \
-		$(RM) -r $(MLX42DIR)/build; \
+# 	@if [ -d "$(MLX42DIR)/build" ]; then \
+# 		echo "$(RED)Removing MLX42 build...$(NC)"; \
+# 		$(RM) -r $(MLX42DIR)/build; \
+# 	fi
+	@if [ -d "$(MLXDIR)/build" ]; then \
+		echo "$(RED)Removing MLX build...$(NC)"; \
+		$(RM) -r $(MLXDIR)/build; \
 	fi
 
 re: fclean all
@@ -160,7 +179,8 @@ info:
 	@echo ""
 	@echo "$(YELLOW)Libraries:$(NC)"
 	@echo "$(CYAN)  LIBFT:$(NC) $(LIBFT)"
-	@echo "$(MAGENTA)  MLX42:$(NC) $(MLX42_LIB)"
+# 	@echo "$(MAGENTA)  MLX42:$(NC) $(MLX42_LIB)"
+	@echo "$(MAGENTA)  MLX:$(NC) $(MLX_LIB)"
 
 
 # 	Notes:

@@ -40,9 +40,18 @@ void	print_msg(const char *msg)
     	perror("write error");
 }
 
-void	exit_program(t_collector **collector, const char *msg, bool should_exit)
+// void	exit_program(t_collector **collector, const char *msg, bool should_exit)
+// {
+// 	collector_cleanup(collector);
+// 	if (msg && *msg)
+// 		print_msg(msg);
+// 	if (should_exit)
+// 		exit(EXIT_FAILURE);
+// }
+
+void	exit_program(t_collector **collector, const char *msg, bool should_exit, void *mlx)
 {
-	collector_cleanup(collector);
+	collector_cleanup(collector, mlx);
 	if (msg && *msg)
 		print_msg(msg);
 	if (should_exit)
