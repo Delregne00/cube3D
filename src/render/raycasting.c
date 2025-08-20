@@ -195,6 +195,9 @@ void	raycasting(t_game *game, t_collector **collector)
 				texY += tex->height;
 
 			texPos += step;
+			////TODO: per migrar a MiniLabX, crec q haurem d'usar 
+			////char *addr = mlx_get_data_addr(img, &bpp, &line_len, &endian);
+			////en lloc de: get_texture_pixel()
 			uint32_t color = get_texture_pixel(tex, texX, texY);
 			mlx_put_pixel(game->img, x, y, color);
 		}
@@ -213,124 +216,3 @@ void	raycasting(t_game *game, t_collector **collector)
 		x++;
 	}
 }
-
-
-
-
-
-//// les 3 funcions següents funcionen OK però amb textures en loc de images
-// static uint32_t	get_texture_pixel(mlx_texture_t *tex, int texX, int texY)
-// {
-// 	int	index = (texY * tex->width + texX) * 4;
-// 	return ((tex->pixels[index] << 24)     // R
-// 		| (tex->pixels[index + 1] << 16)  // G
-// 		| (tex->pixels[index + 2] << 8)   // B
-// 		| (tex->pixels[index + 3]));      // A
-// }
-
-// static mlx_texture_t	*select_texture(t_game *game, t_ray *ray)
-// {
-// 	if (ray->side == 0)
-// 	{
-// 		if (ray->rayDirX < 0)
-// 			return (game->cube->tex_north);
-// 		else
-// 			return (game->cube->tex_south);
-// 	}
-// 	else
-// 	{
-// 		if (ray->rayDirY < 0)
-// 			return (game->cube->tex_west);
-// 		else
-// 			return (game->cube->tex_east);
-// 	}
-// }
-
-// void	raycasting(t_game *game)
-// {
-// 	int			x;
-// 	int			y;
-// 	t_ray		ray;
-// 	uint32_t	color_floor;
-// 	uint32_t	color_ceil;
-
-// 	color_floor = rgb_to_uint32(
-// 		game->cube->data->f_color[0],
-// 		game->cube->data->f_color[1],
-// 		game->cube->data->f_color[2]
-// 	);
-// 	color_ceil = rgb_to_uint32(
-// 		game->cube->data->c_color[0],
-// 		game->cube->data->c_color[1],
-// 		game->cube->data->c_color[2]
-// 	);
-
-// 	x = 0;
-// 	while (x < game->width)
-// 	{
-// 		init_ray(game, &ray, x);
-// 		calc_step_and_side_dist(game, &ray);
-// 		perform_dda(game, &ray);
-// 		calc_wall_height(game, &ray);
-
-// 		// 1️⃣ Techo
-// 		y = 0;
-// 		while (y < ray.drawStart)
-// 			mlx_put_pixel(game->img, x, y++, color_ceil);
-
-// 		// 2️⃣ Pared con textura
-// 		mlx_texture_t *tex = select_texture(game, &ray);
-// 		if (!tex)
-// 		{
-// 			printf("Error: textura NULL\n");
-// 			continue; // o salir
-// 		}
-
-// 		double wallX;
-// 		if (ray.side == 0)
-// 			wallX = game->player.y + ray.perpWallDist * ray.rayDirY;
-// 		else
-// 			wallX = game->player.x + ray.perpWallDist * ray.rayDirX;
-// 		wallX -= floor(wallX);
-
-// 		int texX = (int)(wallX * (double)tex->width);
-// 		if ((ray.side == 0 && ray.rayDirX > 0) ||
-// 			(ray.side == 1 && ray.rayDirY < 0))
-// 			texX = tex->width - texX - 1;
-
-// 		double step = 1.0 * tex->height / ray.lineHeight;
-// 		if (ray.drawStart < 0)
-// 			ray.drawStart = 0;
-// 		if (ray.drawEnd >= game->height)
-// 			ray.drawEnd = game->height - 1;
-
-// 		double texPos = (ray.drawStart - game->height / 2.0 + ray.lineHeight / 2.0) * step;
-
-// 		int texY;
-// 		texY = 0;
-// 		for (y = ray.drawStart; y <= ray.drawEnd; y++)
-// 		{
-// 			// texY = (int)texPos & (tex->height - 1);
-// 			texY = (int)texPos % tex->height;
-// 			if (texY < 0)
-// 				texY += tex->height;
-
-// 			texPos += step;
-// 			uint32_t color = get_texture_pixel(tex, texX, texY);
-// 			mlx_put_pixel(game->img, x, y, color);
-// 		}
-// 		if (texX < 0 || (uint32_t)texX >= tex->width || texY < 0 || (uint32_t)texY >= tex->height)
-// 		{
-// 			printf("Error: texX=%d texY=%d fuera de rango (w=%d h=%d)\n",
-// 				texX, texY, tex->width, tex->height);
-// 			continue;
-// 		}
-
-// 		// 3️⃣ Suelo
-// 		y = ray.drawEnd + 1;
-// 		while (y < game->height)
-// 			mlx_put_pixel(game->img, x, y++, color_floor);
-
-// 		x++;
-// 	}
-// }

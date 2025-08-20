@@ -1,7 +1,7 @@
-NO ./textures/wall_y.png
-SO ./textures/wall_g.png
-WE ./textures/wall_hard.png
-EA ./textures/wall.png
+NO ./textures/wall_hard.xpm
+SO ./textures/wall_hard.xpm
+WE ./textures/wall_hard.xpm
+EA ./textures/wall_hard.xpm
 
 F 40,100,0
 C 25,30,0
