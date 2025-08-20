@@ -53,7 +53,7 @@ void player_init(t_game *game)
 // int	close_window(t_game *game)
 int	close_window(t_game_loop_param *p)
 {
-	printf("marxaaaaa!\n");
+	// printf("marxaaaaa!\n");
 	// (void)game;
 	collector_cleanup(p->collector, p->game->mlx);
 	printf("Surt de cub3D sense errors x close_window!\n");
@@ -132,9 +132,6 @@ t_game *game_init(t_cube *cube, t_collector **collector)
 		exit_program(collector, "Error Failed to create window", EXIT_FAILURE, game->mlx);
 	collector_append(collector, game->win, RES_WIN, game->mlx);
 
-	// Cargar texturas
-	// load_textures(game, collector);
-
 	// Crear imagen
 	game->img = mlx_new_image(game->mlx, WIN_W, WIN_H);
 	if (!game->img)
@@ -147,6 +144,10 @@ t_game *game_init(t_cube *cube, t_collector **collector)
 									&game->endian);
 	if (!game->addr)
 		exit_program(collector, "Error Failed to create addr", EXIT_FAILURE, game->mlx);
+
+	// Cargar texturas
+	textures_load(game, collector);
+
 
 	// Inicializar jugador
 	player_init(game);
@@ -165,11 +166,5 @@ t_game *game_init(t_cube *cube, t_collector **collector)
 
 	// Iniciar loop
 	mlx_loop(game->mlx);
-
-	// Limpiar (després de sortir del loop)
-	// mlx_destroy_image(game->mlx, game->img);
-	// mlx_destroy_window(game->mlx, game->win);
-	// free(game);
-
 	return (game);
 }

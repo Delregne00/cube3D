@@ -92,6 +92,17 @@ typedef struct s_player {
 	double plane_y;
 } t_player;
 
+typedef struct s_texture
+{
+    void    *img;        // punter a la imatge MLX
+    char    *addr;       // punter a la memòria de píxels
+    int     width;       // amplada en píxels
+    int     height;      // alçada en píxels
+    int     bpp;         // bits per píxel
+    int     line_len;    // bytes per línia
+    int     endian;      // endianess (normalment 0)
+}   t_texture;
+
 // typedef struct s_cube
 // {
 //     t_data      *data;
@@ -102,14 +113,24 @@ typedef struct s_player {
 //     mlx_image_t *tex_east;
 // }   t_cube;
 
+// typedef struct s_cube
+// {
+//     t_data  *data;
+//     t_map   *map;
+//     void    *tex_north;
+//     void    *tex_south;
+//     void    *tex_west;
+//     void    *tex_east;
+// }   t_cube;
+
 typedef struct s_cube
 {
-    t_data  *data;
-    t_map   *map;
-    void    *tex_north;
-    void    *tex_south;
-    void    *tex_west;
-    void    *tex_east;
+    t_data      *data;
+    t_map       *map;
+    t_texture   tex_north;
+    t_texture   tex_south;
+    t_texture   tex_west;
+    t_texture   tex_east;
 }   t_cube;
 
 // typedef struct s_game {
@@ -305,8 +326,9 @@ void	raycasting(t_game *game);
 void	render_raycast(t_game *game);
 
 /* render/textures.c */
-// int		load_textures(t_cube *cube);
-int		load_textures(t_game *game, t_collector **collector);
+int		tex_pixel_get(t_texture *tex, int x, int y);
+// int		textures_load(t_cube *cube);
+int		textures_load(t_game *game, t_collector **collector);
 
 /* render/render_utils.c */
 //void	print_cube_data(t_cube *cube);
