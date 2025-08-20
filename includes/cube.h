@@ -24,7 +24,7 @@
 # define TEX_EA 3
 
 // Macros para el minimap
-#define MINIMAP_SCALE 10        // Tamaño de cada celda del mapa
+#define MINIMAP_SCALE 5     // Tamaño de cada celda del mapa
 #define MINIMAP_OFFSET_X 20     // Posición X del minimap en la ventana
 #define MINIMAP_OFFSET_Y 20     // Posición Y del minimap en la ventana
 #define PLAYER_SIZE 3           // Tamaño del punto del jugador
@@ -298,7 +298,7 @@ bool	is_wall(t_game *game, double x, double y);
 /* ========================================================================== */
 
 /* render/raycasting.c */
-void	raycasting(t_game *game, t_collector **collector);
+void	raycasting(t_game *game);
 
 /* render/render.c */
 //void	render(void *param);

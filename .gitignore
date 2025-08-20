@@ -4,6 +4,7 @@
 *.txt
 *.pdf
 libraries/MLX42
+libraries/minilibx
 test*
 *.json
 main_test.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 09:05:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/07/26 09:05:00 by jsayerza         ###   ########.fr       */
+/*   Updated: 2025/08/20 12:46:19 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	game_loop(void *param)
 	ft_memset(game->addr, 0, WIN_W * WIN_H * (game->bits_per_pixel / 8));
 	// handle_input(game);
 	handle_input(p);
-	// raycasting(game, p->collector);
+	raycasting(game);
 	render_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
