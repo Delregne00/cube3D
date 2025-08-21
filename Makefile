@@ -62,6 +62,13 @@ MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
 				$(SRCDIR)/minimap/player_movement.c
 
 RENDER_SRC =	$(SRCDIR)/render/raycasting.c \
+				$(SRCDIR)/render/textures.c \
+				$(SRCDIR)/render/ray_dda.c \
+				$(SRCDIR)/render/ray_init.c \
+				$(SRCDIR)/render/ray_texture.c \
+				$(SRCDIR)/render/ray_wall_calc.c \
+				$(SRCDIR)/render/render_utils.c \
+				$(SRCDIR)/render/render_columns.c 
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c

@@ -10,14 +10,16 @@
 # include <string.h>
 # include <stdarg.h>
 # include <math.h>
+# include <stdint.h>
+# include <time.h>
 # include "libraries/libft/libft.h"
 // # include "libraries/MLX42/include/MLX42/MLX42.h"
 # include "libraries/minilibx/mlx.h"
 
 //Macros
 # define MAX_MAP_SIZE 100
-# define WIN_W 1280
-# define WIN_H 720
+# define WIN_W 1920
+# define WIN_H 1080
 # define TEX_NO 0
 # define TEX_SO 1
 # define TEX_WE 2
@@ -50,6 +52,7 @@
 #define KEY_ESC 65307
 #define KEY_LEFT 65361
 #define KEY_RIGHT 65363
+
 
 // Variables globals x estat de tecles
 typedef struct s_keys {
@@ -203,6 +206,33 @@ typedef struct s_ray
 	int		drawEnd;
 }	t_ray;
 
+typedef struct s_render_cache {
+    uint32_t    floor_color;
+    uint32_t    ceil_color;
+    double      sin_rot;
+    double      cos_rot;
+    t_texture   *tex_cache[4];  // Cache de texturas
+    int         initialized;
+} t_render_cache;
+
+
+extern t_render_cache g_cache;
+
+typedef struct s_column_data
+{
+    t_texture   *tex;
+    uint32_t    *pixels;
+    int         width;
+    int         height;
+    int         draw_start;
+    int         draw_end;
+    int         texX;
+    double      step;
+    double      texPos;
+}   t_column_data;
+
+
+
 /* ========================================================================== */
 /*                           UTILITY FUNCTIONS                                */
 /* ========================================================================== */
@@ -324,6 +354,10 @@ void	raycasting(t_game *game);
 /* render/render.c */
 //void	render(void *param);
 void	render_raycast(t_game *game);
+uint32_t	rgb_to_color(int r, int g, int b);
+void		put_pixel_safe(t_game *game, int x, int y, uint32_t color);
+t_texture *select_texture(t_game *game, t_ray *ray);
+uint32_t	get_texture_pixel(t_texture *tex, int texX, int texY);
 
 /* render/textures.c */
 int		tex_pixel_get(t_texture *tex, int x, int y);
@@ -333,5 +367,56 @@ int		textures_load(t_game *game, t_collector **collector);
 /* render/render_utils.c */
 //void	print_cube_data(t_cube *cube);
 void	print_textures_and_colors(t_cube *cube);
+void init_ray(t_game *game, t_ray *ray, int x);
+bool is_wall_fast(t_game *game, int map_x, int map_y);
+void put_pixel_safe(t_game *game, int x, int y, uint32_t color);
+uint32_t rgb_to_color(int r, int g, int b);
+void init_render_cache(t_game *game);
+
+// ========================================================================== 
+//                           RAY FUNCTIONS                                    
+// ========================================================================== 
+
+/* ray_init.c */
+void init_ray(t_game *game, t_ray *ray, int x);
+void init_ray_distances(t_ray *ray);
+void calc_step_and_side_dist(t_game *game, t_ray *ray);
+void calc_step_x(t_game *game, t_ray *ray);
+void calc_step_y(t_game *game, t_ray *ray);
+
+/* ray_dda.c */
+void perform_dda(t_game *game, t_ray *ray);
+void dda_step(t_ray *ray);
+bool check_bounds(t_game *game, t_ray *ray);
+bool check_wall_hit(t_game *game, t_ray *ray);
+
+/* ray_wall_calc.c */
+void calc_wall_height(t_game *game, t_ray *ray);
+void calc_perp_wall_dist(t_game *game, t_ray *ray);
+void calc_line_height(t_game *game, t_ray *ray);
+void calc_draw_limits(t_game *game, t_ray *ray);
+
+/* ray_texture.c */
+t_texture *select_texture(t_game *game, t_ray *ray);
+t_texture *select_vertical_texture(t_ray *ray);
+t_texture *select_horizontal_texture(t_ray *ray);
+uint32_t get_texture_pixel(t_texture *tex, int texX, int texY);
+bool is_valid_texture_coord(t_texture *tex, int texX, int texY);
+
+/* render_column.c */
+void draw_column_textured(t_game *game, t_ray *ray, int x);
+void setup_column_data(t_game *game, t_ray *ray, t_column_data *data);
+void calc_texture_coordinates(t_game *game, t_ray *ray, t_column_data *data);
+void adjust_texture_x(t_ray *ray, t_column_data *data);
+void render_ceiling(int x, t_column_data *data);
+void render_wall(int x, t_column_data *data);
+void render_floor(int x, t_column_data *data);
+
+/* raycasting_main.c */
+void raycasting(t_game *game);
+bool validate_game_data(t_game *game);
+void init_cache_if_needed(t_game *game);
+void display_fps(void);
+void cast_single_ray(t_game *game, t_ray *ray, int x);
 
 #endif

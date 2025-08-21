@@ -3,61 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 11:05:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/08/03 11:05:00 by jsayerza         ###   ########.fr       */
+/*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
+/*   Updated: 2025/08/21 09:58:54 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "includes/cube.h"
 
-void	print_textures_and_colors(t_cube *cube)
+void init_render_cache(t_game *game)
 {
-	char	buffer[1024];
-
-	print_msg("Textures:");
-	sprintf(buffer, "NO: %s", cube->data->textures[0]);
-	print_msg(buffer);
-	sprintf(buffer, "SO: %s", cube->data->textures[1]);
-	print_msg(buffer);
-	sprintf(buffer, "WE: %s", cube->data->textures[2]);
-	print_msg(buffer);
-	sprintf(buffer, "EA: %s", cube->data->textures[3]);
-	print_msg(buffer);
-
-	print_msg("\nColors:");
-	sprintf(buffer, "Floor: %d,%d,%d", cube->data->f_color[0],
-			cube->data->f_color[1], cube->data->f_color[2]);
-	print_msg(buffer);
-	sprintf(buffer, "Ceiling: %d,%d,%d", cube->data->c_color[0],
-			cube->data->c_color[1], cube->data->c_color[2]);
-	print_msg(buffer);
+    t_cube *cube;
+    
+    if (!game || !game->cube)
+        return;
+        
+    cube = game->cube;
+    
+    // Inicializar colores del suelo y techo
+    g_cache.floor_color = rgb_to_color(cube->data->f_color[0], 
+                                      cube->data->f_color[1], 
+                                      cube->data->f_color[2]);
+    g_cache.ceil_color = rgb_to_color(cube->data->c_color[0], 
+                                     cube->data->c_color[1], 
+                                     cube->data->c_color[2]);
+    
+    // Cache de texturas
+    g_cache.tex_cache[0] = &cube->tex_north;  // North
+    g_cache.tex_cache[1] = &cube->tex_south;  // South
+    g_cache.tex_cache[2] = &cube->tex_west;   // West
+    g_cache.tex_cache[3] = &cube->tex_east;   // East
+    
+    // Marcar como inicializado
+    g_cache.initialized = 1;
 }
 
-// void	print_cube_data(t_cube *cube)
-// {
-// 	char	buffer[64];
-// 	int		len;
+uint32_t rgb_to_color(int r, int g, int b)
+{
+    return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+}
 
-// 	//TODO: veure parser_utils/print_parsed_data(), fa el mateix
+void put_pixel_safe(t_game *game, int x, int y, uint32_t color)
+{
+    char *dst;
+    
+    if (x < 0 || x >= game->width || y < 0 || y >= game->height)
+        return;
+        
+    dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
+    *(uint32_t *)dst = color;
+}
 
-// 	// write(1, "Textures:\n", 10);
-// 	print_msg("Textures:");
-// 	write(1, "NO: ", 4);
-// 	write(1, cube->data->textures[0], ft_strlen(cube->data->textures[0]));
-// 	write(1, "\nSO: ", 5);
-// 	write(1, cube->data->textures[1], ft_strlen(cube->data->textures[1]));
-// 	write(1, "\nWE: ", 5);
-// 	write(1, cube->data->textures[2], ft_strlen(cube->data->textures[2]));
-// 	write(1, "\nEA: ", 5);
-// 	write(1, cube->data->textures[3], ft_strlen(cube->data->textures[3]));
-// 	write(1, "\n\nColors:\n", 10);
-
-// 	len = sprintf(buffer, "F: %d,%d,%d\n", cube->data->f_color[0], cube->data->f_color[1], cube->data->f_color[2]);
-// 	write(1, buffer, len);
-// 	len = sprintf(buffer, "C: %d,%d,%d\n", cube->data->c_color[0], cube->data->c_color[1], cube->data->c_color[2]);
-// 	write(1, buffer, len);
-// }
-
+bool is_wall_fast(t_game *game, int map_x, int map_y)
+{
+    if (map_x < 0 || map_y < 0)
+        return true;
+    if (map_y >= game->cube->map->filas || map_x >= game->cube->map->max_columnas)
+        return true;
+    return (game->cube->map->map[map_y][map_x] == '1');
+}

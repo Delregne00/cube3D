@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_movement.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 20:30:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/08/10 20:30:00 by jsayerza         ###   ########.fr       */
+/*   Updated: 2025/08/20 19:13:45 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	move_player(t_game *game, int direction)
 	double	new_y;
 	double	move_speed;
 	
-	move_speed = 0.05; // TODO: Ajustar?
+	move_speed = 0.07; // TODO: Ajustar?
 	// Moure's en la direcció cap on mira el jugador
 	new_x = game->player.x + game->player.dir_x * move_speed * direction;
 	new_y = game->player.y + game->player.dir_y * move_speed * direction;
