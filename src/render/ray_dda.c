@@ -6,27 +6,26 @@
 /*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/08/21 09:41:07 by delregne         ###   ########.fr       */
+/*   Updated: 2025/08/22 10:24:59 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cube.h"
 
-void perform_dda(t_game *game, t_ray *ray)
+void	perform_dda(t_game *game, t_ray *ray)
 {
     ray->hit = 0;
-    
     while (ray->hit == 0)
     {
         dda_step(ray);
         if (check_bounds(game, ray))
-            break;
+            break ;
         if (check_wall_hit(game, ray))
             ray->hit = 1;
     }
 }
 
-void dda_step(t_ray *ray)
+void	dda_step(t_ray *ray)
 {
     if (ray->sideDistX < ray->sideDistY)
     {
@@ -42,28 +41,27 @@ void dda_step(t_ray *ray)
     }
 }
 
-bool check_bounds(t_game *game, t_ray *ray)
+bool	check_bounds(t_game *game, t_ray *ray)
 {
-    int max_cols;
-    int max_rows;
+    int	max_cols;
+    int	max_rows;
     
     max_cols = game->cube->map->max_columnas;
     max_rows = game->cube->map->filas;
-    
     if (ray->mapX < 0 || ray->mapY < 0)
     {
         ray->hit = 1;
-        return true;
+        return (true);
     }
     if (ray->mapY >= max_rows || ray->mapX >= max_cols)
     {
         ray->hit = 1;
-        return true;
+        return (true);
     }
-    return false;
+    return (false);
 }
 
-bool check_wall_hit(t_game *game, t_ray *ray)
+bool	check_wall_hit(t_game *game, t_ray *ray)
 {
     char **map;
     
