@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_rgb.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: your_username <your_email@student.42.fr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 00:00:00 by your_username    #+#    #+#             */
+/*   Updated: 2024/01/01 00:00:00 by your_username   ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cube.h"
 
 bool	is_valid_number(char *str)
@@ -59,11 +71,47 @@ bool	validate_rgb_values(t_cube *cube, char **rgb_parts, char *original_line)
 	return (true);
 }
 
+static void	assign_floor_color(t_cube *cube, char **rgb_parts)
+{
+	int	j;
+
+	j = 0;
+	while (j < 3)
+	{
+		cube->data->f_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
+		j++;
+	}
+}
+
+static void	assign_ceiling_color(t_cube *cube, char **rgb_parts)
+{
+	int	j;
+
+	j = 0;
+	while (j < 3)
+	{
+		cube->data->c_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
+		j++;
+	}
+}
+
+static void	free_rgb_parts(char **rgb_parts)
+{
+	int	j;
+
+	j = 0;
+	while (rgb_parts[j])
+	{
+		free(rgb_parts[j]);
+		j++;
+	}
+	free(rgb_parts);
+}
+
 bool	process_rgb(t_cube *cube, char *line, int i)
 {
 	char	**rgb_parts;
 	char	*clean_line;
-	int		j;
 
 	clean_line = trim_whitespace(line);
 	rgb_parts = ft_split(clean_line, ',');
@@ -75,37 +123,19 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 	if (!validate_rgb_values(cube, rgb_parts, line))
 		return (false);
 	if (i == 5)
-	{
-		j = 0;
-		while (j < 3)
-		{
-			cube->data->f_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
-			j++;
-		}
-	}
-	else if (i == 6) 
-	{
-		j = 0;
-		while (j < 3)
-		{
-			cube->data->c_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
-			j++;
-		}
-	}
-	j = 0;
-	while (rgb_parts[j])
-	{
-		free(rgb_parts[j]);
-		j++;
-	}
-	free(rgb_parts);
+		assign_floor_color(cube, rgb_parts);
+	else if (i == 6)
+		assign_ceiling_color(cube, rgb_parts);
+	free_rgb_parts(rgb_parts);
 	return (true);
 }
 
 bool	process_rgb_lines(t_cube *cube, char *line, char **expected, int i)
 {
 	line = trim_whitespace(line);
-	if(!parse_line(cube, line, expected[i], ft_strlen(expected[i]), i, process_rgb))
+	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i])))
+		return (false);
+	if (!process_rgb(cube, line + ft_strlen(expected[i]), i))
 		return (false);
 	return (true);
 }

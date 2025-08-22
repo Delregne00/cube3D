@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_textures.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: your_username <your_email@student.42.fr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 00:00:00 by your_username    #+#    #+#             */
+/*   Updated: 2024/01/01 00:00:00 by your_username   ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cube.h"
 
 char	*trim_whitespace(char *str)
@@ -5,7 +17,8 @@ char	*trim_whitespace(char *str)
 	char	*end;
 
 	end = str + ft_strlen(str) - 1;
-	while (end > str && (*end == ' ' || *end == '\t' || *end == '\n' || *end == '\r'))
+	while (end > str && (*end == ' ' || *end == '\t'
+			|| *end == '\n' || *end == '\r'))
 		end--;
 	end[1] = '\0';
 	return (str);
@@ -28,61 +41,60 @@ void	process_empty_line(char *line)
 	}
 }
 
+static bool	check_texture_extension(char *clean_line)
+{
+	if (ft_strnstr(clean_line, ".xpm", ft_strlen(clean_line)))
+		return (true);
+	if (ft_strnstr(clean_line, ".bmp", ft_strlen(clean_line)))
+		return (true);
+	if (ft_strnstr(clean_line, ".png", ft_strlen(clean_line)))
+		return (true);
+	if (ft_strnstr(clean_line, ".jpg", ft_strlen(clean_line)))
+		return (true);
+	if (ft_strnstr(clean_line, ".jpeg", ft_strlen(clean_line)))
+		return (true);
+	return (false);
+}
+
 bool	process_textures(t_cube *cube, char *line, int i)
 {
-	char	*expected[5] = {".xpm", ".bmp", ".png", ".jpg", ".jpeg"};
-	int		j;
-	bool	found;
 	char	*clean_line;
 
-	j = 0;
-	found = false;
 	clean_line = trim_whitespace(line);
-	while (j < 5)
-	{
-		if (ft_strnstr(clean_line, expected[j], ft_strlen(clean_line)))
-		{
-			if (!validate_perimisons_exist(clean_line))
-				return (false);
-			found = true;
-			break;
-		}
-		j++;
-	}
-	if (!found)
+	if (!check_texture_extension(clean_line))
 	{
 		print_error(2, clean_line, "Not valid termination");
 		return (false);
 	}
+	if (!validate_perimisons_exist(clean_line))
+		return (false);
 	cube->data->textures[i] = ft_strdup(clean_line);
 	if (!cube->data->textures[i])
 	{
 		print_error(1, "Memory allocation failed");
 		return (false);
 	}
-	return(true);
+	return (true);
 }
 
-bool	parse_line(t_cube *cube, char *line, char *expected, int len, int i, bool (*proces)(t_cube *, char *, int))
+bool	parse_line(t_cube *cube, char *line, char *expected, int len)
 {
+	(void)cube;
 	if (ft_strncmp(line, expected, len) != 0)
 	{
-		print_error(4, "In line", ft_itoa(i + 1), "Expected", expected);
+		print_error(2, "Expected format not found", expected);
 		free(line);
-        return (false);
+		return (false);
 	}
-	else
-	{
-		if (!proces(cube, line + len, i))
-        	return (false);
-		return (true);
-	}
+	return (true);
 }
 
-bool process_texture_lines(t_cube *cube, char *line, char **expected, int i)
+bool	process_texture_lines(t_cube *cube, char *line, char **expected, int i)
 {
 	line = trim_whitespace(line);
-	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i]), i, process_textures))
+	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i])))
+		return (false);
+	if (!process_textures(cube, line + ft_strlen(expected[i]), i))
 		return (false);
 	return (true);
 }

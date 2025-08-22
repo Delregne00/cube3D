@@ -19,7 +19,6 @@ int main(int argc, char **argv)
 	if (!parser(cube, argv[1]))
 		exit_program(&collector, "Error: Parsing failed", EXIT_FAILURE, NULL);
 	printf("Parsing completed successfully!\n");
-	print_parsed_data(cube);
 	game = game_init(cube, &collector);
 	if (!game)
 		exit_program(&collector, "Error: Failed to initialize game", EXIT_FAILURE, NULL);

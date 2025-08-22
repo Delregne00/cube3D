@@ -3,7 +3,7 @@ SO ./textures/wall_south.jpeg
 WE ./textures/wall_west.png
 EA ./textures/wall_east.jpg
 
-F 220,100,23
+F 220,100yy,23
 C 255,30,0
 
 11111111111111111111111111111111111111111111111111

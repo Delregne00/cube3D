@@ -280,7 +280,7 @@ bool    validation_file(t_cube *cube, char *file);
 bool    validate_perimisons_exist(char *file);
 bool    process_rgb_lines(t_cube *cube, char *line, char **expected, int i);
 bool    process_texture_lines(t_cube *cube, char *line, char **expected, int i);
-bool    parse_line(t_cube *cube, char *line, char *expected, int len, int i, bool (*proces)(t_cube *, char *, int));
+bool	parse_line(t_cube *cube, char *line, char *expected, int len);
 bool    process_rgb(t_cube *cube, char *line, int i);
 bool    process_textures(t_cube *cube, char *line, int i);
 void    map_to_struct(t_cube *cube, char **map);
@@ -415,7 +415,7 @@ void render_floor(int x, t_column_data *data);
 /* raycasting_main.c */
 void raycasting(t_game *game);
 bool validate_game_data(t_game *game);
-void init_cache_if_needed(t_game *game);
+void init_cache(t_game *game);
 void display_fps(void);
 void cast_single_ray(t_game *game, t_ray *ray, int x);
 

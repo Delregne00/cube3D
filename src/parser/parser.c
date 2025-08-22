@@ -20,10 +20,14 @@ bool	validate_extensions(char *file)
 	int		len;
 	int		size;
 	int		i;
-	char	*extension[5] = {".xpm", ".bmp", ".png", ".jpg", ".jpeg"};
+	char	*extension[6];
 
-	if (!file)
-		return (false);
+	extension[0] = ".xpm";
+	extension[1] = ".bmp";
+	extension[2] = ".png";
+	extension[3] = ".jpg";
+	extension[4] = ".jpeg";
+	extension[5] = NULL;
 	len = ft_strlen(file);
 	i = 0;
 	while (extension[i])
@@ -84,6 +88,5 @@ bool	parser(t_cube *cube, char *file)
 	if (!validate_perimisons_exist(file) || !validate_extension(file, 4, ".cub")
 		|| !validation_file(cube, file) || !validate_map(cube->map))
 		return (false);
-
 	return (true);
 }

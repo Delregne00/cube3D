@@ -6,13 +6,11 @@
 /*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/08/21 09:57:43 by delregne         ###   ########.fr       */
+/*   Updated: 2025/08/22 08:22:29 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cube.h"
-
-// Eliminar esta línea incorrecta: init_render_cache;
 
 void raycasting(t_game *game)
 {
@@ -22,7 +20,7 @@ void raycasting(t_game *game)
     if (!validate_game_data(game))
         return;
         
-    init_cache_if_needed(game);
+    init_cache(game);
     display_fps();
     
     x = 0;
@@ -40,7 +38,7 @@ bool validate_game_data(t_game *game)
     return true;
 }
 
-void init_cache_if_needed(t_game *game)
+void init_cache(t_game *game)
 {
     if (!g_cache.initialized)
         init_render_cache(game);
