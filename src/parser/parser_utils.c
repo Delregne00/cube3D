@@ -1,18 +1,27 @@
+/* ************************************************************************** */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 parser_utils.c										:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: acarranz <marvin@42.fr>					+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2025/09/02 17:09:07 by acarranz		   #+#	  #+#			  */
+/*	 Updated: 2025/09/02 17:09:07 by acarranz		  ###	########.fr		  */
+/*																			  */
+/* ************************************************************************** */
+
 #include "cube.h"
 
-void	print_map(t_map *map)
+char	*trim_whitespace(char *str)
 {
-	int	i;
+	char	*end;
 
-	if (!map)
-		return ;
-	i = 0;
-	while (map->map[i])
-	{
-		printf("%s\n", map->map[i]);
-		i++;
-	}
-	printf("\n");
+	end = str + ft_strlen(str) - 1;
+	while (end > str && (*end == ' ' || *end == '\t'
+			|| *end == '\n' || *end == '\r'))
+		end--;
+	end[1] = '\0';
+	return (str);
 }
 
 void	print_error(int n, ...)

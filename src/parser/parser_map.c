@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 parser_map.c										:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: acarranz <marvin@42.fr>					+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2025/09/02 17:09:02 by acarranz		   #+#	  #+#			  */
+/*	 Updated: 2025/09/02 17:09:02 by acarranz		  ###	########.fr		  */
+/*																			  */
+/* ************************************************************************** */
+
 #include "cube.h"
 
 void	map_to_struct(t_cube *cube, char **map)
@@ -48,30 +60,6 @@ void	map_dimensions(t_map *map)
 		i++;
 	}
 	map->max_columnas = max_columnas;
-}
-
-bool	validate_map_characters(char **map)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (!is_valid_char(map[i][j]))
-			{
-				print_error(3, "Invalid character in map",
-					"Line", ft_itoa(i + 1));
-				return (false);
-			}
-			j++;
-		}
-		i++;
-	}
-	return (true);
 }
 
 static void	scan_map_for_player(t_map *game_map, int *player_count)

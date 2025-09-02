@@ -71,43 +71,6 @@ bool	validate_rgb_values(t_cube *cube, char **rgb_parts, char *original_line)
 	return (true);
 }
 
-static void	assign_floor_color(t_cube *cube, char **rgb_parts)
-{
-	int	j;
-
-	j = 0;
-	while (j < 3)
-	{
-		cube->data->f_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
-		j++;
-	}
-}
-
-static void	assign_ceiling_color(t_cube *cube, char **rgb_parts)
-{
-	int	j;
-
-	j = 0;
-	while (j < 3)
-	{
-		cube->data->c_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
-		j++;
-	}
-}
-
-static void	free_rgb_parts(char **rgb_parts)
-{
-	int	j;
-
-	j = 0;
-	while (rgb_parts[j])
-	{
-		free(rgb_parts[j]);
-		j++;
-	}
-	free(rgb_parts);
-}
-
 bool	process_rgb(t_cube *cube, char *line, int i)
 {
 	char	**rgb_parts;

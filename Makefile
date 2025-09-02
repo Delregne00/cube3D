@@ -11,7 +11,7 @@ NC = \033[0m
 # Compiler and flags
 CC = cc
 ## no se xq serveixen totes aquestes flags... tenen a veure amb MLX42?
-CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -fno-trapping-math -funroll-loops 
+CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops
 RM = rm -f
 
 # Directories
@@ -54,8 +54,10 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_textures.c \
 				$(SRCDIR)/parser/parser_rgb.c \
 				$(SRCDIR)/parser/parser_map.c \
+				$(SRCDIR)/parser/parser_map_utils.c \
 				$(SRCDIR)/parser/flood_fill.c \
 				$(SRCDIR)/parser/flood_fill_utils.c \
+				$(SRCDIR)/parser/flood_fill_connectivity.c \
 				$(SRCDIR)/parser/parser_utils.c
 
 MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
@@ -68,7 +70,7 @@ RENDER_SRC =	$(SRCDIR)/render/raycasting.c \
 				$(SRCDIR)/render/ray_texture.c \
 				$(SRCDIR)/render/ray_wall_calc.c \
 				$(SRCDIR)/render/render_utils.c \
-				$(SRCDIR)/render/render_columns.c 
+				$(SRCDIR)/render/render_columns.c
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
@@ -188,7 +190,7 @@ info:
 
 
 # 	Notes:
-#	./cub3D maps/map_000.cub 
+#	./cub3D maps/map_000.cub
 #
 # 	x substituir espais en blanc:
 # 	^(    )+

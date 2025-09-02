@@ -243,7 +243,7 @@ void	freer(void **ptr);
 void	print_msg(const char *msg);
 // void	exit_program(t_collector **collector, const char *msg,
 // 			bool should_exit);
-void	exit_program(t_collector **collector, const char *msg, 
+void	exit_program(t_collector **collector, const char *msg,
 			bool should_exit, void *mlx);
 
 /* ========================================================================== */
@@ -256,7 +256,7 @@ void	collector_remove_ptr(t_collector **collector, void *ptr);
 // void	collector_cleanup(t_collector **collector);
 void	collector_cleanup(t_collector **collector, void *mlx);
 // void	collector_append(t_collector **collector, void *ptr);
-void	collector_append(t_collector **collector, void *ptr, 
+void	collector_append(t_collector **collector, void *ptr,
 			t_resource_type type, void *mlx);
 
 
@@ -298,9 +298,19 @@ void    free_visited_matrix(bool **visited, int filas);
 bool    start_position(t_map *map, int *start_x, int *start_y);
 bool    start_flood_fill(t_map *map, int x, int y, bool **visited);
 bool    check_connectivity(t_map *map, bool **visited);
+bool	check_adjacent_positions(t_map *map, int x, int y);
+bool	validate_char_and_border(t_map *map, int x, int y);
+bool	flood_fill_recursive(t_map *map, int x, int y, bool **visited);
+bool	initialize_flood_fill(t_map *map, bool ***visited);
+bool	execute_flood_fill(t_map *map, bool **visited);
 
 /* parser/parser_utils.c */
 void	print_map(t_map *map);
+void	assign_floor_color(t_cube *cube, char **rgb_parts);
+void	assign_ceiling_color(t_cube *cube, char **rgb_parts);
+void	free_rgb_parts(char **rgb_parts);
+bool	validate_map_characters(char **map);
+
 // void    print_map(char **map);
 void    print_error(int n, ...);
 void    free_map(t_map *map);
@@ -373,9 +383,9 @@ void put_pixel_safe(t_game *game, int x, int y, uint32_t color);
 uint32_t rgb_to_color(int r, int g, int b);
 void init_render_cache(t_game *game);
 
-// ========================================================================== 
-//                           RAY FUNCTIONS                                    
-// ========================================================================== 
+// ==========================================================================
+//                           RAY FUNCTIONS
+// ==========================================================================
 
 /* ray_init.c */
 void init_ray(t_game *game, t_ray *ray, int x);

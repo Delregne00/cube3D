@@ -27,7 +27,7 @@
 ### 3. TEXTURAS (4 obligatorias)
 #### Identificadores válidos:
 - [✅] **NO** - Textura Norte
-- [✅] **SO** - Textura Sur  
+- [✅] **SO** - Textura Sur
 - [✅] **WE** - Textura Oeste
 - [✅] **EA** - Textura Este
 
@@ -62,10 +62,10 @@ C 255,255,255
 
 #### Ejemplos inválidos:
 ```
-F 220, 100, 0    // espacios después de comas
-F 256,100,0      // valor fuera de rango
-F 220.5,100,0    // decimales
-F 220,100        // faltan valores
+F 220, 100, 0	 // espacios después de comas
+F 256,100,0		 // valor fuera de rango
+F 220.5,100,0	 // decimales
+F 220,100		 // faltan valores
 ```
 
 ### 5. MAPA
@@ -74,7 +74,7 @@ F 220,100        // faltan valores
 - [ ] **'0'** - Espacio vacío (suelo)
 - [ ] **'N'** - Jugador mirando Norte
 - [ ] **'S'** - Jugador mirando Sur
-- [ ] **'E'** - Jugador mirando Este  
+- [ ] **'E'** - Jugador mirando Este
 - [ ] **'W'** - Jugador mirando Oeste
 - [ ] **' '** - Espacio (vacío, parte del mapa)
 - [ ] **'\t'** - Tabulación (tratada como espacio)
@@ -90,7 +90,7 @@ F 220,100        // faltan valores
 
 #### Validación de cierre:
 - [ ] Primera fila: solo '1' y espacios
-- [ ] Última fila: solo '1' y espacios  
+- [ ] Última fila: solo '1' y espacios
 - [ ] Primera columna: solo '1' y espacios
 - [ ] Última columna: solo '1' y espacios
 - [ ] Todo '0', 'N', 'S', 'E', 'W' debe estar rodeado de '1' o espacios que lleven a '1'
@@ -124,10 +124,10 @@ EA ./textures/wall_east.xpm
 F 220,100,0
 C 225,30,0
 
-        1111111111111111111111111
-        1000000000110000000000001
-        1011000001110000000000001
-        1001000000000000000000001
+		1111111111111111111111111
+		1000000000110000000000001
+		1011000001110000000000001
+		1001000000000000000000001
 111111111011000001110000000000001
 100000000011000001110111111111111
 11110111111111011100000010001
@@ -145,7 +145,7 @@ C 225,30,0
 ### Espacios en el mapa:
 ```
 111111
-1   01  // espacios válidos
+1	01	// espacios válidos
 100001
 1000N1
 111111
@@ -177,7 +177,7 @@ NO ./my textures/north wall.xpm
 ### 2. Identificar elementos
 ```c
 // Si línea empieza con "NO", "SO", "WE", "EA" -> textura
-// Si línea empieza con "F", "C" -> color  
+// Si línea empieza con "F", "C" -> color
 // Si línea contiene '0', '1', 'N', 'S', 'E', 'W' -> mapa
 // Si línea vacía -> ignorar
 ```
@@ -206,7 +206,7 @@ NO ./my textures/north wall.xpm
 ## ORDEN DE VALIDACIÓN RECOMENDADO
 
 1. **Archivo y extensión**
-2. **Estructura y formato** 
+2. **Estructura y formato**
 3. **Elementos obligatorios presentes**
 4. **Formato de texturas y colores**
 5. **Existencia de archivos de textura**

@@ -12,18 +12,6 @@
 
 #include "cube.h"
 
-char	*trim_whitespace(char *str)
-{
-	char	*end;
-
-	end = str + ft_strlen(str) - 1;
-	while (end > str && (*end == ' ' || *end == '\t'
-			|| *end == '\n' || *end == '\r'))
-		end--;
-	end[1] = '\0';
-	return (str);
-}
-
 void	process_empty_line(char *line)
 {
 	int	i;

@@ -55,37 +55,6 @@ void	process_map(t_cube *cube, char *line, int fd)
 	map_to_struct(cube, map);
 }
 
-bool	process_single_line(t_cube *cube, char *line, char **expected, int i)
-{
-	if (i == 4 || i == 7)
-	{
-		process_empty_line(line);
-	}
-	else if (i < 4)
-	{
-		if (!process_texture_lines(cube, line, expected, i))
-			return (false);
-	}
-	else
-	{
-		if (!process_rgb_lines(cube, line, expected, i))
-			return (false);
-	}
-	return (true);
-}
-
-static void	init_expected_array(char **expected)
-{
-	expected[0] = "NO ";
-	expected[1] = "SO ";
-	expected[2] = "WE ";
-	expected[3] = "EA ";
-	expected[4] = "";
-	expected[5] = "F ";
-	expected[6] = "C ";
-	expected[7] = "";
-}
-
 static bool	process_lines_loop(t_cube *cube, char **line,
 		int fd, char **expected)
 {
@@ -94,8 +63,20 @@ static bool	process_lines_loop(t_cube *cube, char **line,
 	i = 0;
 	while (i <= 7)
 	{
-		if (!process_single_line(cube, *line, expected, i))
-			return (false);
+		if (i == 4 || i == 7)
+		{
+			process_empty_line(*line);
+		}
+		else if (i < 4)
+		{
+			if (!process_texture_lines(cube, *line, expected, i))
+				return (false);
+		}
+		else
+		{
+			if (!process_rgb_lines(cube, *line, expected, i))
+				return (false);
+		}
 		free(*line);
 		*line = get_next_line(fd);
 		i++;
@@ -108,13 +89,20 @@ bool	process_file(t_cube *cube, int fd)
 	char	*expected[8];
 	char	*line;
 
+	expected[0] = "NO ";
+	expected[1] = "SO ";
+	expected[2] = "WE ";
+	expected[3] = "EA ";
+	expected[4] = "";
+	expected[5] = "F ";
+	expected[6] = "C ";
+	expected[7] = "";
 	line = get_next_line(fd);
 	if (line == NULL)
 	{
 		print_error(1, "Is a empty map");
 		return (false);
 	}
-	init_expected_array(expected);
 	if (!process_lines_loop(cube, &line, fd, expected))
 		return (false);
 	process_map(cube, line, fd);
