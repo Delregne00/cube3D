@@ -35,21 +35,13 @@ void	print_msg(const char *msg)
 {
 	if (msg && *msg)
 		if (write(2, msg, ft_strlen(msg)) == -1)
-    		perror("write error");
+			perror("write error");
 	if (write(2, "\n", 1) == -1)
-    	perror("write error");
+		perror("write error");
 }
 
-// void	exit_program(t_collector **collector, const char *msg, bool should_exit)
-// {
-// 	collector_cleanup(collector);
-// 	if (msg && *msg)
-// 		print_msg(msg);
-// 	if (should_exit)
-// 		exit(EXIT_FAILURE);
-// }
-
-void	exit_program(t_collector **collector, const char *msg, bool should_exit, void *mlx)
+void	exit_program(t_collector **collector, const char *msg,
+	bool should_exit, void *mlx)
 {
 	collector_cleanup(collector, mlx);
 	if (msg && *msg)

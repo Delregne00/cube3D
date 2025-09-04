@@ -37,30 +37,6 @@ void	collector_remove_ptr(t_collector **collector, void *ptr)
 	}
 }
 
-// void	collector_cleanup(t_collector **collector)
-// {
-// 	t_collector	*current;
-// 	t_collector	*next;
-
-// 	current = *collector;
-// 	while (current)
-// 	{
-// 		next = current->next;
-// 		if (current->ptr)
-// 		{
-// 			// printf("del ptr: %p\n", current->ptr);
-// 			freer(&current->ptr);
-// 		}
-// 		if (current)
-// 		{
-// 			// printf("   current: %p\n", current);
-// 			free(current);
-// 		}
-// 		current = next;
-// 	}
-// 	*collector = NULL;
-// }
-
 void	collector_cleanup(t_collector **collector, void *mlx)
 {
 	t_collector	*current;
@@ -85,7 +61,6 @@ void	collector_cleanup(t_collector **collector, void *mlx)
 	*collector = NULL;
 }
 
-
 bool	collector_contains(t_collector *collector, void *ptr)
 {
 	while (collector)
@@ -97,22 +72,8 @@ bool	collector_contains(t_collector *collector, void *ptr)
 	return (false);
 }
 
-// void	collector_append(t_collector **collector, void *ptr)
-// {
-// 	t_collector	*new_node;
-
-// 	if (!ptr || collector_contains(*collector, ptr))
-// 		return ;
-// 	new_node = malloc(sizeof(t_collector));
-// 	if (!new_node)
-// 		exit_program(collector, "Error malloc collector", EXIT_FAILURE);
-// 	new_node->ptr = ptr;
-// 	// printf("app ptr: %p\n", ptr);
-// 	new_node->next = *collector;
-// 	*collector = new_node;
-// }
-
-void	collector_append(t_collector **collector, void *ptr, t_resource_type type, void *mlx)
+void	collector_append(t_collector **collector, void *ptr,
+	t_resource_type type, void *mlx)
 {
 	t_collector	*new_node;
 

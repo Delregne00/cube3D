@@ -69,6 +69,15 @@ typedef struct s_keys {
 /*                              STRUCTURES                                    */
 /* ========================================================================== */
 
+typedef struct s_line_params
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+}	t_line_params;
+
 typedef struct s_map
 {
 	char    **map;
@@ -106,26 +115,6 @@ typedef struct s_texture
     int     endian;      // endianess (normalment 0)
 }   t_texture;
 
-// typedef struct s_cube
-// {
-//     t_data      *data;
-//     t_map       *map;
-//     mlx_image_t *tex_north;
-//     mlx_image_t *tex_south;
-//     mlx_image_t *tex_west;
-//     mlx_image_t *tex_east;
-// }   t_cube;
-
-// typedef struct s_cube
-// {
-//     t_data  *data;
-//     t_map   *map;
-//     void    *tex_north;
-//     void    *tex_south;
-//     void    *tex_west;
-//     void    *tex_east;
-// }   t_cube;
-
 typedef struct s_cube
 {
     t_data      *data;
@@ -135,16 +124,6 @@ typedef struct s_cube
     t_texture   tex_west;
     t_texture   tex_east;
 }   t_cube;
-
-// typedef struct s_game {
-// 	t_cube			*cube;
-// 	t_player		player;
-// 	mlx_t           *mlx;
-// 	mlx_image_t     *img;
-// 	char			*addr;
-// 	int				width;
-// 	int				height;
-// } t_game;
 
 typedef struct s_game {
     t_cube  *cube;
@@ -159,12 +138,6 @@ typedef struct s_game {
     int     width;
     int     height;
 }   t_game;
-
-// typedef struct s_collector
-// {
-// 	void				*ptr;
-// 	struct s_collector	*next;
-// }	t_collector;
 
 typedef enum e_resource_type
 {
@@ -323,16 +296,16 @@ void    print_parsed_data(t_cube *cube);
 /* ========================================================================== */
 /*                          MINIMAP FUNCTIONS                                 */
 /* ========================================================================== */
+/* minimap.c */
 void	render_minimap(t_game *game);
 void	draw_map_grid(t_game *game);
 void	draw_player(t_game *game);
 void	draw_player_direction(t_game *game);
-// void draw_square(t_game *game, int x, int y, int size, uint32_t color);
-// void draw_line(t_game *game, int x0, int y0, int x1, int y1, uint32_t color);
 void	draw_square(t_game *game, int x, int y, int size, int color);
-void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
 void	put_pixel_to_image(t_game *game, int x, int y, int color);
 
+/* minimap_draw_line.c */
+void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
 
 /* ========================================================================== */
 /*                  PLAYER MOVEMENT FUNCTIONS                                 */

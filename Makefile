@@ -61,6 +61,7 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_utils.c
 
 MINIMAP_SRC =	$(SRCDIR)/minimap/minimap.c \
+				$(SRCDIR)/minimap/minimap_draw_line.c \
 				$(SRCDIR)/minimap/player_movement.c
 
 RENDER_SRC =	$(SRCDIR)/render/raycasting.c \
@@ -195,3 +196,4 @@ info:
 # 	x substituir espais en blanc:
 # 	^(    )+
 # 	\t
+# source ~/norminette_env/bin/activate
