@@ -33,11 +33,6 @@
 #define PLAYER_DIR_LENGTH 15    // Longitud de la línea de dirección
 
 // Colors minimap
-// #define COLOR_WALL 0xFF0000FF   // Rojo para paredes
-// #define COLOR_FLOOR 0xFFFFFFFF  // Blanco para suelo
-// #define COLOR_PLAYER 0x00FF00FF // Verde para jugador
-// #define COLOR_DIR 0x0000FFFF    // Azul para dirección
-// Colors format RGB de minilibX (sense canal alpha)
 #define COLOR_WALL 0xFF0000     // Rojo para paredes
 #define COLOR_FLOOR 0xFFFFFF    // Blanco para suelo
 #define COLOR_PLAYER 0x00FF00   // Verde para jugador
@@ -54,6 +49,10 @@
 #define KEY_RIGHT 65363
 
 
+/* ========================================================================== */
+/*                              STRUCTURES                                    */
+/* ========================================================================== */
+
 // Variables globals x estat de tecles
 typedef struct s_keys {
 	int	w;
@@ -65,10 +64,6 @@ typedef struct s_keys {
 	int	esc;
 } t_keys;
 
-/* ========================================================================== */
-/*                              STRUCTURES                                    */
-/* ========================================================================== */
-
 typedef struct s_line_params
 {
 	int	dx;
@@ -77,6 +72,23 @@ typedef struct s_line_params
 	int	sy;
 	int	err;
 }	t_line_params;
+
+typedef struct s_square_params
+{
+	int	x;
+	int	y;
+	int	size;
+	int	color;
+}	t_square_params;
+
+typedef struct s_line_data
+{
+	int	x0;
+	int	y0;
+	int	x1;
+	int	y1;
+	int	color;
+}	t_line_data;
 
 typedef struct s_map
 {
@@ -297,15 +309,20 @@ void    print_parsed_data(t_cube *cube);
 /*                          MINIMAP FUNCTIONS                                 */
 /* ========================================================================== */
 /* minimap.c */
-void	render_minimap(t_game *game);
-void	draw_map_grid(t_game *game);
+void	minimap_render(t_game *game);
 void	draw_player(t_game *game);
 void	draw_player_direction(t_game *game);
-void	draw_square(t_game *game, int x, int y, int size, int color);
-void	put_pixel_to_image(t_game *game, int x, int y, int color);
 
 /* minimap_draw_line.c */
-void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
+// void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
+void    draw_line(t_game *game, t_line_data *line_data);
+
+/* minimap_draw_map.c */
+void	draw_map_grid(t_game *game);
+
+/* minimap_funcs.c */
+void    draw_square(t_game *game, int x, int y, t_square_params *square_data);
+void	put_pixel_to_image(t_game *game, int x, int y, int color);
 
 /* ========================================================================== */
 /*                  PLAYER MOVEMENT FUNCTIONS                                 */

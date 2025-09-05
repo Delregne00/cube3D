@@ -73,7 +73,7 @@ int	game_loop(void *param)
 	// handle_input(game);
 	handle_input(p);
 	raycasting(game);
-	render_minimap(game);
+	minimap_render(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
@@ -104,7 +104,7 @@ void	hooks_setup(t_game_loop_param *p)
 // 	// Raycasting básico (pintado de muros)
 // 	raycasting(game, collector);
 // 	// Renderizar minimap encima
-// 	render_minimap(game);
+// 	minimap_render(game);
 // }
 
 t_game *game_init(t_cube *cube, t_collector **collector)
