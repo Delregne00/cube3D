@@ -174,19 +174,19 @@ typedef struct s_ray
 	int		map_x;
 	int		map_y;
 	int		step_x;
-	int		stepY;
+	int		step_y;
 	int		hit;
 	int		side;
-	double	rayDirX;
-	double	rayDirY;
-	double	sideDistX;
-	double	sideDistY;
-	double	deltaDistX;
-	double	deltaDistY;
-	double	perpWallDist;
-	int		lineHeight;
-	int		drawStart;
-	int		drawEnd;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
 }	t_ray;
 
 typedef struct s_render_cache {

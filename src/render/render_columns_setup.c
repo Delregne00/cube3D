@@ -14,8 +14,8 @@
 
 static void	adjust_texture_x(t_ray *ray, t_column_data *data)
 {
-	if ((ray->side == 0 && ray->rayDirX > 0)
-		|| (ray->side == 1 && ray->rayDirY < 0))
+	if ((ray->side == 0 && ray->ray_dir_x > 0)
+		|| (ray->side == 1 && ray->ray_dir_y < 0))
 		data->tex_x = data->tex->width - data->tex_x - 1;
 	if (data->tex_x < 0)
 		data->tex_x = 0;
@@ -29,15 +29,15 @@ static void	calc_texture_coordinates(t_game *game, t_ray *ray,
 	double	wall_x;
 
 	if (ray->side == 0)
-		wall_x = game->player.y + ray->perpWallDist * ray->rayDirY;
+		wall_x = game->player.y + ray->perp_wall_dist * ray->ray_dir_y;
 	else
-		wall_x = game->player.x + ray->perpWallDist * ray->rayDirX;
+		wall_x = game->player.x + ray->perp_wall_dist * ray->ray_dir_x;
 	wall_x -= floor(wall_x);
 	data->tex_x = (int)(wall_x * (double)data->tex->width);
 	adjust_texture_x(ray, data);
-	data->step = 1.0 * data->tex->height / ray->lineHeight;
-	data->tex_pos = (ray->drawStart - data->height / 2.0
-			+ ray->lineHeight / 2.0) * data->step;
+	data->step = 1.0 * data->tex->height / ray->line_height;
+	data->tex_pos = (ray->draw_start - data->height / 2.0
+			+ ray->line_height / 2.0) * data->step;
 }
 
 void	setup_column_data(t_game *game, t_ray *ray, t_column_data *data)
@@ -46,7 +46,7 @@ void	setup_column_data(t_game *game, t_ray *ray, t_column_data *data)
 	data->pixels = (uint32_t *)game->addr;
 	data->width = game->width;
 	data->height = game->height;
-	data->draw_start = ray->drawStart;
-	data->draw_end = ray->drawEnd;
+	data->draw_start = ray->draw_start;
+	data->draw_end = ray->draw_end;
 	calc_texture_coordinates(game, ray, data);
 }

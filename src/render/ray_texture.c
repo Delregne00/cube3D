@@ -23,7 +23,7 @@ t_texture	*select_texture(t_game *game, t_ray *ray)
 
 t_texture	*select_vertical_texture(t_ray *ray)
 {
-	if (ray->rayDirX < 0)
+	if (ray->ray_dir_x < 0)
 		return (g_cache.tex_cache[2]);
 	else
 		return (g_cache.tex_cache[3]);
@@ -31,7 +31,7 @@ t_texture	*select_vertical_texture(t_ray *ray)
 
 t_texture	*select_horizontal_texture(t_ray *ray)
 {
-	if (ray->rayDirY < 0)
+	if (ray->ray_dir_y < 0)
 		return (g_cache.tex_cache[0]);
 	else
 		return (g_cache.tex_cache[1]);

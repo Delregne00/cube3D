@@ -27,16 +27,16 @@ void	perform_dda(t_game *game, t_ray *ray)
 
 void	dda_step(t_ray *ray)
 {
-	if (ray->sideDistX < ray->sideDistY)
+	if (ray->side_dist_x < ray->side_dist_y)
 	{
-		ray->sideDistX += ray->deltaDistX;
+		ray->side_dist_x += ray->delta_dist_x;
 		ray->map_x += ray->step_x;
 		ray->side = 0;
 	}
 	else
 	{
-		ray->sideDistY += ray->deltaDistY;
-		ray->map_y += ray->stepY;
+		ray->side_dist_y += ray->delta_dist_y;
+		ray->map_y += ray->step_y;
 		ray->side = 1;
 	}
 }
