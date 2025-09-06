@@ -254,7 +254,15 @@ void	cube_free(t_cube *cube);
 
 /* init/game_init.c */
 t_game	*game_init(t_cube *cube, t_collector **collector);
-void player_init(t_game *game);
+
+/* init/game_funcs.c */
+void	player_init(t_game *game);
+int		window_close(t_game_loop_param *p);
+int		game_loop(void *param);
+void	hooks_setup(t_game_loop_param *p);
+
+/* init/player_direction.c */
+void	player_set_direction(t_player *player, char direction);
 
 /* ========================================================================== */
 /*                           PARSER FUNCTIONS                                 */
@@ -327,22 +335,17 @@ void	put_pixel_to_image(t_game *game, int x, int y, int color);
 /* ========================================================================== */
 /*                  PLAYER MOVEMENT FUNCTIONS                                 */
 /* ========================================================================== */
-/* minimap/input.c */
-int		key_press(int keycode, t_game *game);
-int		key_release(int keycode, t_game *game);
-// void	handle_input(t_game *game);
-void	handle_input(t_game_loop_param *p);
-// int		close_window(t_game *game);
-int	close_window(t_game_loop_param *p);
-// void	setup_hooks(t_game *game, t_game_loop_param *param);
-void	hooks_setup(t_game_loop_param *p);
 
 /* minimap/player_movement.c */
-// void handle_input(t_game *game);
 void	move_player(t_game *game, int direction);
 void	strafe_player(t_game *game, int direction);
 void	rotate_player(t_game *game, int direction);
-bool	is_wall(t_game *game, double x, double y);
+// bool	is_wall(t_game *game, double x, double y);
+
+/* minimap/player_movement_keys.c */
+int		key_press(int keycode, t_game *game);
+int		key_release(int keycode, t_game *game);
+void	handle_input(t_game_loop_param *p);
 
 /* ========================================================================== */
 /*                           RENDER FUNCTIONS                                 */

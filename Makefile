@@ -47,7 +47,9 @@ endif
 # Source files
 MAIN_SRC = 		main.c
 INIT_SRC =		$(SRCDIR)/init/cube_init.c \
-				$(SRCDIR)/init/game_init.c
+				$(SRCDIR)/init/game_init.c \
+				$(SRCDIR)/init/game_funcs.c \
+				$(SRCDIR)/init/player_direction.c
 
 PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_file.c \

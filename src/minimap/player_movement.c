@@ -12,7 +12,7 @@
 
 #include "includes/cube.h"
 
-bool	is_wall(t_game *game, double x, double y)
+static bool	is_wall(t_game *game, double x, double y)
 {
 	int	map_x;
 	int	map_y;

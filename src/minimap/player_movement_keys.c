@@ -72,5 +72,5 @@ void	handle_input(t_game_loop_param *p)
 	if (g_keys.right)
 		rotate_player(p->game, 1);
 	if (g_keys.esc)
-		close_window(p);
+		window_close(p);
 }
