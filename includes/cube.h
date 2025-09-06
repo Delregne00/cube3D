@@ -28,13 +28,13 @@
 # include "libraries/minilibx/mlx.h"
 
 //Macros
-# define MAX_MAP_SIZE 100
-# define WIN_W 1920
-# define WIN_H 1080
-# define TEX_NO 0
-# define TEX_SO 1
-# define TEX_WE 2
-# define TEX_EA 3
+# define MAX_MAP_SIZE	100
+# define WIN_W			1920
+# define WIN_H			1080
+# define TEX_NO			0
+# define TEX_SO			1
+# define TEX_WE			2
+# define TEX_EA			3
 
 // Macros per al minimap
 # define MINIMAP_SCALE		5	// Mida de cada cella del mapa
