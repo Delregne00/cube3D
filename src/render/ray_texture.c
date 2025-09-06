@@ -37,21 +37,21 @@ t_texture	*select_horizontal_texture(t_ray *ray)
 		return (g_cache.tex_cache[1]);
 }
 
-uint32_t	get_texture_pixel(t_texture *tex, int texX, int texY)
+uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY)
 {
 	char	*pixel;
 
 	if (!tex || !tex->addr)
 		return (0xFF00FF);
-	if (!is_valid_texture_coord(tex, texX, texY))
+	if (!is_valid_texture_coord(tex, tex_x, texY))
 		return (0xFF00FF);
-	pixel = tex->addr + (texY * tex->line_len + texX * (tex->bpp / 8));
+	pixel = tex->addr + (texY * tex->line_len + tex_x * (tex->bpp / 8));
 	return (*(uint32_t *)pixel);
 }
 
-bool	is_valid_texture_coord(t_texture *tex, int texX, int texY)
+bool	is_valid_texture_coord(t_texture *tex, int tex_x, int texY)
 {
-	if (texX < 0 || texX >= tex->width)
+	if (tex_x < 0 || tex_x >= tex->width)
 		return (false);
 	if (texY < 0 || texY >= tex->height)
 		return (false);

@@ -45,13 +45,13 @@ void	render_wall(int x, t_column_data *data)
 	y = data->draw_start;
 	while (y <= data->draw_end)
 	{
-		tex_y = (int)data->texPos;
+		tex_y = (int)data->tex_pos;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= data->tex->height)
 			tex_y = data->tex->height - 1;
-		data->texPos += data->step;
-		color = get_texture_pixel(data->tex, data->texX, tex_y);
+		data->tex_pos += data->step;
+		color = get_texture_pixel(data->tex, data->tex_x, tex_y);
 		data->pixels[y * data->width + x] = color;
 		y++;
 	}

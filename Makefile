@@ -201,5 +201,8 @@ info:
 #
 # 	x substituir espais en blanc:
 # 	^(    )+
+#   ^( {4})+
+#   NO a ppi de linia:
+#   ( {4})+
 # 	\t
 # source ~/norminette_env/bin/activate

@@ -30,13 +30,13 @@ void	dda_step(t_ray *ray)
 	if (ray->sideDistX < ray->sideDistY)
 	{
 		ray->sideDistX += ray->deltaDistX;
-		ray->mapX += ray->stepX;
+		ray->map_x += ray->step_x;
 		ray->side = 0;
 	}
 	else
 	{
 		ray->sideDistY += ray->deltaDistY;
-		ray->mapY += ray->stepY;
+		ray->map_y += ray->stepY;
 		ray->side = 1;
 	}
 }
@@ -48,12 +48,12 @@ bool	check_bounds(t_game *game, t_ray *ray)
 
 	max_cols = game->cube->map->max_columnas;
 	max_rows = game->cube->map->filas;
-	if (ray->mapX < 0 || ray->mapY < 0)
+	if (ray->map_x < 0 || ray->map_y < 0)
 	{
 		ray->hit = 1;
 		return (true);
 	}
-	if (ray->mapY >= max_rows || ray->mapX >= max_cols)
+	if (ray->map_y >= max_rows || ray->map_x >= max_cols)
 	{
 		ray->hit = 1;
 		return (true);
@@ -66,5 +66,5 @@ bool	check_wall_hit(t_game *game, t_ray *ray)
 	char	**map;
 
 	map = game->cube->map->map;
-	return (map[ray->mapY][ray->mapX] == '1');
+	return (map[ray->map_y][ray->map_x] == '1');
 }

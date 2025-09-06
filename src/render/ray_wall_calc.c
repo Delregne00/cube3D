@@ -23,12 +23,12 @@ void	calc_perp_wall_dist(t_game *game, t_ray *ray)
 {
 	if (ray->side == 0)
 	{
-		ray->perpWallDist = (ray->mapX - game->player.x
-				+ (1 - ray->stepX) / 2) / ray->rayDirX;
+		ray->perpWallDist = (ray->map_x - game->player.x
+				+ (1 - ray->step_x) / 2) / ray->rayDirX;
 	}
 	else
 	{
-		ray->perpWallDist = (ray->mapY - game->player.y
+		ray->perpWallDist = (ray->map_y - game->player.y
 				+ (1 - ray->stepY) / 2) / ray->rayDirY;
 	}
 }
