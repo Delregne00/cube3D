@@ -15,27 +15,26 @@
 t_texture	*select_texture(t_game *game, t_ray *ray)
 {
 	(void)game;
-
 	if (ray->side == 0)
-		return select_vertical_texture(ray);
+		return (select_vertical_texture(ray));
 	else
-		return select_horizontal_texture(ray);
+		return (select_horizontal_texture(ray));
 }
 
 t_texture	*select_vertical_texture(t_ray *ray)
 {
 	if (ray->rayDirX < 0)
-		return g_cache.tex_cache[2];
+		return (g_cache.tex_cache[2]);
 	else
-		return g_cache.tex_cache[3];
+		return (g_cache.tex_cache[3]);
 }
 
 t_texture	*select_horizontal_texture(t_ray *ray)
 {
 	if (ray->rayDirY < 0)
-		return g_cache.tex_cache[0];
+		return (g_cache.tex_cache[0]);
 	else
-		return g_cache.tex_cache[1];
+		return (g_cache.tex_cache[1]);
 }
 
 uint32_t	get_texture_pixel(t_texture *tex, int texX, int texY)
@@ -43,19 +42,18 @@ uint32_t	get_texture_pixel(t_texture *tex, int texX, int texY)
 	char	*pixel;
 
 	if (!tex || !tex->addr)
-		return 0xFF00FF;
+		return (0xFF00FF);
 	if (!is_valid_texture_coord(tex, texX, texY))
-		return 0xFF00FF;
-
+		return (0xFF00FF);
 	pixel = tex->addr + (texY * tex->line_len + texX * (tex->bpp / 8));
-	return *(uint32_t *)pixel;
+	return (*(uint32_t *)pixel);
 }
 
 bool	is_valid_texture_coord(t_texture *tex, int texX, int texY)
 {
 	if (texX < 0 || texX >= tex->width)
-		return false;
+		return (false);
 	if (texY < 0 || texY >= tex->height)
-		return false;
-	return true;
+		return (false);
+	return (true);
 }

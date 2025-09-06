@@ -23,15 +23,13 @@ void	calc_perp_wall_dist(t_game *game, t_ray *ray)
 {
 	if (ray->side == 0)
 	{
-		ray->perpWallDist = (ray->mapX - game->player.x +
-							 (1 - ray->stepX) / 2) /
-							ray->rayDirX;
+		ray->perpWallDist = (ray->mapX - game->player.x
+				+ (1 - ray->stepX) / 2) / ray->rayDirX;
 	}
 	else
 	{
-		ray->perpWallDist = (ray->mapY - game->player.y +
-							 (1 - ray->stepY) / 2) /
-							ray->rayDirY;
+		ray->perpWallDist = (ray->mapY - game->player.y
+				+ (1 - ray->stepY) / 2) / ray->rayDirY;
 	}
 }
 
@@ -45,7 +43,6 @@ void	calc_draw_limits(t_game *game, t_ray *ray)
 	ray->drawStart = -ray->lineHeight / 2 + game->height / 2;
 	if (ray->drawStart < 0)
 		ray->drawStart = 0;
-
 	ray->drawEnd = ray->lineHeight / 2 + game->height / 2;
 	if (ray->drawEnd >= game->height)
 		ray->drawEnd = game->height - 1;

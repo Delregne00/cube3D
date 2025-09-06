@@ -12,40 +12,33 @@
 
 #include "includes/cube.h"
 
-t_render_cache g_cache;
+t_render_cache	g_cache;
 
-void	init_ray(t_game *game, t_ray *ray, int x)
-{
-	double	cameraX;
-
-	cameraX = 2 * x / (double)game->width - 1;
-	ray->rayDirX = game->player.dir_x + game->player.plane_x * cameraX;
-	ray->rayDirY = game->player.dir_y + game->player.plane_y * cameraX;
-	ray->mapX = (int)game->player.x;
-	ray->mapY = (int)game->player.y;
-	init_ray_distances(ray);
-}
-
-void	init_ray_distances(t_ray *ray)
+static void	init_ray_distances(t_ray *ray)
 {
 	if (ray->rayDirX == 0)
 		ray->deltaDistX = 1e30;
 	else
 		ray->deltaDistX = fabs(1.0 / ray->rayDirX);
-
 	if (ray->rayDirY == 0)
 		ray->deltaDistY = 1e30;
 	else
 		ray->deltaDistY = fabs(1.0 / ray->rayDirY);
 }
 
-void	calc_step_and_side_dist(t_game *game, t_ray *ray)
+void	init_ray(t_game *game, t_ray *ray, int x)
 {
-	calc_step_x(game, ray);
-	calc_step_y(game, ray);
+	double	camera_x;
+
+	camera_x = 2 * x / (double)game->width - 1;
+	ray->rayDirX = game->player.dir_x + game->player.plane_x * camera_x;
+	ray->rayDirY = game->player.dir_y + game->player.plane_y * camera_x;
+	ray->mapX = (int)game->player.x;
+	ray->mapY = (int)game->player.y;
+	init_ray_distances(ray);
 }
 
-void	calc_step_x(t_game *game, t_ray *ray)
+static void	calc_step_x(t_game *game, t_ray *ray)
 {
 	if (ray->rayDirX < 0)
 	{
@@ -59,7 +52,7 @@ void	calc_step_x(t_game *game, t_ray *ray)
 	}
 }
 
-void	calc_step_y(t_game *game, t_ray *ray)
+static void	calc_step_y(t_game *game, t_ray *ray)
 {
 	if (ray->rayDirY < 0)
 	{
@@ -73,3 +66,8 @@ void	calc_step_y(t_game *game, t_ray *ray)
 	}
 }
 
+void	calc_step_and_side_dist(t_game *game, t_ray *ray)
+{
+	calc_step_x(game, ray);
+	calc_step_y(game, ray);
+}

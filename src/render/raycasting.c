@@ -12,6 +12,46 @@
 
 #include "includes/cube.h"
 
+static void	cast_single_ray(t_game *game, t_ray *ray, int x)
+{
+	init_ray(game, ray, x);
+	calc_step_and_side_dist(game, ray);
+	perform_dda(game, ray);
+	calc_wall_height(game, ray);
+	draw_column_textured(game, ray, x);
+}
+
+static void	display_fps(void)
+{
+	static int		frame_count;
+	static time_t	last_time;
+	time_t			current_time;
+
+	frame_count = 0;
+	last_time = 0;
+	current_time = time(NULL);
+	frame_count++;
+	if (current_time > last_time)
+	{
+		printf("FPS: %d\n", frame_count);
+		frame_count = 0;
+		last_time = current_time;
+	}
+}
+
+static void	init_cache(t_game *game)
+{
+	if (!g_cache.initialized)
+		init_render_cache(game);
+}
+
+static bool	validate_game_data(t_game *game)
+{
+	if (!game || !game->cube || !game->cube->map)
+		return (false);
+	return (true);
+}
+
 void	raycasting(t_game *game)
 {
 	int		x;
@@ -27,44 +67,4 @@ void	raycasting(t_game *game)
 		cast_single_ray(game, &ray, x);
 		x++;
 	}
-}
-
-bool	validate_game_data(t_game *game)
-{
-	if (!game || !game->cube || !game->cube->map)
-		return (false);
-	return (true);
-}
-
-void	init_cache(t_game *game)
-{
-	if (!g_cache.initialized)
-		init_render_cache(game);
-}
-
-void	display_fps(void)
-{
-	static	int frame_count;
-	static	time_t last_time;
-	time_t	current_time;
-
-	frame_count = 0;
-	last_time = 0;
-	current_time = time(NULL);
-	frame_count++;
-	if (current_time > last_time)
-	{
-		printf("FPS: %d\n", frame_count);
-		frame_count = 0;
-		last_time = current_time;
-	}
-}
-
-void	cast_single_ray(t_game *game, t_ray *ray, int x)
-{
-	init_ray(game, ray, x);
-	calc_step_and_side_dist(game, ray);
-	perform_dda(game, ray);
-	calc_wall_height(game, ray);
-	draw_column_textured(game, ray, x);
 }

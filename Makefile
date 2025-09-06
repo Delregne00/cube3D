@@ -74,7 +74,8 @@ RENDER_SRC =	$(SRCDIR)/render/raycasting.c \
 				$(SRCDIR)/render/ray_texture.c \
 				$(SRCDIR)/render/ray_wall_calc.c \
 				$(SRCDIR)/render/render_utils.c \
-				$(SRCDIR)/render/render_columns.c
+				$(SRCDIR)/render/render_columns.c \
+				$(SRCDIR)/render/render_columns_setup.c
 
 UTILS_SRC =		$(SRCDIR)/utils/collector.c \
 				$(SRCDIR)/utils/utils.c
