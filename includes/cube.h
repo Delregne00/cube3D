@@ -278,7 +278,8 @@ bool		parser(t_cube *cube, char *file);
 bool		validation_file(t_cube *cube, char *file);
 bool		validate_perimisons_exist(char *file);
 bool		process_rgb_lines(t_cube *cube, char *line, char **expected, int i);
-bool		process_texture_lines(t_cube *cube, char *line, char **expected, int i);
+bool		process_texture_lines(t_cube *cube, char *line,
+				char **expected, int i);
 bool		parse_line(t_cube *cube, char *line, char *expected, int len);
 bool		process_rgb(t_cube *cube, char *line, int i);
 bool		process_textures(t_cube *cube, char *line, int i);
@@ -318,92 +319,92 @@ void		process_empty_line(char *line);
 /*							MINIMAP FUNCTIONS								*/
 /* ======================================================================== */
 /* minimap.c */
-void	minimap_render(t_game *game);
-void	draw_player(t_game *game);
-void	draw_player_direction(t_game *game);
+void		minimap_render(t_game *game);
+void		draw_player(t_game *game);
+void		draw_player_direction(t_game *game);
 
 /* minimap_draw_line.c */
-// void	draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
-void	draw_line(t_game *game, t_line_data *line_data);
+void		draw_line(t_game *game, t_line_data *line_data);
 
 /* minimap_draw_map.c */
-void	draw_map_grid(t_game *game);
+void		draw_map_grid(t_game *game);
 
 /* minimap_funcs.c */
-void	draw_square(t_game *game, int x, int y, t_square_params *square_data);
-void	put_pixel_to_image(t_game *game, int x, int y, int color);
+void		draw_square(t_game *game, int x, int y,
+				t_square_params *square_data);
+void		put_pixel_to_image(t_game *game, int x, int y, int color);
 
 /* ======================================================================== */
 /*					PLAYER MOVEMENT FUNCTIONS								*/
 /* ======================================================================== */
 
 /* minimap/player_movement.c */
-void	move_player(t_game *game, int direction);
-void	strafe_player(t_game *game, int direction);
-void	rotate_player(t_game *game, int direction);
+void		move_player(t_game *game, int direction);
+void		strafe_player(t_game *game, int direction);
+void		rotate_player(t_game *game, int direction);
 
 /* minimap/player_movement_keys.c */
-int		key_press(int keycode, t_game *game);
-int		key_release(int keycode, t_game *game);
-void	handle_input(t_game_loop_param *p);
+int			key_press(int keycode, t_game *game);
+int			key_release(int keycode, t_game *game);
+void		handle_input(t_game_loop_param *p);
 
 /* ======================================================================== */
 /*						RENDER FUNCTIONS									*/
 /* ======================================================================== */
 
 /* render/raycasting.c */
-void	raycasting(t_game *game);
+void		raycasting(t_game *game);
 
 /* render/render.c */
 uint32_t	rgb_to_color(int r, int g, int b);
-void	put_pixel_safe(t_game *game, int x, int y, uint32_t color);
+void		put_pixel_safe(t_game *game, int x, int y, uint32_t color);
 t_texture	*select_texture(t_game *game, t_ray *ray);
 uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY);
 
 /* render/textures.c */
-int		tex_pixel_get(t_texture *tex, int x, int y);
-int		textures_load(t_game *game, t_collector **collector);
+int			tex_pixel_get(t_texture *tex, int x, int y);
+int			textures_load(t_game *game, t_collector **collector);
 
 /* render/render_utils.c */
-bool	is_wall_fast(t_game *game, int map_x, int map_y);
-void	put_pixel_safe(t_game *game, int x, int y, uint32_t color);
+bool		is_wall_fast(t_game *game, int map_x, int map_y);
+void		put_pixel_safe(t_game *game, int x, int y, uint32_t color);
 uint32_t	rgb_to_color(int r, int g, int b);
-void	init_render_cache(t_game *game);
+void		init_render_cache(t_game *game);
 
 /* ======================================================================== */
 /*						RAY FUNCTIONS										*/
 /* ======================================================================== */
 
 /* render/raycasting.c */
-void	raycasting(t_game *game);
+void		raycasting(t_game *game);
 
 /* render/ray_init.c */
-void	init_ray(t_game *game, t_ray *ray, int x);
-void	calc_step_and_side_dist(t_game *game, t_ray *ray);
+void		init_ray(t_game *game, t_ray *ray, int x);
+void		calc_step_and_side_dist(t_game *game, t_ray *ray);
 
 /* render/ray_dda.c */
-void	perform_dda(t_game *game, t_ray *ray);
-void	dda_step(t_ray *ray);
-bool	check_bounds(t_game *game, t_ray *ray);
-bool	check_wall_hit(t_game *game, t_ray *ray);
+void		perform_dda(t_game *game, t_ray *ray);
+void		dda_step(t_ray *ray);
+bool		check_bounds(t_game *game, t_ray *ray);
+bool		check_wall_hit(t_game *game, t_ray *ray);
 
 /* render/ray_wall_calc.c */
-void	calc_wall_height(t_game *game, t_ray *ray);
-void	calc_perp_wall_dist(t_game *game, t_ray *ray);
-void	calc_line_height(t_game *game, t_ray *ray);
-void	calc_draw_limits(t_game *game, t_ray *ray);
+void		calc_wall_height(t_game *game, t_ray *ray);
+void		calc_perp_wall_dist(t_game *game, t_ray *ray);
+void		calc_line_height(t_game *game, t_ray *ray);
+void		calc_draw_limits(t_game *game, t_ray *ray);
 
 /* render/ray_texture.c */
 t_texture	*select_texture(t_game *game, t_ray *ray);
 t_texture	*select_vertical_texture(t_ray *ray);
 t_texture	*select_horizontal_texture(t_ray *ray);
 uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY);
-bool	is_valid_texture_coord(t_texture *tex, int tex_x, int texY);
+bool		is_valid_texture_coord(t_texture *tex, int tex_x, int texY);
 
 /* render/render_column.c */
-void	draw_column_textured(t_game *game, t_ray *ray, int x);
+void		draw_column_textured(t_game *game, t_ray *ray, int x);
 
 /* render/render_columns_setup.c */
-void	setup_column_data(t_game *game, t_ray *ray, t_column_data *data);
+void		setup_column_data(t_game *game, t_ray *ray, t_column_data *data);
 
 #endif
