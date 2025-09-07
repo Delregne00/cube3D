@@ -27,13 +27,13 @@ static bool	is_wall(t_game *game, double x, double y)
 }
 
 // Moviment endavant/enrera
-void	move_player(t_game *game, int direction)
+void	player_move(t_game *game, int direction)
 {
 	double	new_x;
 	double	new_y;
 	double	move_speed;
 
-	move_speed = 0.07;
+	move_speed = MOVE_SPEED;
 	new_x = game->player.x + game->player.dir_x * move_speed * direction;
 	new_y = game->player.y + game->player.dir_y * move_speed * direction;
 	if (!is_wall(game, new_x, game->player.y))
@@ -43,13 +43,13 @@ void	move_player(t_game *game, int direction)
 }
 
 // Movimient lateral
-void	strafe_player(t_game *game, int direction)
+void	player_strafe(t_game *game, int direction)
 {
 	double	new_x;
 	double	new_y;
 	double	move_speed;
 
-	move_speed = 0.05;
+	move_speed = MOVE_SPEED;
 	new_x = game->player.x + game->player.plane_x * move_speed * direction;
 	new_y = game->player.y + game->player.plane_y * move_speed * direction;
 	if (!is_wall(game, new_x, game->player.y))
@@ -59,13 +59,13 @@ void	strafe_player(t_game *game, int direction)
 }
 
 // Rotació del jugador
-void	rotate_player(t_game *game, int direction)
+void	player_rotate(t_game *game, int direction)
 {
 	double	old_dir_x;
 	double	old_plane_x;
 	double	rot_speed;
 
-	rot_speed = 0.03;
+	rot_speed = ROT_SPEED;
 	old_dir_x = game->player.dir_x;
 	old_plane_x = game->player.plane_x;
 	game->player.dir_x = game->player.dir_x * cos(rot_speed * direction)

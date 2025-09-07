@@ -12,13 +12,6 @@
 
 #include "includes/cube.h"
 
-void	ptr_print(void **ptr, char *msg)
-{
-	if (!ptr || !*ptr)
-		return ;
-	fprintf(stderr, "%s %p: %s\n", msg, *ptr, (char *)*ptr);
-}
-
 void	freer(void **ptr)
 {
 	if (!ptr || !*ptr)

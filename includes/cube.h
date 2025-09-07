@@ -59,6 +59,10 @@
 # define KEY_LEFT	65361
 # define KEY_RIGHT	65363
 
+// Macros velocitat player
+# define MOVE_SPEED	0.15	//0.01: Molt lenta, 0.20: Molt ràpida
+# define ROT_SPEED	0.10
+
 /* ======================================================================== */
 /*							STRUCTURES										*/
 /* ======================================================================== */
@@ -230,11 +234,10 @@ typedef struct s_column_data
 }	t_column_data;
 
 /* ======================================================================== */
-/*						UTILITY FUNCTIONS								*/
+/*						UTILITY FUNCTIONS									*/
 /* ======================================================================== */
 
 /* util/utils.c */
-void		ptr_print(void **ptr, char *msg);
 void		freer(void **ptr);
 void		print_msg(const char *msg);
 void		exit_program(t_collector **collector, const char *msg,
@@ -245,7 +248,6 @@ void		exit_program(t_collector **collector, const char *msg,
 /* ======================================================================== */
 
 /* util/collector.c */
-bool		collector_contains(t_collector *collector, void *ptr);
 void		collector_remove_ptr(t_collector **collector, void *ptr);
 void		collector_cleanup(t_collector **collector, void *mlx);
 void		collector_append(t_collector **collector, void *ptr,
@@ -339,9 +341,9 @@ void		put_pixel_to_image(t_game *game, int x, int y, int color);
 /* ======================================================================== */
 
 /* minimap/player_movement.c */
-void		move_player(t_game *game, int direction);
-void		strafe_player(t_game *game, int direction);
-void		rotate_player(t_game *game, int direction);
+void		player_move(t_game *game, int direction);
+void		player_strafe(t_game *game, int direction);
+void		player_rotate(t_game *game, int direction);
 
 /* minimap/player_movement_keys.c */
 int			key_press(int keycode, t_game *game);

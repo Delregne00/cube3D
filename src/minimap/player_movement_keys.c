@@ -60,17 +60,17 @@ int	key_release(int keycode, t_game *game)
 void	handle_input(t_game_loop_param *p)
 {
 	if (g_keys.w)
-		move_player(p->game, 1);
+		player_move(p->game, 1);
 	if (g_keys.s)
-		move_player(p->game, -1);
+		player_move(p->game, -1);
 	if (g_keys.a)
-		strafe_player(p->game, -1);
+		player_strafe(p->game, -1);
 	if (g_keys.d)
-		strafe_player(p->game, 1);
+		player_strafe(p->game, 1);
 	if (g_keys.left)
-		rotate_player(p->game, -1);
+		player_rotate(p->game, -1);
 	if (g_keys.right)
-		rotate_player(p->game, 1);
+		player_rotate(p->game, 1);
 	if (g_keys.esc)
 		window_close(p);
 }
