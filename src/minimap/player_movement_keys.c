@@ -13,7 +13,7 @@
 #include "includes/cube.h"
 
 // Variable global x estat de tecles
-t_keys	g_keys = {0, 0, 0, 0, 0, 0, 0};
+static t_keys	g_keys = {0, 0, 0, 0, 0, 0, 0};
 
 // Maneig tecles pressionades
 int	key_press(int keycode, t_game *game)
@@ -36,7 +36,7 @@ int	key_press(int keycode, t_game *game)
 	return (0);
 }
 
-// Maneig tecles lliberades
+// Maneig tecles alliberades
 int	key_release(int keycode, t_game *game)
 {
 	(void)game;

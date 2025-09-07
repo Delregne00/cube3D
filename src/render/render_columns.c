@@ -36,7 +36,7 @@ static void	render_floor(int x, t_column_data *data)
 	}
 }
 
-void	render_wall(int x, t_column_data *data)
+static void	render_wall(int x, t_column_data *data)
 {
 	int			y;
 	int			tex_y;
@@ -57,7 +57,7 @@ void	render_wall(int x, t_column_data *data)
 	}
 }
 
-void	render_ceiling(int x, t_column_data *data)
+static void	render_ceiling(int x, t_column_data *data)
 {
 	int			y;
 	int			ceil_end;

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "includes/cube.h"
-
 t_render_cache	g_cache;
 
 static void	init_ray_distances(t_ray *ray)
