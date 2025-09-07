@@ -356,8 +356,6 @@ void		handle_input(t_game_loop_param *p);
 void		raycasting(t_game *game);
 
 /* render/render.c */
-uint32_t	rgb_to_color(int r, int g, int b);
-void		put_pixel_safe(t_game *game, int x, int y, uint32_t color);
 t_texture	*select_texture(t_game *game, t_ray *ray);
 uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY);
 
@@ -366,10 +364,8 @@ int			tex_pixel_get(t_texture *tex, int x, int y);
 int			textures_load(t_game *game, t_collector **collector);
 
 /* render/render_utils.c */
-bool		is_wall_fast(t_game *game, int map_x, int map_y);
-void		put_pixel_safe(t_game *game, int x, int y, uint32_t color);
-uint32_t	rgb_to_color(int r, int g, int b);
-void		init_render_cache(t_game *game);
+void		cache_init_render(t_game *game);
+void		calc_step_and_side_dist(t_game *game, t_ray *ray);
 
 /* ======================================================================== */
 /*						RAY FUNCTIONS										*/
@@ -379,14 +375,10 @@ void		init_render_cache(t_game *game);
 void		raycasting(t_game *game);
 
 /* render/ray_init.c */
-void		init_ray(t_game *game, t_ray *ray, int x);
-void		calc_step_and_side_dist(t_game *game, t_ray *ray);
+void		ray_init(t_game *game, t_ray *ray, int x);
 
 /* render/ray_dda.c */
-void		perform_dda(t_game *game, t_ray *ray);
-void		dda_step(t_ray *ray);
-bool		check_bounds(t_game *game, t_ray *ray);
-bool		check_wall_hit(t_game *game, t_ray *ray);
+void		dda_perform(t_game *game, t_ray *ray);
 
 /* render/ray_wall_calc.c */
 void		calc_wall_height(t_game *game, t_ray *ray);

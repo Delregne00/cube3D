@@ -12,36 +12,15 @@
 
 #include "includes/cube.h"
 
-void	perform_dda(t_game *game, t_ray *ray)
+static bool	check_wall_hit(t_game *game, t_ray *ray)
 {
-	ray->hit = 0;
-	while (ray->hit == 0)
-	{
-		dda_step(ray);
-		if (check_bounds(game, ray))
-			break ;
-		if (check_wall_hit(game, ray))
-			ray->hit = 1;
-	}
+	char	**map;
+
+	map = game->cube->map->map;
+	return (map[ray->map_y][ray->map_x] == '1');
 }
 
-void	dda_step(t_ray *ray)
-{
-	if (ray->side_dist_x < ray->side_dist_y)
-	{
-		ray->side_dist_x += ray->delta_dist_x;
-		ray->map_x += ray->step_x;
-		ray->side = 0;
-	}
-	else
-	{
-		ray->side_dist_y += ray->delta_dist_y;
-		ray->map_y += ray->step_y;
-		ray->side = 1;
-	}
-}
-
-bool	check_bounds(t_game *game, t_ray *ray)
+static bool	check_bounds(t_game *game, t_ray *ray)
 {
 	int	max_cols;
 	int	max_rows;
@@ -61,10 +40,31 @@ bool	check_bounds(t_game *game, t_ray *ray)
 	return (false);
 }
 
-bool	check_wall_hit(t_game *game, t_ray *ray)
+static void	dda_step(t_ray *ray)
 {
-	char	**map;
+	if (ray->side_dist_x < ray->side_dist_y)
+	{
+		ray->side_dist_x += ray->delta_dist_x;
+		ray->map_x += ray->step_x;
+		ray->side = 0;
+	}
+	else
+	{
+		ray->side_dist_y += ray->delta_dist_y;
+		ray->map_y += ray->step_y;
+		ray->side = 1;
+	}
+}
 
-	map = game->cube->map->map;
-	return (map[ray->map_y][ray->map_x] == '1');
+void	dda_perform(t_game *game, t_ray *ray)
+{
+	ray->hit = 0;
+	while (ray->hit == 0)
+	{
+		dda_step(ray);
+		if (check_bounds(game, ray))
+			break ;
+		if (check_wall_hit(game, ray))
+			ray->hit = 1;
+	}
 }

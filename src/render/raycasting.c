@@ -12,11 +12,11 @@
 
 #include "includes/cube.h"
 
-static void	cast_single_ray(t_game *game, t_ray *ray, int x)
+static void	single_ray_cast(t_game *game, t_ray *ray, int x)
 {
-	init_ray(game, ray, x);
+	ray_init(game, ray, x);
 	calc_step_and_side_dist(game, ray);
-	perform_dda(game, ray);
+	dda_perform(game, ray);
 	calc_wall_height(game, ray);
 	draw_column_textured(game, ray, x);
 }
@@ -39,13 +39,13 @@ static void	display_fps(void)
 	}
 }
 
-static void	init_cache(t_game *game)
+static void	cache_init(t_game *game)
 {
 	if (!g_cache.initialized)
-		init_render_cache(game);
+		cache_init_render(game);
 }
 
-static bool	validate_game_data(t_game *game)
+static bool	game_data_validate(t_game *game)
 {
 	if (!game || !game->cube || !game->cube->map)
 		return (false);
@@ -57,14 +57,14 @@ void	raycasting(t_game *game)
 	int		x;
 	t_ray	ray;
 
-	if (!validate_game_data(game))
+	if (!game_data_validate(game))
 		return ;
-	init_cache(game);
+	cache_init(game);
 	display_fps();
 	x = 0;
 	while (x < game->width)
 	{
-		cast_single_ray(game, &ray, x);
+		single_ray_cast(game, &ray, x);
 		x++;
 	}
 }

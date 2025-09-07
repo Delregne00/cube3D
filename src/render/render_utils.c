@@ -12,7 +12,12 @@
 
 #include "includes/cube.h"
 
-void	init_render_cache(t_game *game)
+static uint32_t	rgb_to_color(int r, int g, int b)
+{
+	return (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF));
+}
+
+void	cache_init_render(t_game *game)
 {
 	t_cube	*cube;
 
@@ -30,27 +35,58 @@ void	init_render_cache(t_game *game)
 	g_cache.initialized = 1;
 }
 
-uint32_t	rgb_to_color(int r, int g, int b)
+static void	calc_step_x(t_game *game, t_ray *ray)
 {
-	return (((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF));
+	if (ray->ray_dir_x < 0)
+	{
+		ray->step_x = -1;
+		ray->side_dist_x = (game->player.x - ray->map_x) * ray->delta_dist_x;
+	}
+	else
+	{
+		ray->step_x = 1;
+		ray->side_dist_x = (ray->map_x + 1.0 - game->player.x)
+			* ray->delta_dist_x;
+	}
 }
 
-void	put_pixel_safe(t_game *game, int x, int y, uint32_t color)
+static void	calc_step_y(t_game *game, t_ray *ray)
 {
-	char	*dst;
-
-	if (x < 0 || x >= game->width || y < 0 || y >= game->height)
-		return ;
-	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
-	*(uint32_t *)dst = color;
+	if (ray->ray_dir_y < 0)
+	{
+		ray->step_y = -1;
+		ray->side_dist_y = (game->player.y - ray->map_y) * ray->delta_dist_y;
+	}
+	else
+	{
+		ray->step_y = 1;
+		ray->side_dist_y = (ray->map_y + 1.0 - game->player.y)
+			* ray->delta_dist_y;
+	}
 }
 
-bool	is_wall_fast(t_game *game, int map_x, int map_y)
+void	calc_step_and_side_dist(t_game *game, t_ray *ray)
 {
-	if (map_x < 0 || map_y < 0)
-		return (true);
-	if (map_y >= game->cube->map->filas
-		|| map_x >= game->cube->map->max_columnas)
-		return (true);
-	return (game->cube->map->map[map_y][map_x] == '1');
+	calc_step_x(game, ray);
+	calc_step_y(game, ray);
 }
+
+// void	put_pixel_safe(t_game *game, int x, int y, uint32_t color)
+// {
+// 	char	*dst;
+
+// 	if (x < 0 || x >= game->width || y < 0 || y >= game->height)
+// 		return ;
+// 	dst = game->addr + (y * game->line_length + x * (game->bits_per_pixel / 8));
+// 	*(uint32_t *)dst = color;
+// }
+
+// bool	is_wall_fast(t_game *game, int map_x, int map_y)
+// {
+// 	if (map_x < 0 || map_y < 0)
+// 		return (true);
+// 	if (map_y >= game->cube->map->filas
+// 		|| map_x >= game->cube->map->max_columnas)
+// 		return (true);
+// 	return (game->cube->map->map[map_y][map_x] == '1');
+// }
