@@ -12,8 +12,6 @@
 
 #include "includes/cube.h"
 
-t_render_cache	g_cache = {0};
-
 static void	ray_init_distances(t_ray *ray)
 {
 	if (ray->ray_dir_x == 0)

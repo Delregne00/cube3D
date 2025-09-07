@@ -12,18 +12,6 @@
 
 #include "includes/cube.h"
 
-int	tex_pixel_get(t_texture *tex, int x, int y)
-{
-	char	*pixel;
-	int		color;
-
-	if (x < 0 || x >= tex->width || y < 0 || y >= tex->height)
-		return (0);
-	pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
-	color = *(unsigned int *)pixel;
-	return (color);
-}
-
 static void	texture_load(void *mlx, t_texture *tex, const char *path,
 	t_collector **collector)
 {

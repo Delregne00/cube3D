@@ -12,7 +12,7 @@
 
 #include "includes/cube.h"
 
-static void	render_floor(int x, t_column_data *data)
+static void	floor_render(int x, t_column_data *data)
 {
 	int			y;
 	int			floor_end;
@@ -36,7 +36,7 @@ static void	render_floor(int x, t_column_data *data)
 	}
 }
 
-static void	render_wall(int x, t_column_data *data)
+static void	wall_render(int x, t_column_data *data)
 {
 	int			y;
 	int			tex_y;
@@ -51,13 +51,13 @@ static void	render_wall(int x, t_column_data *data)
 		if (tex_y >= data->tex->height)
 			tex_y = data->tex->height - 1;
 		data->tex_pos += data->step;
-		color = get_texture_pixel(data->tex, data->tex_x, tex_y);
+		color = texture_pixel_get(data->tex, data->tex_x, tex_y);
 		data->pixels[y * data->width + x] = color;
 		y++;
 	}
 }
 
-static void	render_ceiling(int x, t_column_data *data)
+static void	ceiling_render(int x, t_column_data *data)
 {
 	int			y;
 	int			ceil_end;
@@ -81,12 +81,12 @@ static void	render_ceiling(int x, t_column_data *data)
 	}
 }
 
-void	draw_column_textured(t_game *game, t_ray *ray, int x)
+void	column_textured_draw(t_game *game, t_ray *ray, int x)
 {
 	t_column_data	data;
 
-	setup_column_data(game, ray, &data);
-	render_ceiling(x, &data);
-	render_wall(x, &data);
-	render_floor(x, &data);
+	column_data_setup(game, ray, &data);
+	ceiling_render(x, &data);
+	wall_render(x, &data);
+	floor_render(x, &data);
 }

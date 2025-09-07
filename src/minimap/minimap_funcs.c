@@ -24,7 +24,7 @@ void	put_pixel_to_image(t_game *game, int x, int y, int color)
 	}
 }
 
-static void	draw_square_row(t_game *game, t_square_params *params, int row)
+static void	square_draw_row(t_game *game, t_square_params *params, int row)
 {
 	int	j;
 	int	pixel_x;
@@ -41,7 +41,7 @@ static void	draw_square_row(t_game *game, t_square_params *params, int row)
 	}
 }
 
-void	draw_square(t_game *game, int x, int y, t_square_params *square_data)
+void	square_draw(t_game *game, int x, int y, t_square_params *square_data)
 {
 	t_square_params	params;
 	int				i;
@@ -53,7 +53,7 @@ void	draw_square(t_game *game, int x, int y, t_square_params *square_data)
 	i = 0;
 	while (i < params.size)
 	{
-		draw_square_row(game, &params, i);
+		square_draw_row(game, &params, i);
 		i++;
 	}
 }

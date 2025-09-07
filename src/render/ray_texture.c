@@ -12,16 +12,28 @@
 
 #include "includes/cube.h"
 
-t_texture	*select_texture(t_game *game, t_ray *ray)
+static bool	is_valid_texture_coord(t_texture *tex, int tex_x, int tex_y)
 {
-	(void)game;
-	if (ray->side == 0)
-		return (select_vertical_texture(ray));
-	else
-		return (select_horizontal_texture(ray));
+	if (tex_x < 0 || tex_x >= tex->width)
+		return (false);
+	if (tex_y < 0 || tex_y >= tex->height)
+		return (false);
+	return (true);
 }
 
-t_texture	*select_vertical_texture(t_ray *ray)
+uint32_t	texture_pixel_get(t_texture *tex, int tex_x, int tex_y)
+{
+	char	*pixel;
+
+	if (!tex || !tex->addr)
+		return (0xFF00FF);
+	if (!is_valid_texture_coord(tex, tex_x, tex_y))
+		return (0xFF00FF);
+	pixel = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
+	return (*(uint32_t *)pixel);
+}
+
+static t_texture	*texture_vertical_select(t_ray *ray)
 {
 	if (ray->ray_dir_x < 0)
 		return (g_cache.tex_cache[2]);
@@ -29,7 +41,7 @@ t_texture	*select_vertical_texture(t_ray *ray)
 		return (g_cache.tex_cache[3]);
 }
 
-t_texture	*select_horizontal_texture(t_ray *ray)
+static t_texture	*texture_horizontal_select(t_ray *ray)
 {
 	if (ray->ray_dir_y < 0)
 		return (g_cache.tex_cache[0]);
@@ -37,23 +49,11 @@ t_texture	*select_horizontal_texture(t_ray *ray)
 		return (g_cache.tex_cache[1]);
 }
 
-uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY)
+t_texture	*texture_select(t_game *game, t_ray *ray)
 {
-	char	*pixel;
-
-	if (!tex || !tex->addr)
-		return (0xFF00FF);
-	if (!is_valid_texture_coord(tex, tex_x, texY))
-		return (0xFF00FF);
-	pixel = tex->addr + (texY * tex->line_len + tex_x * (tex->bpp / 8));
-	return (*(uint32_t *)pixel);
-}
-
-bool	is_valid_texture_coord(t_texture *tex, int tex_x, int texY)
-{
-	if (tex_x < 0 || tex_x >= tex->width)
-		return (false);
-	if (texY < 0 || texY >= tex->height)
-		return (false);
-	return (true);
+	(void)game;
+	if (ray->side == 0)
+		return (texture_vertical_select(ray));
+	else
+		return (texture_horizontal_select(ray));
 }

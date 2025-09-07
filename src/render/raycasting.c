@@ -12,13 +12,15 @@
 
 #include "includes/cube.h"
 
+t_render_cache	g_cache = {0};
+
 static void	single_ray_cast(t_game *game, t_ray *ray, int x)
 {
 	ray_init(game, ray, x);
 	calc_step_and_side_dist(game, ray);
 	dda_perform(game, ray);
-	calc_wall_height(game, ray);
-	draw_column_textured(game, ray, x);
+	wall_height_calc(game, ray);
+	column_textured_draw(game, ray, x);
 }
 
 static void	display_fps(void)
@@ -37,12 +39,6 @@ static void	display_fps(void)
 		frame_count = 0;
 		last_time = current_time;
 	}
-}
-
-static void	cache_init(t_game *game)
-{
-	if (!g_cache.initialized)
-		cache_init_render(game);
 }
 
 static bool	game_data_validate(t_game *game)

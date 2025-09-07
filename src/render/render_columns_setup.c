@@ -40,9 +40,9 @@ static void	calc_texture_coordinates(t_game *game, t_ray *ray,
 			+ ray->line_height / 2.0) * data->step;
 }
 
-void	setup_column_data(t_game *game, t_ray *ray, t_column_data *data)
+void	column_data_setup(t_game *game, t_ray *ray, t_column_data *data)
 {
-	data->tex = select_texture(game, ray);
+	data->tex = texture_select(game, ray);
 	data->pixels = (uint32_t *)game->addr;
 	data->width = game->width;
 	data->height = game->height;

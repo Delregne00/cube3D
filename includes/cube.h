@@ -320,17 +320,17 @@ void		process_empty_line(char *line);
 /* ======================================================================== */
 /* minimap.c */
 void		minimap_render(t_game *game);
-void		draw_player(t_game *game);
-void		draw_player_direction(t_game *game);
+void		player_draw(t_game *game);
+void		player_draw_direction(t_game *game);
 
-/* minimap_draw_line.c */
-void		draw_line(t_game *game, t_line_data *line_data);
+/* minimap_line_draw.c */
+void		line_draw(t_game *game, t_line_data *line_data);
 
 /* minimap_draw_map.c */
-void		draw_map_grid(t_game *game);
+void		map_grid_draw(t_game *game);
 
 /* minimap_funcs.c */
-void		draw_square(t_game *game, int x, int y,
+void		square_draw(t_game *game, int x, int y,
 				t_square_params *square_data);
 void		put_pixel_to_image(t_game *game, int x, int y, int color);
 
@@ -352,19 +352,13 @@ void		handle_input(t_game_loop_param *p);
 /*						RENDER FUNCTIONS									*/
 /* ======================================================================== */
 
-/* render/raycasting.c */
-void		raycasting(t_game *game);
-
-/* render/render.c */
-t_texture	*select_texture(t_game *game, t_ray *ray);
-uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY);
-
 /* render/textures.c */
-int			tex_pixel_get(t_texture *tex, int x, int y);
 int			textures_load(t_game *game, t_collector **collector);
 
-/* render/render_utils.c */
-void		cache_init_render(t_game *game);
+/* render/render_cache.c */
+void		cache_init(t_game *game);
+
+/* render/render_calc_step.c*/
 void		calc_step_and_side_dist(t_game *game, t_ray *ray);
 
 /* ======================================================================== */
@@ -381,22 +375,16 @@ void		ray_init(t_game *game, t_ray *ray, int x);
 void		dda_perform(t_game *game, t_ray *ray);
 
 /* render/ray_wall_calc.c */
-void		calc_wall_height(t_game *game, t_ray *ray);
-void		calc_perp_wall_dist(t_game *game, t_ray *ray);
-void		calc_line_height(t_game *game, t_ray *ray);
-void		calc_draw_limits(t_game *game, t_ray *ray);
+void		wall_height_calc(t_game *game, t_ray *ray);
 
 /* render/ray_texture.c */
-t_texture	*select_texture(t_game *game, t_ray *ray);
-t_texture	*select_vertical_texture(t_ray *ray);
-t_texture	*select_horizontal_texture(t_ray *ray);
-uint32_t	get_texture_pixel(t_texture *tex, int tex_x, int texY);
-bool		is_valid_texture_coord(t_texture *tex, int tex_x, int texY);
+t_texture	*texture_select(t_game *game, t_ray *ray);
+uint32_t	texture_pixel_get(t_texture *tex, int tex_x, int tex_y);
 
 /* render/render_column.c */
-void		draw_column_textured(t_game *game, t_ray *ray, int x);
+void		column_textured_draw(t_game *game, t_ray *ray, int x);
 
 /* render/render_columns_setup.c */
-void		setup_column_data(t_game *game, t_ray *ray, t_column_data *data);
+void		column_data_setup(t_game *game, t_ray *ray, t_column_data *data);
 
 #endif

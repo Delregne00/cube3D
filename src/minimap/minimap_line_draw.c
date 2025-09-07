@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap_draw_line.c                                :+:      :+:    :+:   */
+/*   minimap_line_draw.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -44,7 +44,7 @@ static void	init_line_params(t_line_params *params, t_line_data *data)
 	params->err = params->dx - params->dy;
 }
 
-void	draw_line(t_game *game, t_line_data *line_data)
+void	line_draw(t_game *game, t_line_data *line_data)
 {
 	t_line_params	params;
 	int				current_x;

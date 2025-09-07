@@ -12,7 +12,7 @@
 
 #include "includes/cube.h"
 
-void	draw_player_direction(t_game *game)
+void	player_draw_direction(t_game *game)
 {
 	t_line_data	line_data;
 	int			start_x;
@@ -25,10 +25,10 @@ void	draw_player_direction(t_game *game)
 	line_data.x1 = start_x + (game->player.dir_x * PLAYER_DIR_LENGTH);
 	line_data.y1 = start_y + (game->player.dir_y * PLAYER_DIR_LENGTH);
 	line_data.color = COLOR_DIR;
-	draw_line(game, &line_data);
+	line_draw(game, &line_data);
 }
 
-void	draw_player(t_game *game)
+void	player_draw(t_game *game)
 {
 	t_square_params	square_data;
 	int				pixel_x;
@@ -38,7 +38,7 @@ void	draw_player(t_game *game)
 	pixel_y = MINIMAP_OFFSET_Y + (game->player.y * MINIMAP_SCALE);
 	square_data.size = PLAYER_SIZE;
 	square_data.color = COLOR_PLAYER;
-	draw_square(game, pixel_x - PLAYER_SIZE / 2, pixel_y - PLAYER_SIZE / 2,
+	square_draw(game, pixel_x - PLAYER_SIZE / 2, pixel_y - PLAYER_SIZE / 2,
 		&square_data);
 }
 
@@ -46,7 +46,7 @@ void	minimap_render(t_game *game)
 {
 	if (!game || !game->cube || !game->cube->map)
 		return ;
-	draw_map_grid(game);
-	draw_player(game);
-	draw_player_direction(game);
+	map_grid_draw(game);
+	player_draw(game);
+	player_draw_direction(game);
 }
