@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_columns.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/09/02 18:08:10 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/09 06:07:42 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cube.h"
 
-static void	floor_render(int x, t_column_data *data)
+static void	floor_render(t_game *game, int x, t_column_data *data)
 {
 	int			y;
 	int			floor_end;
@@ -20,7 +20,7 @@ static void	floor_render(int x, t_column_data *data)
 
 	y = data->draw_end + 1;
 	floor_end = data->height;
-	color = g_cache.floor_color;
+	color = game->cache.floor_color;
 	while (y < floor_end - 3)
 	{
 		data->pixels[y * data->width + x] = color;
@@ -57,7 +57,7 @@ static void	wall_render(int x, t_column_data *data)
 	}
 }
 
-static void	ceiling_render(int x, t_column_data *data)
+static void	ceiling_render(t_game *game, int x, t_column_data *data)
 {
 	int			y;
 	int			ceil_end;
@@ -65,7 +65,7 @@ static void	ceiling_render(int x, t_column_data *data)
 
 	y = 0;
 	ceil_end = data->draw_start;
-	color = g_cache.ceil_color;
+	color = game->cache.ceil_color;
 	while (y < ceil_end - 3)
 	{
 		data->pixels[y * data->width + x] = color;
@@ -86,7 +86,7 @@ void	column_textured_draw(t_game *game, t_ray *ray, int x)
 	t_column_data	data;
 
 	column_data_setup(game, ray, &data);
-	ceiling_render(x, &data);
+	ceiling_render(game, x, &data);
 	wall_render(x, &data);
-	floor_render(x, &data);
+	floor_render(game, x, &data);
 }

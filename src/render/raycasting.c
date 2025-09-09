@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/09/02 18:06:34 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/09 06:02:43 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cube.h"
-
-t_render_cache	g_cache = {0};
 
 static void	single_ray_cast(t_game *game, t_ray *ray, int x)
 {
@@ -21,24 +19,6 @@ static void	single_ray_cast(t_game *game, t_ray *ray, int x)
 	dda_perform(game, ray);
 	wall_height_calc(game, ray);
 	column_textured_draw(game, ray, x);
-}
-
-static void	display_fps(void)
-{
-	static int		frame_count;
-	static time_t	last_time;
-	time_t			current_time;
-
-	frame_count = 0;
-	last_time = 0;
-	current_time = time(NULL);
-	frame_count++;
-	if (current_time > last_time)
-	{
-		printf("FPS: %d\n", frame_count);
-		frame_count = 0;
-		last_time = current_time;
-	}
 }
 
 static bool	game_data_validate(t_game *game)
@@ -56,7 +36,6 @@ void	raycasting(t_game *game)
 	if (!game_data_validate(game))
 		return ;
 	cache_init(game);
-	display_fps();
 	x = 0;
 	while (x < game->width)
 	{

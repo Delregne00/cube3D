@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_texture.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: delregne <delregne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/09/02 18:04:23 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/09 06:07:28 by delregne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,26 @@ uint32_t	texture_pixel_get(t_texture *tex, int tex_x, int tex_y)
 	return (*(uint32_t *)pixel);
 }
 
-static t_texture	*texture_vertical_select(t_ray *ray)
+static t_texture	*texture_vertical_select(t_game *game, t_ray *ray)
 {
 	if (ray->ray_dir_x < 0)
-		return (g_cache.tex_cache[2]);
+		return (game->cache.tex_cache[2]);
 	else
-		return (g_cache.tex_cache[3]);
+		return (game->cache.tex_cache[3]);
 }
 
-static t_texture	*texture_horizontal_select(t_ray *ray)
+static t_texture	*texture_horizontal_select(t_game *game, t_ray *ray)
 {
 	if (ray->ray_dir_y < 0)
-		return (g_cache.tex_cache[0]);
+		return (game->cache.tex_cache[0]);
 	else
-		return (g_cache.tex_cache[1]);
+		return (game->cache.tex_cache[1]);
 }
 
 t_texture	*texture_select(t_game *game, t_ray *ray)
 {
-	(void)game;
 	if (ray->side == 0)
-		return (texture_vertical_select(ray));
+		return (texture_vertical_select(game, ray));
 	else
-		return (texture_horizontal_select(ray));
+		return (texture_horizontal_select(game, ray));
 }

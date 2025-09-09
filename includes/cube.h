@@ -60,7 +60,7 @@
 # define KEY_RIGHT	65363
 
 // Macros velocitat player
-# define MOVE_SPEED	0.15	//0.01: Molt lenta, 0.20: Molt ràpida
+# define MOVE_SPEED	0.05	//0.01: Molt lenta, 0.20: Molt ràpida
 # define ROT_SPEED	0.10
 
 /* ======================================================================== */
@@ -153,19 +153,30 @@ typedef struct s_cube
 	t_texture	tex_east;
 }	t_cube;
 
+typedef struct s_render_cache
+{
+	uint32_t	floor_color;
+	uint32_t	ceil_color;
+	double		sin_rot;
+	double		cos_rot;
+	t_texture	*tex_cache[4];	// Cache de textures
+	int			initialized;
+}	t_render_cache;
+
 typedef struct s_game
 {
-	t_cube		*cube;
-	t_player	player;
-	void		*mlx;
-	void		*win;
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-	int			width;
-	int			height;
+	t_cube			*cube;
+	t_player		player;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	int				width;
+	int				height;
+	t_render_cache  cache;
 }	t_game;
 
 typedef enum e_resource_type
@@ -207,18 +218,6 @@ typedef struct s_ray
 	int		draw_start;
 	int		draw_end;
 }	t_ray;
-
-typedef struct s_render_cache
-{
-	uint32_t	floor_color;
-	uint32_t	ceil_color;
-	double		sin_rot;
-	double		cos_rot;
-	t_texture	*tex_cache[4];	// Cache de textures
-	int			initialized;
-}	t_render_cache;
-
-extern t_render_cache	g_cache;
 
 typedef struct s_column_data
 {
