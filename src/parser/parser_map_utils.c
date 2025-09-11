@@ -14,24 +14,30 @@
 
 void	assign_floor_color(t_cube *cube, char **rgb_parts)
 {
-	int	j;
+	int		j;
+	char	*trimmed;
 
 	j = 0;
 	while (j < 3)
 	{
-		cube->data->f_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
+		trimmed = trim_whitespace(rgb_parts[j]);
+		cube->data->f_color[j] = ft_atoi(trimmed);
+		free(trimmed);
 		j++;
 	}
 }
 
 void	assign_ceiling_color(t_cube *cube, char **rgb_parts)
 {
-	int	j;
+	int		j;
+	char	*trimmed;
 
 	j = 0;
 	while (j < 3)
 	{
-		cube->data->c_color[j] = ft_atoi(trim_whitespace(rgb_parts[j]));
+		trimmed = trim_whitespace(rgb_parts[j]);
+		cube->data->c_color[j] = ft_atoi(trimmed);
+		free(trimmed);
 		j++;
 	}
 }

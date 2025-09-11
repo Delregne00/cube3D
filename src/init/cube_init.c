@@ -65,14 +65,13 @@ t_cube	*cube_init(t_collector **collector)
 	cube = malloc(sizeof(t_cube));
 	if (!cube)
 		return (NULL);
+	collector_append(collector, cube, RES_MALLOC, NULL);
 	cube->data = cube_data_init(collector);
 	if (!cube->data)
 		return (NULL);
-	collector_append(collector, cube->data, RES_MALLOC, NULL);
 	cube->map = cube_map_init(collector);
 	if (!cube->map)
 		return (NULL);
-	collector_append(collector, cube->map, RES_MALLOC, NULL);
 	return (cube);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 20:30:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/07/01 20:30:00 by jsayerza         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:15:41 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv)
 		exit_program(&collector, "Error: Failed to initialize cube",
 			EXIT_FAILURE, NULL);
 	collector_append(&collector, cube, RES_MALLOC, NULL);
-	if (!parser(cube, argv[1]))
+	if (!parser(cube, argv[1], &collector))
 		exit_program(&collector, "Error: Parsing failed", EXIT_FAILURE, NULL);
 	printf("Parsing completed successfully!\n");
 	game = game_init(cube, &collector);

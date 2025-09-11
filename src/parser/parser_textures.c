@@ -12,21 +12,24 @@
 
 #include "cube.h"
 
-void	process_empty_line(char *line)
+void 	process_empty_line(char *line)
 {
-	int	i;
+	int		i;
+	char	*trimmed_line;
 
 	i = 0;
-	line = trim_whitespace(line);
-	while (line[i])
+	trimmed_line = trim_whitespace(line);
+	while (trimmed_line[i])
 	{
-		if (ft_isprint(line[i]))
+		if (ft_isprint(trimmed_line[i]))
 		{
-			print_error(3, "Line", line, "Must be empty");
+			free(trimmed_line);
+			print_error(3, "Line", trimmed_line, "Must be empty");
 			exit(1);
 		}
 		i++;
 	}
+	free(trimmed_line);
 }
 
 static bool	check_texture_extension(char *clean_line)
@@ -44,24 +47,38 @@ static bool	check_texture_extension(char *clean_line)
 	return (false);
 }
 
-bool	process_textures(t_cube *cube, char *line, int i)
+// Add this parameter to process_textures function signature
+bool	process_textures(t_cube *cube, char *line, int i, t_collector **collector)
 {
 	char	*clean_line;
 
 	clean_line = trim_whitespace(line);
+	if (!clean_line)
+	{
+		print_error(1, "Memory allocation failed for trimming");
+		return (false);
+	}
 	if (!check_texture_extension(clean_line))
 	{
 		print_error(2, clean_line, "Not valid termination");
+		free(clean_line);
 		return (false);
 	}
 	if (!validate_perimisons_exist(clean_line))
+	{
+		free(clean_line);
 		return (false);
+	}
 	cube->data->textures[i] = ft_strdup(clean_line);
 	if (!cube->data->textures[i])
 	{
+		free(clean_line);
 		print_error(1, "Memory allocation failed");
 		return (false);
 	}
+	// Add texture string to collector for proper cleanup
+	collector_append(collector, cube->data->textures[i], RES_MALLOC, NULL);
+	free(clean_line);
 	return (true);
 }
 
@@ -71,18 +88,29 @@ bool	parse_line(t_cube *cube, char *line, char *expected, int len)
 	if (ft_strncmp(line, expected, len) != 0)
 	{
 		print_error(2, "Expected format not found", expected);
-		free(line);
 		return (false);
 	}
 	return (true);
 }
 
-bool	process_texture_lines(t_cube *cube, char *line, char **expected, int i)
+bool        process_texture_lines(t_cube *cube, char *line, char **expected, int i, t_collector **collector)
 {
-	line = trim_whitespace(line);
-	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i])))
+	char	*trimmed_line;
+
+	trimmed_line = trim_whitespace(line);
+	if (!trimmed_line)
 		return (false);
-	if (!process_textures(cube, line + ft_strlen(expected[i]), i))
+
+	if (!parse_line(cube, trimmed_line, expected[i], ft_strlen(expected[i])))
+	{
+		free(trimmed_line);
 		return (false);
+	}
+	if (!process_textures(cube, trimmed_line + ft_strlen(expected[i]), i, collector))
+	{
+		free(trimmed_line);
+		return (false);
+	}
+	free(trimmed_line);
 	return (true);
 }

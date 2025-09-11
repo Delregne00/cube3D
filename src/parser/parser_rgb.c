@@ -37,14 +37,17 @@ bool	parse_rgb(char *rgb, char *line)
 	if (!is_valid_number(trimmed))
 	{
 		print_error(3, line, "Invalid RGB value", trimmed);
+		free(trimmed);
 		return (false);
 	}
 	value = ft_atoi(trimmed);
 	if (value < 0 || value > 255)
 	{
 		print_error(2, line, "RGB values must be between 0-255");
+		free(trimmed);
 		return (false);
 	}
+	free(trimmed);
 	return (true);
 }
 
@@ -81,14 +84,19 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 	if (!rgb_parts)
 	{
 		print_error(2, line, "Invalid RGB values");
+		free(clean_line);
 		return (false);
 	}
 	if (!validate_rgb_values(cube, rgb_parts, line))
+	{
+		free(clean_line);
 		return (false);
+	}
 	if (i == 5)
 		assign_floor_color(cube, rgb_parts);
 	else if (i == 6)
 		assign_ceiling_color(cube, rgb_parts);
+	free(clean_line);
 	free_rgb_parts(rgb_parts);
 	return (true);
 }
@@ -97,8 +105,15 @@ bool	process_rgb_lines(t_cube *cube, char *line, char **expected, int i)
 {
 	line = trim_whitespace(line);
 	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i])))
+	{
+		free(line);
 		return (false);
+	}
 	if (!process_rgb(cube, line + ft_strlen(expected[i]), i))
+	{
+		free(line);
 		return (false);
+	}
+	free(line);
 	return (true);
 }

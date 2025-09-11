@@ -14,14 +14,37 @@
 
 char	*trim_whitespace(char *str)
 {
+	char	*start;
 	char	*end;
+	char	*result;
+	int		len;
 
-	end = str + ft_strlen(str) - 1;
-	while (end > str && (*end == ' ' || *end == '\t'
-			|| *end == '\n' || *end == '\r'))
+	if (!str)
+		return (NULL);
+
+	// Find start (skip leading whitespace)
+	start = str;
+	while (*start && (*start == ' ' || *start == '\t' || *start == '\n' || *start == '\r'))
+		start++;
+
+	// Find end (skip trailing whitespace)
+	end = start + ft_strlen(start) - 1;
+	while (end > start && (*end == ' ' || *end == '\t' || *end == '\n' || *end == '\r'))
 		end--;
-	end[1] = '\0';
-	return (str);
+
+	// Calculate length and allocate new string
+	len = end - start + 1;
+	if (len <= 0)
+		return (ft_strdup(""));
+
+	result = malloc(len + 1);
+	if (!result)
+		return (NULL);
+
+	ft_strncpy(result, start, len);
+	result[len] = '\0';
+
+	return (result);
 }
 
 void	print_error(int n, ...)

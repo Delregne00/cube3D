@@ -14,15 +14,25 @@
 
 bool	validate_char_and_border(t_map *map, int x, int y)
 {
+	char	*x_str;
+	char	*y_str;
+
 	if (!is_valid_char(map->map[x][y]))
 	{
-		print_error(3, "Invalid char in map position", ft_itoa(x), ft_itoa(y));
+		x_str = ft_itoa(x);
+		y_str = ft_itoa(y);
+		print_error(3, "Invalid char in map position", x_str, y_str);
+		free(x_str);
+		free(y_str);
 		return (false);
 	}
 	if (is_transitable(map->map[x][y]) && check_adjacent_positions(map, x, y))
 	{
-		print_error(4, "Transitable space at border",
-			"Position", ft_itoa(x), ft_itoa(y));
+		x_str = ft_itoa(x);
+		y_str = ft_itoa(y);
+		print_error(4, "Transitable space at border", "Position", x_str, y_str);
+		free(x_str);
+		free(y_str);
 		return (false);
 	}
 	return (true);

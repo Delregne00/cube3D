@@ -6,7 +6,7 @@
 /*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:20:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/06/04 19:22:13 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/11 10:58:22 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
 char	*get_next_line(int fd);
 char	*ft_strcpy(char *dest, char *str);
+char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 #endif

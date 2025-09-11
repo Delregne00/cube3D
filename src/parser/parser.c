@@ -95,10 +95,11 @@ bool	validate_perimisons_exist(char *file)
 	return (true);
 }
 
-bool	parser(t_cube *cube, char *file)
+
+bool	parser(t_cube *cube, char *file, t_collector **collector)
 {
 	if (!validate_perimisons_exist(file) || !validate_extension(file, 4, ".cub")
-		|| !validation_file(cube, file) || !validate_map(cube->map))
+		|| !validation_file(cube, file, collector) || !validate_map(cube->map))
 		return (false);
 	return (true);
 }

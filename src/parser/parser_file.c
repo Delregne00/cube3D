@@ -17,6 +17,7 @@ char	**copy_map_fixed(char *first_line, int fd, int *map_size)
 	char	**map;
 	char	*line;
 	int		i;
+	char	*trimmed;
 
 	i = 0;
 	map = allocate_map();
@@ -31,17 +32,20 @@ char	**copy_map_fixed(char *first_line, int fd, int *map_size)
 			free_map_partial(map, i);
 			return (NULL);
 		}
-		ft_strcpy(map[i], trim_whitespace(line));
+		trimmed = trim_whitespace(line);
+		ft_strcpy(map[i], trimmed);
 		i++;
+		free(trimmed);
 		free(line);
 		line = get_next_line(fd);
 	}
+	free(line);
 	map[i] = NULL;
 	*map_size = i;
 	return (map);
 }
 
-void	process_map(t_cube *cube, char *line, int fd)
+void	process_map(t_cube *cube, char *line, int fd, t_collector **collector)
 {
 	char	**map;
 	int		map_size;
@@ -52,11 +56,11 @@ void	process_map(t_cube *cube, char *line, int fd)
 		print_error(1, "Error allocating memory for map");
 		exit(1);
 	}
-	map_to_struct(cube, map);
+	map_to_struct(cube, map, collector);
 }
 
 static bool	process_lines_loop(t_cube *cube, char **line,
-		int fd, char **expected)
+		int fd, char **expected, t_collector **collector)
 {
 	int	i;
 
@@ -69,7 +73,7 @@ static bool	process_lines_loop(t_cube *cube, char **line,
 		}
 		else if (i < 4)
 		{
-			if (!process_texture_lines(cube, *line, expected, i))
+			if (!process_texture_lines(cube, *line, expected, i, collector))
 				return (false);
 		}
 		else
@@ -84,7 +88,7 @@ static bool	process_lines_loop(t_cube *cube, char **line,
 	return (true);
 }
 
-bool	process_file(t_cube *cube, int fd)
+bool	process_file(t_cube *cube, int fd, t_collector **collector)
 {
 	char	*expected[8];
 	char	*line;
@@ -103,13 +107,13 @@ bool	process_file(t_cube *cube, int fd)
 		print_error(1, "Is a empty map");
 		return (false);
 	}
-	if (!process_lines_loop(cube, &line, fd, expected))
+	if (!process_lines_loop(cube, &line, fd, expected, collector))
 		return (false);
-	process_map(cube, line, fd);
+	process_map(cube, line, fd, collector);
 	return (true);
 }
 
-bool	validation_file(t_cube *cube, char *file)
+bool	validation_file(t_cube *cube, char *file, t_collector **collector)
 {
 	int	fd;
 
@@ -119,7 +123,7 @@ bool	validation_file(t_cube *cube, char *file)
 		print_error(2, file, "Cannot open file");
 		return (false);
 	}
-	if (!process_file(cube, fd))
+	if (!process_file(cube, fd, collector))
 		return (false);
 	close(fd);
 	return (true);

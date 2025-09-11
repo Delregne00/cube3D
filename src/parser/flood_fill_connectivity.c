@@ -14,9 +14,10 @@
 
 bool	check_connectivity(t_map *map, bool **visited)
 {
-	int	i;
-	int	j;
-	int	row_len;
+	int		i;
+	int		j;
+	int		row_len;
+	char	*x_str;
 
 	i = 0;
 	while (i < map->filas)
@@ -27,8 +28,9 @@ bool	check_connectivity(t_map *map, bool **visited)
 		{
 			if (is_transitable(map->map[i][j]) && !visited[i][j])
 			{
-				print_error(4, "Unconnected transitable space at",
-					ft_itoa(i), ft_itoa(j), "");
+				x_str = ft_itoa(i);
+				print_error(3, "Unconnected transitable space at", x_str, "");
+				free(x_str);
 				return (false);
 			}
 			j++;
@@ -52,28 +54,36 @@ bool	valid_position(t_map *map, int x, int y)
 	return (true);
 }
 
+static bool	is_outside_map(t_map *map, int x, int y)
+{
+	if (x < 0 || x >= map->filas || y < 0)
+		return (true);
+	if (y >= (int)ft_strlen(map->map[x]))
+		return (true);
+	return (false);
+}
+
 bool	check_adjacent_positions(t_map *map, int x, int y)
 {
-	int	dx[4];
-	int	dy[4];
+	int	directions[4][2];
 	int	i;
 	int	nx;
 	int	ny;
 
-	dx[0] = -1;
-	dx[1] = 1;
-	dx[2] = 0;
-	dx[3] = 0;
-	dy[0] = 0;
-	dy[1] = 0;
-	dy[2] = -1;
-	dy[3] = 1;
+	directions[0][0] = -1;
+	directions[0][1] = 0;
+	directions[1][0] = 1;
+	directions[1][1] = 0;
+	directions[2][0] = 0;
+	directions[2][1] = -1;
+	directions[3][0] = 0;
+	directions[3][1] = 1;
 	i = 0;
 	while (i < 4)
 	{
-		nx = x + dx[i];
-		ny = y + dy[i];
-		if (!valid_position(map, nx, ny))
+		nx = x + directions[i][0];
+		ny = y + directions[i][1];
+		if (!is_outside_map(map, nx, ny) && map->map[nx][ny] == ' ')
 			return (true);
 		i++;
 	}

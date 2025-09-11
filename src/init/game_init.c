@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 09:05:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/08/20 12:46:19 by delregne         ###   ########.fr       */
+/*   Updated: 2025/09/11 12:22:41 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ static t_game	*init_basic_game(t_cube *cube, t_collector **collector)
 	game->cube = cube;
 	game->width = WIN_W;
 	game->height = WIN_H;
+	game->cache.initialized = 0;
+	game->cache.floor_color = 0;
+	game->cache.ceil_color = 0;
+	game->cache.sin_rot = 0.0;
+	game->cache.cos_rot = 0.0;
+	ft_memset(game->cache.tex_cache, 0, sizeof(game->cache.tex_cache));
 	return (game);
 }
 
