@@ -95,11 +95,16 @@ bool	validate_perimisons_exist(char *file)
 	return (true);
 }
 
-
 bool	parser(t_cube *cube, char *file, t_collector **collector)
 {
-	if (!validate_perimisons_exist(file) || !validate_extension(file, 4, ".cub")
-		|| !validation_file(cube, file, collector) || !validate_map(cube->map))
-		return (false);
+	if (!validate_perimisons_exist(file))
+		exit_program(collector, "Error: File permissions or existence failed", true, NULL);
+	if (!validate_extension(file, 4, ".cub"))
+		exit_program(collector, "Error: Invalid file extension", true, NULL);
+	if (!validation_file(cube, file, collector))
+		exit_program(collector, "Error: File validation failed", true, NULL);
+	if (!validate_map(cube->map))
+		exit_program(collector, "Error: Map validation failed", true, NULL);
 	return (true);
 }
+

@@ -302,6 +302,8 @@ bool		flood_fill_recursive(t_map *map, int x, int y, bool **visited);
 bool		initialize_flood_fill(t_map *map, bool ***visited);
 bool		execute_flood_fill(t_map *map, bool **visited);
 bool        flood_fill(t_map *map);
+bool	check_map_closure(t_map *map, int x, int y);
+bool	is_position_out_of_bounds(t_map *map, int x, int y);
 void	map_dimensions(t_map *map);
 
 

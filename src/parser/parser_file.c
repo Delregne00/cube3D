@@ -30,6 +30,11 @@ char	**copy_map_fixed(char *first_line, int fd, int *map_size)
 		if (!map[i])
 		{
 			free_map_partial(map, i);
+			while (line)
+			{
+				free(line);
+				line = get_next_line(fd);
+			}
 			return (NULL);
 		}
 		trimmed = trim_whitespace(line);
@@ -39,7 +44,8 @@ char	**copy_map_fixed(char *first_line, int fd, int *map_size)
 		free(line);
 		line = get_next_line(fd);
 	}
-	free(line);
+	if (line)
+		free(line);
 	map[i] = NULL;
 	*map_size = i;
 	return (map);
@@ -54,7 +60,7 @@ void	process_map(t_cube *cube, char *line, int fd, t_collector **collector)
 	if (!map)
 	{
 		print_error(1, "Error allocating memory for map");
-		exit(1);
+		return ;
 	}
 	map_to_struct(cube, map, collector);
 }
@@ -74,12 +80,24 @@ static bool	process_lines_loop(t_cube *cube, char **line,
 		else if (i < 4)
 		{
 			if (!process_texture_lines(cube, *line, expected, i, collector))
+			{
+				if (*line)
+					free(*line);
+				while ((*line = get_next_line(fd)) != NULL)
+					free(*line);
 				return (false);
+			}
 		}
 		else
 		{
 			if (!process_rgb_lines(cube, *line, expected, i))
+			{
+				if (*line)
+					free(*line);
+				while ((*line = get_next_line(fd)) != NULL)
+					free(*line);
 				return (false);
+			}
 		}
 		free(*line);
 		*line = get_next_line(fd);
@@ -109,13 +127,15 @@ bool	process_file(t_cube *cube, int fd, t_collector **collector)
 	}
 	if (!process_lines_loop(cube, &line, fd, expected, collector))
 		return (false);
-	process_map(cube, line, fd, collector);
+	if (line)
+		process_map(cube, line, fd, collector);
 	return (true);
 }
 
 bool	validation_file(t_cube *cube, char *file, t_collector **collector)
 {
-	int	fd;
+	int		fd;
+	bool	result;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -123,8 +143,7 @@ bool	validation_file(t_cube *cube, char *file, t_collector **collector)
 		print_error(2, file, "Cannot open file");
 		return (false);
 	}
-	if (!process_file(cube, fd, collector))
-		return (false);
+	result = process_file(cube, fd, collector);
 	close(fd);
-	return (true);
+	return (result);
 }

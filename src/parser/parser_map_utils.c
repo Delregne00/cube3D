@@ -57,8 +57,9 @@ void	free_rgb_parts(char **rgb_parts)
 
 bool	validate_map_characters(char **map)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*line_str;
 
 	i = 0;
 	while (map[i])
@@ -68,8 +69,9 @@ bool	validate_map_characters(char **map)
 		{
 			if (!is_valid_char(map[i][j]))
 			{
-				print_error(3, "Invalid character in map",
-					"Line", ft_itoa(i + 1));
+				line_str = ft_itoa(i + 1);
+				print_error(3, "Invalid character in map", "Line", line_str);
+				free(line_str);
 				return (false);
 			}
 			j++;

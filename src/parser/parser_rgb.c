@@ -28,6 +28,54 @@ bool	is_valid_number(char *str)
 	return (true);
 }
 
+bool	validate_rgb_format(char *line)
+{
+	int		i;
+	int		comma_count;
+	bool	after_comma;
+
+	i = 0;
+	comma_count = 0;
+	after_comma = false;
+	while (line[i])
+	{
+		if (line[i] == ',')
+		{
+			comma_count++;
+			after_comma = true;
+			if (i > 0 && line[i - 1] == ' ')
+			{
+				print_error(2, line, "No spaces allowed before comma in RGB");
+				return (false);
+			}
+		}
+		else if (line[i] == ' ')
+		{
+			if (after_comma)
+			{
+				print_error(2, line, "No spaces allowed after comma in RGB");
+				return (false);
+			}
+		}
+		else if (line[i] >= '0' && line[i] <= '9')
+		{
+			after_comma = false;
+		}
+		else
+		{
+			print_error(3, line, "Invalid character in RGB", &line[i]);
+			return (false);
+		}
+		i++;
+	}
+	if (comma_count != 2)
+	{
+		print_error(2, line, "RGB must have exactly 2 commas");
+		return (false);
+	}
+	return (true);
+}
+
 bool	parse_rgb(char *rgb, char *line)
 {
 	int		value;
@@ -78,8 +126,14 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 {
 	char	**rgb_parts;
 	char	*clean_line;
+	bool	result;
 
 	clean_line = trim_whitespace(line);
+	if (!validate_rgb_format(clean_line))
+	{
+		free(clean_line);
+		return (false);
+	}
 	rgb_parts = ft_split(clean_line, ',');
 	if (!rgb_parts)
 	{
@@ -87,8 +141,10 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 		free(clean_line);
 		return (false);
 	}
-	if (!validate_rgb_values(cube, rgb_parts, line))
+	result = validate_rgb_values(cube, rgb_parts, line);
+	if (!result)
 	{
+		free_rgb_parts(rgb_parts);
 		free(clean_line);
 		return (false);
 	}
@@ -96,24 +152,25 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 		assign_floor_color(cube, rgb_parts);
 	else if (i == 6)
 		assign_ceiling_color(cube, rgb_parts);
-	free(clean_line);
 	free_rgb_parts(rgb_parts);
+	free(clean_line);
 	return (true);
 }
 
 bool	process_rgb_lines(t_cube *cube, char *line, char **expected, int i)
 {
-	line = trim_whitespace(line);
-	if (!parse_line(cube, line, expected[i], ft_strlen(expected[i])))
+	char	*trimmed_line;
+	bool	parse_result;
+	bool	process_result;
+
+	trimmed_line = trim_whitespace(line);
+	parse_result = parse_line(cube, trimmed_line, expected[i], ft_strlen(expected[i]));
+	if (!parse_result)
 	{
-		free(line);
+		free(trimmed_line);
 		return (false);
 	}
-	if (!process_rgb(cube, line + ft_strlen(expected[i]), i))
-	{
-		free(line);
-		return (false);
-	}
-	free(line);
-	return (true);
+	process_result = process_rgb(cube, trimmed_line + ft_strlen(expected[i]), i);
+	free(trimmed_line);
+	return (process_result);
 }

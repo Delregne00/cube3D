@@ -11,7 +11,7 @@ NC = \033[0m
 # Compiler and flags
 CC = cc
 ## no se xq serveixen totes aquestes flags... tenen a veure amb MLX42?
-CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops
+CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops -fsanitize=address -fsanitize=leak
 RM = rm -f
 
 # Directories
