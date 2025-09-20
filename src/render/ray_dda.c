@@ -6,7 +6,7 @@
 /*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:00:00 by delregne          #+#    #+#             */
-/*   Updated: 2025/09/02 18:03:00 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/20 20:25:28 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,16 @@
 static bool	check_wall_hit(t_game *game, t_ray *ray)
 {
 	char	**map;
+	int		row_len;
 
 	map = game->cube->map->map;
+	if (ray->map_y < 0 || ray->map_y >= game->cube->map->filas)
+		return (true);
+	if (ray->map_x < 0)
+		return (true);
+	row_len = ft_strlen(map[ray->map_y]);
+	if (ray->map_x >= row_len)
+		return (true);
 	return (map[ray->map_y][ray->map_x] == '1');
 }
 

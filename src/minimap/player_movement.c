@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_movement.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
+/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 20:30:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/09/05 20:30:00 by jsayerza         ###   ########.fr       */
+/*   Updated: 2025/09/20 20:29:06 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ static bool	is_wall(t_game *game, double x, double y)
 {
 	int	map_x;
 	int	map_y;
+	int	row_len;
 
 	map_x = (int)x;
 	map_y = (int)y;
-	if (map_x < 0 || map_y < 0
-		|| map_y >= game->cube->map->filas
-		|| map_x >= game->cube->map->max_columnas)
+	if (map_x < 0 || map_y < 0 || map_y >= game->cube->map->filas)
+		return (true);
+	row_len = ft_strlen(game->cube->map->map[map_y]);
+	if (map_x >= row_len)
 		return (true);
 	return (game->cube->map->map[map_y][map_x] == '1');
 }

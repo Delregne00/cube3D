@@ -12,7 +12,6 @@
 
 #include "cube.h"
 
-// Add collector parameter to map functions
 void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 {
 	int	i;
