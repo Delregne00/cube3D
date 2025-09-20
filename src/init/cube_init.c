@@ -92,7 +92,7 @@ t_cube	*cube_init(t_collector **collector)
 	cube->map = cube_map_init(collector);
 	if (!cube->map)
 		return (NULL);
-		cube->elements = cube_elements_init(collector);
+	cube->elements = cube_elements_init(collector);
 	if (!cube->elements)
 		return (NULL);
 	return (cube);
