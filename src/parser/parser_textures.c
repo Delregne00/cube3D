@@ -12,7 +12,7 @@
 
 #include "cube.h"
 
-void 	process_empty_line(char *line)
+void	process_empty_line(char *line)
 {
 	int		i;
 	char	*trimmed_line;
@@ -32,90 +32,58 @@ void 	process_empty_line(char *line)
 	free(trimmed_line);
 }
 
-static bool	check_texture_extension(char *clean_line)
+static char	*get_texture_prefix(int i)
 {
-	if (ft_strnstr(clean_line, ".xpm", ft_strlen(clean_line)))
-		return (true);
-	if (ft_strnstr(clean_line, ".bmp", ft_strlen(clean_line)))
-		return (true);
-	if (ft_strnstr(clean_line, ".png", ft_strlen(clean_line)))
-		return (true);
-	if (ft_strnstr(clean_line, ".jpg", ft_strlen(clean_line)))
-		return (true);
-	if (ft_strnstr(clean_line, ".jpeg", ft_strlen(clean_line)))
-		return (true);
-	return (false);
+	if (i == 0)
+		return ("NO ");
+	else if (i == 1)
+		return ("SO ");
+	else if (i == 2)
+		return ("WE ");
+	else if (i == 3)
+		return ("EA ");
+	return (NULL);
 }
 
-// Add this parameter to process_textures function signature
-bool	process_textures(t_cube *cube, char *line, int i, t_collector **collector)
+static bool	validate_texture_format(char *trimmed_line, int i)
 {
-	char	*clean_line;
+	char	*expected_prefix;
+	int		prefix_len;
 
-	clean_line = trim_whitespace(line);
-	if (!clean_line)
-	{
-		print_error(1, "Memory allocation failed for trimming");
+	expected_prefix = get_texture_prefix(i);
+	if (!expected_prefix)
 		return (false);
-	}
-	if (!check_texture_extension(clean_line))
+	prefix_len = 3;
+	if (ft_strncmp(trimmed_line, expected_prefix, prefix_len) != 0)
 	{
-		print_error(2, clean_line, "Not valid termination");
-		free(clean_line);
-		return (false);
-	}
-	if (!validate_perimisons_exist(clean_line))
-	{
-		free(clean_line);
-		return (false);
-	}
-	cube->data->textures[i] = ft_strdup(clean_line);
-	if (!cube->data->textures[i])
-	{
-		free(clean_line);
-		print_error(1, "Memory allocation failed");
-		return (false);
-	}
-	// Add texture string to collector for proper cleanup
-	collector_append(collector, cube->data->textures[i], RES_MALLOC, NULL);
-	free(clean_line);
-	return (true);
-}
-
-bool	parse_line(t_cube *cube, char *line, char *expected, int len)
-{
-	(void)cube;
-	if (ft_strncmp(line, expected, len) != 0)
-	{
-		print_error(2, "Expected format not found", expected);
+		print_error(2, "Expected format not found", expected_prefix);
 		return (false);
 	}
 	return (true);
 }
 
-bool process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector)
+bool	process_texture_lines(t_cube *cube, char *line, int i,
+	t_collector **collector)
 {
-    char *trimmed_line;
-    int prefix_len;
-    trimmed_line = trim_whitespace(line);
-    if (!trimmed_line)
-        return false;
-    if (i == 0) prefix_len = 3;
-    else if (i == 1) prefix_len = 3;
-    else if (i == 2) prefix_len = 3;
-    else if (i == 3) prefix_len = 3;
-    else return false;
-    if (ft_strncmp(trimmed_line, (i==0?"NO ":i==1?"SO ":i==2?"WE ":"EA "), prefix_len) != 0)
-    {
-        print_error(2, "Expected format not found", (i==0?"NO ":i==1?"SO ":i==2?"WE ":"EA "));
-        free(trimmed_line);
-        return false;
-    }
-    if (!process_textures(cube, trimmed_line + prefix_len, i, collector))
-    {
-        free(trimmed_line);
-        return false;
-    }
-    free(trimmed_line);
-    return true;
+	char	*trimmed_line;
+	bool	validation_result;
+	bool	process_result;
+
+	trimmed_line = trim_whitespace(line);
+	if (!trimmed_line)
+		return (false);
+	validation_result = validate_texture_format(trimmed_line, i);
+	if (!validation_result)
+	{
+		free(trimmed_line);
+		return (false);
+	}
+	process_result = process_textures(cube, trimmed_line + 3, i, collector);
+	if (!process_result)
+	{
+		free(trimmed_line);
+		return (false);
+	}
+	free(trimmed_line);
+	return (true);
 }

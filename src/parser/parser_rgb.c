@@ -159,20 +159,21 @@ bool	process_rgb(t_cube *cube, char *line, int i)
 
 bool process_rgb_lines(t_cube *cube, char *line, int i)
 {
-    char *trimmed_line;
-    int prefix_len;
-    bool ok;
-    trimmed_line = trim_whitespace(line);
-    if (!trimmed_line)
-        return false;
-    prefix_len = (i == 5 || i == 6) ? 2 : 0;
-    if (prefix_len && ft_strncmp(trimmed_line, (i==5?"F ":"C "), prefix_len) != 0)
-    {
-        print_error(2, "Expected format not found", (i==5?"F ":"C "));
-        free(trimmed_line);
-        return false;
-    }
-    ok = process_rgb(cube, trimmed_line + prefix_len, i);
-    free(trimmed_line);
-    return ok;
+	char	*trimmed_line;
+	int		prefix_len;
+	bool	ok;
+	
+	trimmed_line = trim_whitespace(line);
+	if (!trimmed_line)
+		return (false);
+	prefix_len = (i == 5 || i == 6) ? 2 : 0;
+	if (prefix_len && ft_strncmp(trimmed_line, (i==5?"F ":"C "), prefix_len) != 0)
+	{
+		print_error(2, "Expected format not found", (i==5?"F ":"C "));
+		free(trimmed_line);
+		return (false);
+	}
+	ok = process_rgb(cube, trimmed_line + prefix_len, i);
+	free(trimmed_line);
+	return (ok);
 }

@@ -26,18 +26,13 @@ void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 		i++;
 	cube->map->filas = i;
 	cube->map->map = map;
-
-	// Add the map array to collector
 	collector_append(collector, map, RES_MALLOC, NULL);
-
-	// Add each map line to collector
 	i = 0;
 	while (map[i])
 	{
 		collector_append(collector, map[i], RES_MALLOC, NULL);
 		i++;
 	}
-
 	max_len = 0;
 	i = 0;
 	while (map[i])
