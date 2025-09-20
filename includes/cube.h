@@ -63,6 +63,13 @@
 # define MOVE_SPEED	0.15	//0.01: Molt lenta, 0.20: Molt ràpida
 # define ROT_SPEED	0.10
 
+# define NORTH		"NO "
+# define SOUTH 		"SO "
+# define WEST 		"WE "
+# define EAST		"EA "
+# define FLOOR		"F "
+# define CEILING	"C "
+
 /* ======================================================================== */
 /*							STRUCTURES										*/
 /* ======================================================================== */
@@ -143,15 +150,27 @@ typedef struct s_texture
 	int		endian;		// endianess (normalment 0)
 }	t_texture;
 
+typedef struct s_elemnts{
+	int	north;
+	int	south;
+	int	west;
+	int	east;
+	int	floor;
+	int	ceiling;
+
+}	t_elements;
+
 typedef struct s_cube
 {
 	t_data		*data;
 	t_map		*map;
+	t_elements	*elements;
 	t_texture	tex_north;
 	t_texture	tex_south;
 	t_texture	tex_west;
 	t_texture	tex_east;
 }	t_cube;
+
 
 typedef struct s_render_cache
 {
