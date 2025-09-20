@@ -23,8 +23,8 @@ void 	process_empty_line(char *line)
 	{
 		if (ft_isprint(trimmed_line[i]))
 		{
-			free(trimmed_line);
 			print_error(3, "Line", trimmed_line, "Must be empty");
+			free(trimmed_line);
 			exit(1);
 		}
 		i++;
@@ -93,24 +93,29 @@ bool	parse_line(t_cube *cube, char *line, char *expected, int len)
 	return (true);
 }
 
-bool        process_texture_lines(t_cube *cube, char *line, char **expected, int i, t_collector **collector)
+bool process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector)
 {
-	char	*trimmed_line;
-
-	trimmed_line = trim_whitespace(line);
-	if (!trimmed_line)
-		return (false);
-
-	if (!parse_line(cube, trimmed_line, expected[i], ft_strlen(expected[i])))
-	{
-		free(trimmed_line);
-		return (false);
-	}
-	if (!process_textures(cube, trimmed_line + ft_strlen(expected[i]), i, collector))
-	{
-		free(trimmed_line);
-		return (false);
-	}
-	free(trimmed_line);
-	return (true);
+    char *trimmed_line;
+    int prefix_len;
+    trimmed_line = trim_whitespace(line);
+    if (!trimmed_line)
+        return false;
+    if (i == 0) prefix_len = 3;
+    else if (i == 1) prefix_len = 3;
+    else if (i == 2) prefix_len = 3;
+    else if (i == 3) prefix_len = 3;
+    else return false;
+    if (ft_strncmp(trimmed_line, (i==0?"NO ":i==1?"SO ":i==2?"WE ":"EA "), prefix_len) != 0)
+    {
+        print_error(2, "Expected format not found", (i==0?"NO ":i==1?"SO ":i==2?"WE ":"EA "));
+        free(trimmed_line);
+        return false;
+    }
+    if (!process_textures(cube, trimmed_line + prefix_len, i, collector))
+    {
+        free(trimmed_line);
+        return false;
+    }
+    free(trimmed_line);
+    return true;
 }

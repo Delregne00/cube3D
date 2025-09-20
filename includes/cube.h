@@ -277,9 +277,8 @@ void		player_set_direction(t_player *player, char direction);
 /* PARSER FUNCTIONS */
 bool		parser(t_cube *cube, char *file, t_collector **collector);
 bool		validation_file(t_cube *cube, char *file, t_collector **collector);
-bool		process_rgb_lines(t_cube *cube, char *line, char **expected, int i);
-bool		process_texture_lines(t_cube *cube, char *line,
-				char **expected, int i, t_collector **collector);
+bool		process_rgb_lines(t_cube *cube, char *line, int i);
+bool		process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector);
 bool		parse_line(t_cube *cube, char *line, char *expected, int len);
 bool		process_rgb(t_cube *cube, char *line, int i);
 bool		process_textures(t_cube *cube, char *line, int i, t_collector **collector);
