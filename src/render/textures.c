@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 09:05:00 by jsayerza          #+#    #+#             */
 /*   Updated: 2025/09/02 18:10:25 by acarranz         ###   ########.fr       */
@@ -46,6 +46,5 @@ int	textures_load(t_game *game, t_collector **collector)
 		collector);
 	texture_load(game->mlx, &cube->tex_east, cube->data->textures[3],
 		collector);
-	printf("Textures carregades OK\n");
 	return (0);
 }

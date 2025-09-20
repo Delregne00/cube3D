@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 20:30:00 by jsayerza          #+#    #+#             */
 /*   Updated: 2025/09/11 11:15:41 by acarranz         ###   ########.fr       */
@@ -37,6 +37,5 @@ int	main(int argc, char **argv)
 		exit_program(&collector, "Error: Failed to initialize game",
 			EXIT_FAILURE, NULL);
 	collector_cleanup(&collector, game->mlx);
-	printf("Surt de cub3D sense errors!\n");
 	return (EXIT_SUCCESS);
 }

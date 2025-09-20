@@ -21,29 +21,22 @@ char	*trim_whitespace(char *str)
 
 	if (!str)
 		return (NULL);
-
-	// Find start (skip leading whitespace)
 	start = str;
-	while (*start && (*start == ' ' || *start == '\t' || *start == '\n' || *start == '\r'))
+	while (*start && (*start == ' ' || *start == '\t'
+			|| *start == '\n' || *start == '\r'))
 		start++;
-
-	// Find end (skip trailing whitespace)
 	end = start + ft_strlen(start) - 1;
-	while (end > start && (*end == ' ' || *end == '\t' || *end == '\n' || *end == '\r'))
+	while (end > start && (*end == ' ' || *end == '\t'
+			|| *end == '\n' || *end == '\r'))
 		end--;
-
-	// Calculate length and allocate new string
 	len = end - start + 1;
 	if (len <= 0)
 		return (ft_strdup(""));
-
 	result = malloc(len + 1);
 	if (!result)
 		return (NULL);
-
 	ft_strncpy(result, start, len);
 	result[len] = '\0';
-
 	return (result);
 }
 

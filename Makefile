@@ -11,7 +11,7 @@ NC = \033[0m
 # Compiler and flags
 CC = cc
 ## no se xq serveixen totes aquestes flags... tenen a veure amb MLX42?
-CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops -fsanitize=address -fsanitize=leak
+CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops -fsanitize=address -fsanitize=leak -g
 RM = rm -f
 
 # Directories
@@ -54,6 +54,7 @@ INIT_SRC =		$(SRCDIR)/init/cube_init.c \
 PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_file.c \
 				$(SRCDIR)/parser/parser_textures.c \
+				$(SRCDIR)/parser/parser_textures_process.c \
 				$(SRCDIR)/parser/parser_rgb.c \
 				$(SRCDIR)/parser/parser_map.c \
 				$(SRCDIR)/parser/parser_map_utils.c \

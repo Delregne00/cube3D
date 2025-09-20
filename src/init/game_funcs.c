@@ -32,7 +32,6 @@ void	player_init(t_game *game)
 int	window_close(t_game_loop_param *p)
 {
 	collector_cleanup(p->collector, p->game->mlx);
-	printf("Surt de cub3D sense errors x window_close!\n");
 	exit(0);
 	return (0);
 }

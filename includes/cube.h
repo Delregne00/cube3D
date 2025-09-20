@@ -60,8 +60,8 @@
 # define KEY_RIGHT	65363
 
 // Macros velocitat player
-# define MOVE_SPEED	0.05	//0.01: Molt lenta, 0.20: Molt ràpida
-# define ROT_SPEED	0.03
+# define MOVE_SPEED	0.15	//0.01: Molt lenta, 0.20: Molt ràpida
+# define ROT_SPEED	0.10
 
 # define NORTH		"NO "
 # define SOUTH 		"SO "
@@ -296,15 +296,17 @@ void		player_set_direction(t_player *player, char direction);
 /* PARSER FUNCTIONS */
 bool		parser(t_cube *cube, char *file, t_collector **collector);
 bool		validation_file(t_cube *cube, char *file, t_collector **collector);
-bool		process_rgb_lines(t_cube *cube, char *line, char **expected, int i);
-bool		process_texture_lines(t_cube *cube, char *line,
-				char **expected, int i, t_collector **collector);
-bool		parse_line(t_cube *cube, char *line, char *expected, int len);
+bool		process_rgb_lines(t_cube *cube, char *line, int i);
+bool		process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector);
+// bool		parse_line(t_cube *cube, char *line, char *expected, int len);
 bool		process_rgb(t_cube *cube, char *line, int i);
-bool		process_textures(t_cube *cube, char *line, int i, t_collector **collector);
 void		map_to_struct(t_cube *cube, char **map, t_collector **collector);
 bool        validate_map(t_map *map);
 bool        validate_perimisons_exist(char *file);
+
+/* parser/parser_textures_process.c*/
+bool		process_textures(t_cube *cube, char *line, int i,
+				t_collector **collector);
 
 /* Flood fill functions */
 bool		is_valid_char(char c);
