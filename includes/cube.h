@@ -277,13 +277,22 @@ void		player_set_direction(t_player *player, char direction);
 /* PARSER FUNCTIONS */
 bool		parser(t_cube *cube, char *file, t_collector **collector);
 bool		validation_file(t_cube *cube, char *file, t_collector **collector);
+
+/* parser/parser_rgb_lines.c */
 bool		process_rgb_lines(t_cube *cube, char *line, int i);
 bool		process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector);
-// bool		parse_line(t_cube *cube, char *line, char *expected, int len);
-bool		process_rgb(t_cube *cube, char *line, int i);
 void		map_to_struct(t_cube *cube, char **map, t_collector **collector);
 bool        validate_map(t_map *map);
 bool        validate_perimisons_exist(char *file);
+
+/* parser/parser_rgb_process.c */
+bool		process_rgb(t_cube *cube, char *line, int i);
+
+/* parser/parser_rgb_process_values.c */
+bool		parse_rgb_values(char *rgb, char *line);
+
+/* parser/parser_rgb_validate_format.c */
+bool		validate_rgb_format(char *line);
 
 /* parser/parser_textures_process.c*/
 bool		process_textures(t_cube *cube, char *line, int i,
@@ -304,9 +313,9 @@ bool		flood_fill_recursive(t_map *map, int x, int y, bool **visited);
 bool		initialize_flood_fill(t_map *map, bool ***visited);
 bool		execute_flood_fill(t_map *map, bool **visited);
 bool        flood_fill(t_map *map);
-bool	check_map_closure(t_map *map, int x, int y);
-bool	is_position_out_of_bounds(t_map *map, int x, int y);
-void	map_dimensions(t_map *map);
+bool		check_map_closure(t_map *map, int x, int y);
+bool		is_position_out_of_bounds(t_map *map, int x, int y);
+void		map_dimensions(t_map *map);
 
 
 /* parser/parser_utils.c */

@@ -11,7 +11,8 @@ NC = \033[0m
 # Compiler and flags
 CC = cc
 ## no se xq serveixen totes aquestes flags... tenen a veure amb MLX42?
-CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops -fsanitize=address -fsanitize=leak -g
+# CFLAGS = -Wall -Wextra -Werror -O3 -march=native -ffast-math -flto -pipe -fno-trapping-math -funroll-loops -fsanitize=address -fsanitize=leak -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 # Directories
@@ -55,7 +56,10 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_file.c \
 				$(SRCDIR)/parser/parser_textures.c \
 				$(SRCDIR)/parser/parser_textures_process.c \
-				$(SRCDIR)/parser/parser_rgb.c \
+				$(SRCDIR)/parser/parser_rgb_lines.c \
+				$(SRCDIR)/parser/parser_rgb_process.c \
+				$(SRCDIR)/parser/parser_rgb_process_values.c \
+				$(SRCDIR)/parser/parser_rgb_validate_format.c \
 				$(SRCDIR)/parser/parser_map.c \
 				$(SRCDIR)/parser/parser_map_utils.c \
 				$(SRCDIR)/parser/flood_fill.c \
@@ -208,3 +212,6 @@ info:
 #   ( {4})+
 # 	\t
 # source ~/norminette_env/bin/activate
+
+# valgrind --leak-check=full --show-leak-kinds=definite ./cub3D maps/map.cub
+# valgrind --leak-check=full --show-leak-kinds=all ./cub3D maps/map.cub
