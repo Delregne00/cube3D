@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 static bool	check_texture_extension(char *clean_line)
 {

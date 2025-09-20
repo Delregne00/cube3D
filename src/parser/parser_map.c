@@ -10,9 +10,8 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
-// Add collector parameter to map functions
 void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 {
 	int	i;
@@ -29,18 +28,14 @@ void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 	collector_append(collector, map, RES_MALLOC, NULL);
 	i = 0;
 	while (map[i])
-	{
-		collector_append(collector, map[i], RES_MALLOC, NULL);
-		i++;
-	}
+		collector_append(collector, map[i++], RES_MALLOC, NULL);
 	max_len = 0;
 	i = 0;
 	while (map[i])
 	{
-		len = ft_strlen(map[i]);
+		len = ft_strlen(map[i++]);
 		if (len > max_len)
 			max_len = len;
-		i++;
 	}
 	cube->map->max_columnas = max_len;
 }

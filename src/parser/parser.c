@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 bool	validate_extension(char *file, int size, char *extension)
 {
@@ -32,14 +32,10 @@ bool	validate_extensions(char *file)
 	int		len;
 	int		size;
 	int		i;
-	char	*extension[6];
+	char	*extension[2];
 
 	extension[0] = ".xpm";
-	extension[1] = ".bmp";
-	extension[2] = ".png";
-	extension[3] = ".jpg";
-	extension[4] = ".jpeg";
-	extension[5] = NULL;
+	extension[1] = NULL;
 	len = ft_strlen(file);
 	i = 0;
 	while (extension[i])
@@ -98,7 +94,8 @@ bool	validate_perimisons_exist(char *file)
 bool	parser(t_cube *cube, char *file, t_collector **collector)
 {
 	if (!validate_perimisons_exist(file))
-		exit_program(collector, "Error: File permissions or existence failed", true, NULL);
+		exit_program(collector, "Error: File permissions or existence failed",
+			true, NULL);
 	if (!validate_extension(file, 4, ".cub"))
 		exit_program(collector, "Error: Invalid file extension", true, NULL);
 	if (!validation_file(cube, file, collector))
@@ -107,4 +104,3 @@ bool	parser(t_cube *cube, char *file, t_collector **collector)
 		exit_program(collector, "Error: Map validation failed", true, NULL);
 	return (true);
 }
-

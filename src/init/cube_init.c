@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 static t_data	*cube_data_init(t_collector **collector)
 {
@@ -58,8 +58,7 @@ static t_map	*cube_map_init(t_collector **collector)
 	return (map);
 }
 
-
-t_elements *cube_elements_init(t_collector **collector)
+t_elements	*cube_elements_init(t_collector **collector)
 {
 	t_elements	*elements;
 
@@ -74,7 +73,6 @@ t_elements *cube_elements_init(t_collector **collector)
 	elements->east = 0;
 	elements->floor = 0;
 	elements->ceiling = 0;
-
 	return (elements);
 }
 
@@ -97,6 +95,7 @@ t_cube	*cube_init(t_collector **collector)
 		return (NULL);
 	return (cube);
 }
+
 void	cube_free(t_cube *cube)
 {
 	int	i;

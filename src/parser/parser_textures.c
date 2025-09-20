@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: your_username <your_email@student.42.fr>  +#+  +:+       +#+        */
+/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/01 00:00:00 by your_username    #+#    #+#             */
-/*   Updated: 2024/01/01 00:00:00 by your_username   ###   ########.fr       */
+/*   Created: 2025/09/20 20:30:00 by jsayerza          #+#    #+#             */
+/*   Updated: 2025/09/20 20:30:00 by jsayerza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 void	process_empty_line(char *line)
 {
