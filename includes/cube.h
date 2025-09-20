@@ -60,8 +60,8 @@
 # define KEY_RIGHT	65363
 
 // Macros velocitat player
-# define MOVE_SPEED	0.15	//0.01: Molt lenta, 0.20: Molt ràpida
-# define ROT_SPEED	0.10
+# define MOVE_SPEED	0.08	//0.01: Molt lenta, 0.20: Molt ràpida
+# define ROT_SPEED	0.02
 
 # define NORTH		"NO "
 # define SOUTH 		"SO "
@@ -301,8 +301,10 @@ bool		process_texture_lines(t_cube *cube, char *line, int i, t_collector **colle
 // bool		parse_line(t_cube *cube, char *line, char *expected, int len);
 bool		process_rgb(t_cube *cube, char *line, int i);
 void		map_to_struct(t_cube *cube, char **map, t_collector **collector);
-bool        validate_map(t_map *map);
-bool        validate_perimisons_exist(char *file);
+bool		validate_map(t_map *map);
+bool		validate_perimisons_exist(char *file);
+bool	process_file(t_cube *cube, int fd, t_collector **collector);
+bool	process_elements(t_cube *cube, int fd, t_collector **collector, char **last_line);
 
 /* parser/parser_textures_process.c*/
 bool		process_textures(t_cube *cube, char *line, int i,
@@ -326,6 +328,9 @@ bool        flood_fill(t_map *map);
 bool	check_map_closure(t_map *map, int x, int y);
 bool	is_position_out_of_bounds(t_map *map, int x, int y);
 void	map_dimensions(t_map *map);
+bool	is_space_or_void_char(char c);
+bool	is_wall_char(char c);
+
 
 
 /* parser/parser_utils.c */
