@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 char	*trim_whitespace(char *str)
 {

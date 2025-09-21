@@ -1,16 +1,16 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_textures_process.c                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jsayerza <jsayerza@student.42barcelona.fr> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/20 20:30:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/09/20 20:30:00 by jsayerza         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 parser_textures_process.c							:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: acarranz <marvin@42.fr>					+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2025/09/21 14:56:18 by acarranz		   #+#	  #+#			  */
+/*	 Updated: 2025/09/21 14:56:18 by acarranz		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 static bool	check_texture_extension(char *clean_line)
 {

@@ -63,13 +63,6 @@
 # define MOVE_SPEED	0.08	//0.01: Molt lenta, 0.20: Molt ràpida
 # define ROT_SPEED	0.02
 
-# define NORTH		"NO "
-# define SOUTH 		"SO "
-# define WEST 		"WE "
-# define EAST		"EA "
-# define FLOOR		"F "
-# define CEILING	"C "
-
 /* ======================================================================== */
 /*							STRUCTURES										*/
 /* ======================================================================== */
@@ -150,27 +143,16 @@ typedef struct s_texture
 	int		endian;		// endianess (normalment 0)
 }	t_texture;
 
-typedef struct s_elemnts{
-	int	north;
-	int	south;
-	int	west;
-	int	east;
-	int	floor;
-	int	ceiling;
-
-}	t_elements;
-
 typedef struct s_cube
 {
 	t_data		*data;
 	t_map		*map;
-	t_elements	*elements;
+	t_keys		*keys;
 	t_texture	tex_north;
 	t_texture	tex_south;
 	t_texture	tex_west;
 	t_texture	tex_east;
 }	t_cube;
-
 
 typedef struct s_render_cache
 {
@@ -195,7 +177,7 @@ typedef struct s_game
 	int				endian;
 	int				width;
 	int				height;
-	t_render_cache  cache;
+	t_render_cache	cache;
 }	t_game;
 
 typedef enum e_resource_type
@@ -251,6 +233,19 @@ typedef struct s_column_data
 	double		tex_pos;
 }	t_column_data;
 
+typedef struct s_process_data
+{
+	t_cube			*cube;
+	int				fd;
+	t_collector		**collector;
+	char			**last_line;
+	int				found[6];
+	char			*line;
+	char			*trimmed;
+	char			*previous_line;
+	char			*previous_trimmed;
+}	t_process_data;
+
 /* ======================================================================== */
 /*						UTILITY FUNCTIONS									*/
 /* ======================================================================== */
@@ -296,20 +291,26 @@ void		player_set_direction(t_player *player, char direction);
 /* PARSER FUNCTIONS */
 bool		parser(t_cube *cube, char *file, t_collector **collector);
 bool		validation_file(t_cube *cube, char *file, t_collector **collector);
+
+/* parser/parser_rgb_lines.c */
 bool		process_rgb_lines(t_cube *cube, char *line, int i);
-bool		process_texture_lines(t_cube *cube, char *line, int i, t_collector **collector);
-// bool		parse_line(t_cube *cube, char *line, char *expected, int len);
 bool		process_rgb(t_cube *cube, char *line, int i);
+bool		process_texture_lines(t_cube *cube, char *line, int i,
+				t_collector **collector);
+bool		validate_rgb_format(char *line);
+bool		validate_rgb_values(t_cube *cube, char **rgb_parts,
+				char *original_line);
+bool		parse_rgb_values(char *rgb, char *line);
 void		map_to_struct(t_cube *cube, char **map, t_collector **collector);
 bool		validate_map(t_map *map);
 bool		validate_perimisons_exist(char *file);
-bool	process_file(t_cube *cube, int fd, t_collector **collector);
-bool	process_elements(t_cube *cube, int fd, t_collector **collector, char **last_line);
+bool		process_file(t_cube *cube, int fd, t_collector **collector);
+bool		process_elements(t_cube *cube, int fd, t_collector **collector,
+				char **last_line);
 
 /* parser/parser_textures_process.c*/
 bool		process_textures(t_cube *cube, char *line, int i,
 				t_collector **collector);
-
 /* Flood fill functions */
 bool		is_valid_char(char c);
 bool		is_transitable(char c);
@@ -324,14 +325,38 @@ bool		validate_char_and_border(t_map *map, int x, int y);
 bool		flood_fill_recursive(t_map *map, int x, int y, bool **visited);
 bool		initialize_flood_fill(t_map *map, bool ***visited);
 bool		execute_flood_fill(t_map *map, bool **visited);
-bool        flood_fill(t_map *map);
-bool	check_map_closure(t_map *map, int x, int y);
-bool	is_position_out_of_bounds(t_map *map, int x, int y);
-void	map_dimensions(t_map *map);
-bool	is_space_or_void_char(char c);
-bool	is_wall_char(char c);
+bool		flood_fill(t_map *map);
+bool		check_map_closure(t_map *map, int x, int y);
+bool		is_position_out_of_bounds(t_map *map, int x, int y);
+void		map_dimensions(t_map *map);
+bool		is_space_or_void_char(char c);
+bool		is_wall_char(char c);
 
+void		init_basic_params(t_process_data *data, t_cube *cube, int fd);
+void		init_process_data(t_process_data *data, t_collector **collector,
+				char **last_line);
 
+// Funciones de limpieza y manejo de memoria
+void		cleanup_previous_lines(t_process_data *data);
+void		update_previous_lines(t_process_data *data);
+
+// Funciones de procesamiento de líneas
+bool		handle_empty_line(t_process_data *data);
+int			process_single_line(t_process_data *data);
+
+// Funciones de procesamiento de elementos
+bool		process_texture_element(t_process_data *data, char *prefix,
+				int index);
+bool		process_rgb_element(t_process_data *data, char *prefix, int index);
+bool		process_known_elements(t_process_data *data);
+bool		handle_unknown_element(t_process_data *data);
+
+// Función de verificación
+bool		verify_all_elements_found(t_process_data *data);
+
+// Función principal
+bool		process_elements(t_cube *cube, int fd, t_collector **collector,
+				char **last_line);
 
 /* parser/parser_utils.c */
 void		assign_floor_color(t_cube *cube, char **rgb_parts);

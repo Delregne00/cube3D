@@ -6,7 +6,7 @@
 /*   By: acarranz <acarranz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:20:00 by jsayerza          #+#    #+#             */
-/*   Updated: 2025/09/11 10:58:22 by acarranz         ###   ########.fr       */
+/*   Updated: 2025/09/21 16:07:44 by acarranz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,24 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <fcntl.h>
 
 # define SIZE_MAXX 2147483647
+# define BUFFER_SIZE 42
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_get_next_line
+{
+	char	buffer[BUFFER_SIZE];
+	int		buffer_read;
+	int		buffer_pos;
+}	t_gnl;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

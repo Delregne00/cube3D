@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "includes/cube.h"
 
 static t_data	*cube_data_init(t_collector **collector)
 {
@@ -58,24 +58,22 @@ static t_map	*cube_map_init(t_collector **collector)
 	return (map);
 }
 
-
-t_elements *cube_elements_init(t_collector **collector)
+static t_keys	*cube_keys_init(t_collector **collector)
 {
-	t_elements	*elements;
+	t_keys	*keys;
 
-	elements = malloc(sizeof(t_elements));
-	if (!elements)
+	keys = malloc(sizeof(t_map));
+	if (!keys)
 		return (NULL);
-	if (collector)
-		collector_append(collector, elements, RES_MALLOC, NULL);
-	elements->north = 0;
-	elements->south = 0;
-	elements->west = 0;
-	elements->east = 0;
-	elements->floor = 0;
-	elements->ceiling = 0;
-
-	return (elements);
+	collector_append(collector, keys, RES_MALLOC, NULL);
+	keys->w = 0;
+	keys->a = 0;
+	keys->s = 0;
+	keys->d = 0;
+	keys->left = 0;
+	keys->right = 0;
+	keys->esc = 0;
+	return (keys);
 }
 
 t_cube	*cube_init(t_collector **collector)
@@ -92,11 +90,12 @@ t_cube	*cube_init(t_collector **collector)
 	cube->map = cube_map_init(collector);
 	if (!cube->map)
 		return (NULL);
-	cube->elements = cube_elements_init(collector);
-	if (!cube->elements)
+	cube->keys = cube_keys_init(collector);
+	if (!cube->map)
 		return (NULL);
 	return (cube);
 }
+
 void	cube_free(t_cube *cube)
 {
 	int	i;
