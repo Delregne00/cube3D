@@ -313,29 +313,21 @@ bool		process_textures(t_cube *cube, char *line, int i,
 				t_collector **collector);
 /* Flood fill functions */
 bool		is_valid_char(char c);
-bool		is_transitable(char c);
-bool		valid_position(t_map *map, int x, int y);
-bool		**init_visited_matrix(t_map *map);
-void		free_visited_matrix(bool **visited, int filas);
-bool		start_position(t_map *map, int *start_x, int *start_y);
-bool		start_flood_fill(t_map *map, int x, int y, bool **visited);
-bool		check_connectivity(t_map *map, bool **visited);
-bool		check_adjacent_positions(t_map *map, int x, int y);
-bool		validate_char_and_border(t_map *map, int x, int y);
-bool		flood_fill_recursive(t_map *map, int x, int y, bool **visited);
-bool		initialize_flood_fill(t_map *map, bool ***visited);
-bool		execute_flood_fill(t_map *map, bool **visited);
+void		init_directions(int directions[4][2]);
 bool		flood_fill(t_map *map);
-bool		check_map_closure(t_map *map, int x, int y);
-bool		is_position_out_of_bounds(t_map *map, int x, int y);
-void		map_dimensions(t_map *map);
-bool		is_space_or_void_char(char c);
-bool		is_wall_char(char c);
+bool		is_transitable(char c);
+bool		is_wall_or_transitable(char c);
+bool		validate_adjacent_cell(t_map *map, int di, int dj);
+bool		check_adjacent_positions(t_map *map, int i, int j);
+char		**create_visited_map(t_map *map);
+void		free_visited_map(char **visited, int filas);
+bool		flood_fill_validation(t_map *map);
+bool		validate_adjacent_cell(t_map *map, int di, int dj);
+
 
 void		init_basic_params(t_process_data *data, t_cube *cube, int fd);
 void		init_process_data(t_process_data *data, t_collector **collector,
 				char **last_line);
-
 // Funciones de limpieza y manejo de memoria
 void		cleanup_previous_lines(t_process_data *data);
 void		update_previous_lines(t_process_data *data);

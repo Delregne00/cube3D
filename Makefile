@@ -65,7 +65,6 @@ PARSER_SRC =	$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/parser_map.c \
 				$(SRCDIR)/parser/parser_map_utils.c \
 				$(SRCDIR)/parser/flood_fill.c \
-				$(SRCDIR)/parser/flood_fill_connectivity.c \
 				$(SRCDIR)/parser/flood_fill_utils.c \
 				$(SRCDIR)/parser/parser_utils.c
 

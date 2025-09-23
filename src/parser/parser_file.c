@@ -14,14 +14,18 @@
 
 bool	process_map_line(char **map, char *line, int index)
 {
-	char	*trimmed;
+	int	len;
 
-	map[index] = malloc(ft_strlen(line) + 1);
+	if (!line)
+		return (false);
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		len--;
+	map[index] = malloc(len + 1);
 	if (!map[index])
 		return (false);
-	trimmed = trim_whitespace(line);
-	ft_strcpy(map[index], trimmed);
-	free(trimmed);
+	ft_strncpy(map[index], line, len);
+	map[index][len] = '\0';
 	return (true);
 }
 

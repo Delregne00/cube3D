@@ -80,3 +80,9 @@ bool	validate_map_characters(char **map)
 	}
 	return (true);
 }
+
+bool	is_valid_char(char c)
+{
+	return (c == '0' || c == 'N' || c == 'W' || c == 'S'
+		|| c == 'E' || c == '1' || c == ' ' || c == '\t');
+}

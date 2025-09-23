@@ -10,7 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "cube.h"
 
 void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 {
@@ -18,26 +18,20 @@ void	map_to_struct(t_cube *cube, char **map, t_collector **collector)
 	int	len;
 	int	max_len;
 
-	if (!cube || !cube->map || !map)
-		return ;
 	i = 0;
-	while (map[i])
-		i++;
-	cube->map->filas = i;
-	cube->map->map = map;
-	collector_append(collector, map, RES_MALLOC, NULL);
-	i = 0;
-	while (map[i])
-		collector_append(collector, map[i++], RES_MALLOC, NULL);
 	max_len = 0;
-	i = 0;
 	while (map[i])
 	{
-		len = ft_strlen(map[i++]);
+		collector_append(collector, map[i], RES_MALLOC, NULL);
+		len = ft_strlen(map[i]);
 		if (len > max_len)
 			max_len = len;
+		i++;
 	}
+	cube->map->filas = i;
 	cube->map->max_columnas = max_len;
+	cube->map->map = map;
+	collector_append(collector, map, RES_MALLOC, NULL);
 }
 
 void	map_dimensions(t_map *map)
