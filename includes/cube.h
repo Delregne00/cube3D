@@ -324,7 +324,6 @@ void		free_visited_map(char **visited, int filas);
 bool		flood_fill_validation(t_map *map);
 bool		validate_adjacent_cell(t_map *map, int di, int dj);
 
-
 void		init_basic_params(t_process_data *data, t_cube *cube, int fd);
 void		init_process_data(t_process_data *data, t_collector **collector,
 				char **last_line);

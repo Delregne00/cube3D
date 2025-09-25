@@ -66,7 +66,6 @@ bool	handle_unknown_element(t_process_data *data)
 {
 	if (!data->previous_trimmed || ft_strlen(data->previous_trimmed) != 0)
 	{
-		print_error(1, "Map must be preceded by empty line");
 		free(data->trimmed);
 		free(data->line);
 		cleanup_previous_lines(data);
